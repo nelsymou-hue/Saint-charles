@@ -7,8 +7,8 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── PALETTE & COULEURS ──────────────────────────────────────────────────────
-const BG = "#8fa8c8";
-const SIDEBAR_BG = "rgba(15,30,70,0.65)";
+const BG = "#f5f0e8";
+const SIDEBAR_BG = "#006064";
 
 const PALETTE = [
   { accent:"#e91e8c", grad:"linear-gradient(135deg,#f06,#e91e8c)",   tint:"rgba(233,30,140,.08)", border:"rgba(233,30,140,.22)", icon:"rgba(233,30,140,.12)" },
@@ -429,7 +429,7 @@ export default function App() {
     <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'DM Sans',sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}`}</style>
 
-      {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"rgba(153,27,27,.9)":"rgba(26,35,126,.9)", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
+      {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
 
       {/* MODALS */}
       {modalUpload && (
