@@ -551,33 +551,32 @@ export default function App() {
                 <Icon name={item.icon} size={16} color={view===item.id?"#fff":"rgba(255,255,255,.5)"} /> {item.label}
               </div>
             ))}
-            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
-            {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
-              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
-                style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
-                <Icon name={e.icon} size={15} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
-              </div>
-            ))}
-            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Ressources</div>
-            {ESPACES.filter(e=>e.id==="ressources").map(e=>(
-              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
-                style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
-                <Icon name={e.icon} size={15} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
-              </div>
-            ))}
-            {isSA && <>
-              <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Admin</div>
+            {isSA && (
               <div className="nav-item" onClick={()=>setView("validation")}
                 style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="validation"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="validation"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="validation"?500:400, borderLeft:view==="validation"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
                 <Icon name="check" size={15} color={view==="validation"?"#fff":"rgba(255,255,255,.45)"} /> Validation
                 {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{pending}</span>}
               </div>
-            </>}
+            )}
             <div className="nav-item" onClick={()=>{setView("notifs");markNotifsLues();}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{unread}</span>}
             </div>
+            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
+            {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
+              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
+                style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s", whiteSpace:"nowrap", overflow:"hidden" }}>
+                <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
+              </div>
+            ))}
+            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Ressources</div>
+            {ESPACES.filter(e=>e.id==="ressources").map(e=>(
+              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
+                style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
+                <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
+              </div>
+            ))}
           </nav>
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ width:34, height:34, borderRadius:"50%", background:`${user.color}25`, color:user.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, border:`1px solid ${user.color}35` }}>{user.avatar}</div>
