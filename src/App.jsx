@@ -114,15 +114,15 @@ const SpaceIcon = ({ id, size=42 }) => {
 const glassCard = { background:"rgba(255,255,255,0.72)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1px solid rgba(0,96,100,0.15)", borderRadius:16, padding:20, boxShadow:"0 4px 20px rgba(0,0,0,.06)" };
 const btn = { background:"#006064", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
 const btnGhost = { background:"transparent", border:"1.5px solid #006064", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"#006064", display:"inline-flex", alignItems:"center", gap:7 };
-const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.15)", backdropFilter:"blur(8px)", border:"1.5px solid rgba(255,255,255,.7)", borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#fff", boxSizing:"border-box" };
+const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #006064", borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#006064", boxSizing:"border-box" };
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children, maxWidth=480 }) => (
   <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.5)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20, backdropFilter:"blur(4px)" }}>
     <div onClick={e=>e.stopPropagation()} style={{ background:BG, borderRadius:20, padding:28, width:"100%", maxWidth, maxHeight:"90vh", overflowY:"auto", border:"1px solid rgba(255,255,255,.3)", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-        <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, margin:0, color:"#fff" }}>{title}</h2>
-        <button onClick={onClose} style={{ background:"none", border:"none", cursor:"pointer", color:"rgba(255,255,255,.6)", fontSize:20 }}>✕</button>
+        <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, margin:0, color:"#006064" }}>{title}</h2>
+        <button onClick={onClose} style={{ background:"none", border:"none", cursor:"pointer", color:"rgba(0,96,100,.5)", fontSize:20 }}>✕</button>
       </div>
       {children}
     </div>
@@ -370,7 +370,7 @@ export default function App() {
     return true;
   });
 
-  const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#fca5a5" : "rgba(255,255,255,.7)" });
+  const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#006064" });
 
   const markNotifsLues = async () => {
     await supabase.from("notifications").update({ lu:true }).eq("lu", false);
@@ -418,7 +418,7 @@ export default function App() {
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
     <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'DM Sans',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}input::placeholder,textarea::placeholder{color:rgba(0,96,100,.6)!important;opacity:1}`}</style>
 
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
 
@@ -427,34 +427,34 @@ export default function App() {
         <Modal title={`Déposer dans — ${espace?.nom}`} onClose={()=>{setModalUpload(false);setUploadErrors({});}}>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:14 }}>
             <div>
-              <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
+              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
               <input style={fieldStyle(uploadErrors.prenom)} placeholder="Votre prénom..." value={uploadForm.prenom} onChange={e=>setUploadForm(f=>({...f,prenom:e.target.value}))} />
               {uploadErrors.prenom && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.prenom}</div>}
             </div>
             <div>
-              <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
+              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
               <input style={fieldStyle(uploadErrors.nom)} placeholder="Votre nom..." value={uploadForm.nom} onChange={e=>setUploadForm(f=>({...f,nom:e.target.value}))} />
               {uploadErrors.nom && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.nom}</div>}
             </div>
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
+            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
             <input style={fieldStyle(uploadErrors.titre)} placeholder="Titre du document..." value={uploadForm.titre} onChange={e=>setUploadForm(f=>({...f,titre:e.target.value}))} />
             {uploadErrors.titre && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.titre}</div>}
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Catégorie</label>
+            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Catégorie</label>
             <select style={fieldStyle(false)} value={uploadForm.cat} onChange={e=>setUploadForm(f=>({...f,cat:e.target.value}))}>
               <option value="">Choisir...</option>
               {(cats[espace?.id]||[]).map(c=><option key={c}>{c}</option>)}
             </select>
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
+            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
             <textarea style={{...fieldStyle(false),resize:"none"}} rows={3} placeholder="Description optionnelle..." value={uploadForm.desc} onChange={e=>setUploadForm(f=>({...f,desc:e.target.value}))} />
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"rgba(255,255,255,.85)", display:"block", marginBottom:6, fontWeight:500 }}>Nom du fichier *</label>
+            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom du fichier *</label>
             <input style={fieldStyle(uploadErrors.file)} placeholder="ex: reglement-2024.pdf" value={uploadForm.file} onChange={e=>setUploadForm(f=>({...f,file:e.target.value}))} />
             {uploadErrors.file && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
           </div>
