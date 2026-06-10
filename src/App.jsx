@@ -403,7 +403,7 @@ export default function App() {
           ))}
         </div>
 
-        <div style={{ background:"rgba(255,255,255,.55)", backdropFilter:"blur(20px)", borderRadius:20, padding:20, marginBottom:14, border:"2px solid #006064", boxShadow:"0 4px 16px rgba(0,96,100,.1)" }}>
+        <div style={{ background:"rgba(255,255,255,.55)", backdropFilter:"blur(20px)", borderRadius:20, padding:20, marginBottom:14, border:"1px solid #006064", boxShadow:"0 4px 16px rgba(0,96,100,.1)" }}>
           <label style={{ fontSize:13, color:"#6b7280", display:"block", marginBottom:8, fontWeight:500 }}>Mot de passe</label>
           <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
             style={{ width:"100%", padding:"10px 14px", background:"rgba(0,96,100,.15)", backdropFilter:"blur(8px)", border:`1px solid ${loginError?"#dc2626":"rgba(0,96,100,.4)"}`, borderRadius:12, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#006064", boxSizing:"border-box" }} />
