@@ -148,11 +148,11 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
           <span style={{ background:tc.bg, color:tc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:700 }}>{doc.type}</span>
         </div>
         <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
-        {doc.description && <div style={{ fontSize:12, color:"rgba(26,26,46,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
+        {doc.description && <div style={{ fontSize:12, color:"rgba(0,96,100,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
         <div style={{ display:"inline-block", background:"rgba(0,96,100,.08)", color:"#006064", padding:"3px 10px", borderRadius:20, fontSize:11, fontWeight:600, border:"1px solid rgba(0,96,100,.18)", marginBottom:10 }}>{doc.categorie}</div>
-        <div style={{ fontSize:11, color:"rgba(26,26,46,.5)", display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
-          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="user" size={10} color="rgba(26,26,46,.4)" /> {doc.auteur}</span>
-          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="calendar" size={10} color="rgba(26,26,46,.4)" /> {doc.created_at?.split("T")[0]}</span>
+        <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
+          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="user" size={10} color="rgba(0,96,100,.4)" /> {doc.auteur}</span>
+          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="calendar" size={10} color="rgba(0,96,100,.4)" /> {doc.created_at?.split("T")[0]}</span>
         </div>
         <div style={{ height:1, background:"linear-gradient(90deg,rgba(0,96,100,.15),transparent)", marginBottom:11 }} />
         <div style={{ display:"flex", alignItems:"center", gap:7 }} onClick={e=>e.stopPropagation()}>
@@ -182,9 +182,9 @@ const SpaceCard = ({ esp, count, onClick }) => {
       <div style={{ position:"relative", zIndex:2 }}>
         <div style={{ marginBottom:14 }}><SpaceIcon id={esp.id} size={42} /></div>
         <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, marginBottom:6, color:c.accent }}>{esp.nom}</div>
-        <div style={{ fontSize:13, color:"rgba(26,26,46,.6)", marginBottom:14 }}>{esp.desc}</div>
+        <div style={{ fontSize:13, color:"rgba(0,96,100,.6)", marginBottom:14 }}>{esp.desc}</div>
         <div style={{ height:1, background:`linear-gradient(90deg,${c.border},transparent)`, marginBottom:10 }} />
-        <div style={{ fontSize:12, color:"#1a1a2e", fontWeight:500 }}>{count} document(s) publié(s)</div>
+        <div style={{ fontSize:12, color:"#006064", fontWeight:500 }}>{count} document(s) publié(s)</div>
       </div>
     </div>
   );
@@ -597,27 +597,23 @@ export default function App() {
         {/* TOPBAR */}
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
           <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
-            <Icon name="menu" size={16} color="#1a1a2e" />
+            <Icon name="menu" size={16} color="#006064" />
           </button>
           {navHistory.length>0 && (
             <button onClick={goBack} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
-              <Icon name="back" size={16} color="#1a1a2e" />
+              <Icon name="back" size={16} color="#006064" />
             </button>
           )}
-          <div style={{ fontSize:13, color:"rgba(26,26,46,.55)", flex:1 }}>
+          <div style={{ fontSize:13, color:"rgba(0,96,100,.6)", flex:1 }}>
             {view==="accueil"&&"Accueil"}{view==="dashboard"&&"Tableau de bord"}{view==="espace"&&espace?.nom}{view==="validation"&&"Validation"}{view==="notifs"&&"Notifications"}
-          </div>
-          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <div style={{ width:30, height:30, borderRadius:"50%", background:`${user.color}25`, color:user.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700, border:`1px solid ${user.color}35` }}>{user.avatar}</div>
-            <span style={{ fontSize:13, color:"#1a1a2e", fontWeight:500 }}>{user.name}</span>
           </div>
         </div>
 
         {/* ACCUEIL */}
         {view==="accueil" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#1a1a2e" }}>Bonjour, {user.name.split(" ").slice(-1)[0]}</h1>
-            <p style={{ color:"rgba(26,26,46,.55)", margin:"0 0 28px", fontSize:14 }}>Bienvenue sur l'espace documents de l'École Privée Saint-Charles</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#006064" }}>Bonjour, {user.name.split(" ").slice(-1)[0]}</h1>
+            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 28px", fontSize:14 }}>Bienvenue sur l'espace documents de l'École Privée Saint-Charles</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
               {ESPACES.map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
@@ -630,11 +626,11 @@ export default function App() {
         {/* DASHBOARD */}
         {view==="dashboard" && isAdmin && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#1a1a2e" }}>Tableau de bord</h1>
-            <p style={{ color:"rgba(26,26,46,.55)", margin:"0 0 28px", fontSize:14 }}>Vue d'ensemble de l'activité documentaire</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#006064" }}>Tableau de bord</h1>
+            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 28px", fontSize:14 }}>Vue d'ensemble de l'activité documentaire</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))", gap:14, marginBottom:28 }}>
               {[
-                {label:"Total",val:docs.length,color:"#1a1a2e",icon:"file"},
+                {label:"Total",val:docs.length,color:"#006064",icon:"file"},
                 {label:"Publiés",val:docs.filter(d=>d.status==="valide").length,color:"#6ee7b7",icon:"check"},
                 {label:"En attente",val:pending,color:"#fcd34d",icon:"inbox"},
                 {label:"Refusés",val:docs.filter(d=>d.status==="refuse").length,color:"#fca5a5",icon:"close"},
@@ -645,13 +641,13 @@ export default function App() {
                     <Icon name={s.icon} size={20} color={s.color} />
                   </div>
                   <div style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, color:s.color }}>{s.val}</div>
-                  <div style={{ fontSize:12, color:"rgba(26,26,46,.55)", marginTop:4 }}>{s.label}</div>
+                  <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:4 }}>{s.label}</div>
                 </div>
               ))}
             </div>
             <div style={glassCard}>
-              <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:18, margin:"0 0 18px", color:"#1a1a2e" }}>Activité récente</h3>
-              {loading && <div style={{ color:"rgba(26,26,46,.45)", fontSize:14 }}>Chargement...</div>}
+              <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:18, margin:"0 0 18px", color:"#006064" }}>Activité récente</h3>
+              {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14 }}>Chargement...</div>}
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 {docs.slice(0,5).map(doc => {
                   const tc=TYPE_COLORS[doc.type]||TYPE_COLORS.AUTRE;
@@ -660,8 +656,8 @@ export default function App() {
                     <div key={doc.id} onClick={()=>setModalDetail(doc)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", cursor:"pointer", background:"rgba(255,255,255,.6)", transition:"all .15s" }}>
                       <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type}</span>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:14, color:"#1a1a2e", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
-                        <div style={{ fontSize:12, color:"rgba(26,26,46,.5)" }}>{doc.auteur} · {doc.created_at?.split("T")[0]}</div>
+                        <div style={{ fontSize:14, color:"#006064", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
+                        <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {doc.created_at?.split("T")[0]}</div>
                       </div>
                       <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>{doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}</span>
                     </div>
@@ -680,7 +676,7 @@ export default function App() {
                 <SpaceIcon id={espace.id} size={46} />
                 <div>
                   <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, margin:"0 0 2px", color:c_esp.accent }}>{espace.nom}</h1>
-                  <p style={{ color:"rgba(26,26,46,.55)", margin:0, fontSize:13 }}>{espace.desc}</p>
+                  <p style={{ color:"rgba(0,96,100,.55)", margin:0, fontSize:13 }}>{espace.desc}</p>
                 </div>
               </div>
               <div style={{ display:"flex", gap:8 }}>
@@ -689,27 +685,27 @@ export default function App() {
               </div>
             </div>
             <div style={{ position:"relative", marginBottom:14 }}>
-              <div style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)" }}><Icon name="search" size={15} color="rgba(26,26,46,.4)" /></div>
-              <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#1a1a2e"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
+              <div style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)" }}><Icon name="search" size={15} color="rgba(0,96,100,.4)" /></div>
+              <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#006064"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
             </div>
             <div style={{ display:"flex", gap:8, marginBottom:20, overflowX:"auto", paddingBottom:4 }}>
-              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter==="all"?"#fff":"#1a1a2e", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
+              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter==="all"?"#fff":"#006064", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
               {(cats[espace.id]||[]).map(cat=>(
                 <div key={cat} style={{ display:"inline-flex", alignItems:"center", gap:4, flexShrink:0 }}>
-                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#1a1a2e", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
+                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#006064", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
                   {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(220,38,38,.15)", border:"1px solid rgba(220,38,38,.25)", color:"#fca5a5", borderRadius:8, width:26, height:26, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0 }}><Icon name="trash" size={12} color="#fca5a5" /></button>}
                 </div>
               ))}
             </div>
-            {loading && <div style={{ color:"rgba(26,26,46,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
+            {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14 }}>
               {espDocs(espace.id).map(doc=>(
                 <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />
               ))}
               {espDocs(espace.id).length===0 && !loading && (
-                <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(26,26,46,.4)" }}>
-                  <Icon name="inbox" size={40} color="rgba(26,26,46,.15)" />
-                  <div style={{ marginTop:12, color:"#1a1a2e" }}>Aucun document trouvé</div>
+                <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
+                  <Icon name="inbox" size={40} color="rgba(0,96,100,.15)" />
+                  <div style={{ marginTop:12, color:"#006064" }}>Aucun document trouvé</div>
                 </div>
               )}
             </div>
@@ -719,8 +715,8 @@ export default function App() {
         {/* VALIDATION */}
         {view==="validation" && isSA && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#1a1a2e" }}>Validation</h1>
-            <p style={{ color:"rgba(26,26,46,.55)", margin:"0 0 24px", fontSize:14 }}>{pending} document(s) en attente</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#006064" }}>Validation</h1>
+            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{pending} document(s) en attente</p>
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {docs.filter(d=>d.status==="attente").map(doc => {
                 const tc=TYPE_COLORS[doc.type]||TYPE_COLORS.AUTRE;
@@ -730,15 +726,15 @@ export default function App() {
                     <div style={{ display:"flex", gap:14, alignItems:"flex-start", flexWrap:"wrap" }}>
                       <span style={{ background:tc.bg, color:tc.text, padding:"8px 12px", borderRadius:6, fontSize:12, fontWeight:700, flexShrink:0 }}>{doc.type}</span>
                       <div style={{ flex:1 }}>
-                        <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#1a1a2e" }}>{doc.titre}</h3>
-                        {doc.description && <p style={{ fontSize:13, color:"rgba(26,26,46,.6)", margin:"0 0 8px" }}>{doc.description}</p>}
-                        <div style={{ fontSize:12, color:"rgba(26,26,46,.5)", display:"flex", gap:12, flexWrap:"wrap" }}>
+                        <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#006064" }}>{doc.titre}</h3>
+                        {doc.description && <p style={{ fontSize:13, color:"rgba(0,96,100,.6)", margin:"0 0 8px" }}>{doc.description}</p>}
+                        <div style={{ fontSize:12, color:"rgba(0,96,100,.5)", display:"flex", gap:12, flexWrap:"wrap" }}>
                           <span>{doc.categorie}</span><span>{doc.auteur}</span><span>{espNom}</span>
                         </div>
                       </div>
                     </div>
                     <div style={{ marginTop:14, borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:14 }}>
-                      <label style={{ fontSize:12, color:"rgba(26,26,46,.55)", display:"block", marginBottom:6 }}>Commentaire (optionnel — affiché en cas de refus)</label>
+                      <label style={{ fontSize:12, color:"rgba(0,96,100,.55)", display:"block", marginBottom:6 }}>Commentaire (optionnel — affiché en cas de refus)</label>
                       <textarea style={{...inputStyle,resize:"none",fontSize:13}} rows={2} placeholder="Raison du refus..." value={refusComment} onChange={e=>setRefusComment(e.target.value)} />
                     </div>
                     <div style={{ display:"flex", gap:8, marginTop:12, justifyContent:"flex-end" }}>
@@ -753,9 +749,9 @@ export default function App() {
                 );
               })}
               {pending===0 && (
-                <div style={{ textAlign:"center", padding:80, color:"rgba(26,26,46,.4)" }}>
-                  <Icon name="check" size={40} color="rgba(26,26,46,.15)" />
-                  <div style={{ marginTop:12, color:"#1a1a2e" }}>Aucun document en attente</div>
+                <div style={{ textAlign:"center", padding:80, color:"rgba(0,96,100,.4)" }}>
+                  <Icon name="check" size={40} color="rgba(0,96,100,.15)" />
+                  <div style={{ marginTop:12, color:"#006064" }}>Aucun document en attente</div>
                 </div>
               )}
             </div>
@@ -765,8 +761,8 @@ export default function App() {
         {/* NOTIFICATIONS */}
         {view==="notifs" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#1a1a2e" }}>Notifications</h1>
-            <p style={{ color:"rgba(26,26,46,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#006064" }}>Notifications</h1>
+            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
                 <div key={n.id} style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, opacity:n.lu?0.6:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.15)":`3px solid #e91e8c` }}>
@@ -774,16 +770,16 @@ export default function App() {
                     <Icon name="bell" size={16} color="#006064" />
                   </div>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, color:"#1a1a2e", fontWeight:n.lu?400:500 }}>{n.texte}</div>
-                    <div style={{ fontSize:12, color:"rgba(26,26,46,.45)", marginTop:3 }}>{n.created_at?.split("T")[0]}</div>
+                    <div style={{ fontSize:14, color:"#006064", fontWeight:n.lu?400:500 }}>{n.texte}</div>
+                    <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{n.created_at?.split("T")[0]}</div>
                   </div>
                   {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#e91e8c", flexShrink:0 }} />}
                 </div>
               ))}
               {notifs.length===0 && (
-                <div style={{ textAlign:"center", padding:80, color:"rgba(26,26,46,.4)" }}>
-                  <Icon name="bell" size={40} color="rgba(26,26,46,.15)" />
-                  <div style={{ marginTop:12, color:"#1a1a2e" }}>Aucune notification</div>
+                <div style={{ textAlign:"center", padding:80, color:"rgba(0,96,100,.4)" }}>
+                  <Icon name="bell" size={40} color="rgba(0,96,100,.15)" />
+                  <div style={{ marginTop:12, color:"#006064" }}>Aucune notification</div>
                 </div>
               )}
             </div>
