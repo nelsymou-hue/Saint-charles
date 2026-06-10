@@ -388,15 +388,15 @@ export default function App() {
           <p style={{ color:"#006064", fontSize:13, margin:0 }}>Espace de partage de documents</p>
         </div>
 
-        <div style={{ background:"rgba(255,255,255,.55)", backdropFilter:"blur(20px)", borderRadius:20, padding:20, marginBottom:14, border:"1px solid rgba(255,255,255,.75)", boxShadow:"0 8px 32px rgba(0,0,0,.1)", borderTop:"3px solid transparent", borderImage:"linear-gradient(90deg,#e91e8c,#0d9488,#9c27b0,#1a237e) 1 0 0 0" }}>
-          <div style={{ fontSize:11, color:"#6b7280", fontWeight:600, letterSpacing:1, textTransform:"uppercase", marginBottom:12 }}>Profils</div>
+        <div style={{ background:"#006064", borderRadius:20, padding:20, marginBottom:14, boxShadow:"0 8px 32px rgba(0,0,0,.18)", borderTop:"3px solid rgba(255,255,255,.25)" }}>
+          <div style={{ fontSize:11, color:"rgba(255,255,255,.6)", fontWeight:600, letterSpacing:1, textTransform:"uppercase", marginBottom:12 }}>Profils</div>
           {USERS.map(u=>(
-            <div key={u.id} style={{ background:"rgba(255,255,255,.7)", border:`1px solid rgba(255,255,255,.8)`, borderLeft:`3px solid ${u.color}`, borderRadius:12, padding:"12px 16px", cursor:"pointer", display:"flex", alignItems:"center", gap:12, marginBottom:8, transition:"all .2s" }}
+            <div key={u.id} style={{ background:"rgba(255,255,255,.12)", border:`1px solid rgba(255,255,255,.18)`, borderLeft:`3px solid ${u.color}`, borderRadius:12, padding:"12px 16px", cursor:"pointer", display:"flex", alignItems:"center", gap:12, marginBottom:8, transition:"all .2s" }}
               onClick={()=>{ setLoginError(""); handleLogin(u); }}>
-              <div style={{ width:38, height:38, borderRadius:"50%", background:`${u.color}18`, color:u.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700 }}>{u.avatar}</div>
+              <div style={{ width:38, height:38, borderRadius:"50%", background:`${u.color}30`, color:"#fff", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700 }}>{u.avatar}</div>
               <div style={{ flex:1 }}>
-                <div style={{ color:"#1a1a5e", fontSize:14, fontWeight:500 }}>{u.name}</div>
-                <div style={{ color:"#9ca3af", fontSize:12 }}>{u.post || (u.role==="superadmin"?"Super Admin":u.role==="admin"?"Admin":"Personnel Enseignant")}</div>
+                <div style={{ color:"#fff", fontSize:14, fontWeight:500 }}>{u.name}</div>
+                <div style={{ color:"rgba(255,255,255,.6)", fontSize:12 }}>{u.post || (u.role==="superadmin"?"Super Admin":u.role==="admin"?"Admin":"Personnel Enseignant")}</div>
               </div>
               <div style={{ width:7, height:7, borderRadius:"50%", background:u.color }} />
             </div>
