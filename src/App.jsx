@@ -384,7 +384,7 @@ export default function App() {
       <div style={{ width:"100%", maxWidth:460 }}>
         <div style={{ textAlign:"center", marginBottom:24 }}>
           <div style={{ width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,.5)", border:"2px solid rgba(255,255,255,.7)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 14px", boxShadow:"0 8px 28px rgba(26,26,94,.15)", fontSize:28, fontWeight:700, color:"#1a237e" }}>SC</div>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#1a237e", fontSize:22, margin:"0 0 4px" }}>École Privée Saint-Charles</h1>
+          <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#006064", fontSize:22, margin:"0 0 4px" }}>École Privée Saint-Charles</h1>
           <p style={{ color:"#006064", fontSize:13, margin:0 }}>Espace de partage de documents</p>
         </div>
 
