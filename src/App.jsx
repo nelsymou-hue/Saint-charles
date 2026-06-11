@@ -341,7 +341,7 @@ export default function App() {
     const ext = uploadForm.file.split(".").pop();
     const path = `${espace.id}/${Date.now()}-${uploadForm.file.replace(/\s+/g,"_")}`;
     const { error: storErr } = await supabase.storage.from("documents").upload(path, uploadForm.fileObj, { contentType: uploadForm.fileObj.type, upsert: false });
-    if (storErr) { showToast("Erreur upload fichier", true); return; }
+    if (storErr) { showToast(`Erreur upload : ${storErr.message}`, true); return; }
     const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
     const file_url = urlData?.publicUrl || "";
 
