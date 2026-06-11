@@ -85,6 +85,7 @@ const Icon = ({ name, size=18, color="currentColor" }) => {
     bell:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
     logout:      <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
     menu:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
+    download:    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
     close:       <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
     upload:      <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>,
     download:    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>,
@@ -159,6 +160,12 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
           <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600, flex:1, textAlign:"center" }}>
             {doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}
           </span>
+          {doc.file_url && (
+            <a href={doc.file_url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
+              style={{ background:"rgba(0,96,100,.12)", color:"#006064", border:"1px solid rgba(0,96,100,.25)", padding:"6px 9px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", textDecoration:"none" }}>
+              <Icon name="download" size={13} color="#006064" />
+            </a>
+          )}
           {canDelete && (
             <button onClick={()=>onDelete(doc)} style={{ background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"6px 9px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center" }}>
               <Icon name="trash" size={13} color="#fca5a5" />
@@ -212,7 +219,7 @@ export default function App() {
   const [modalDelete, setModalDelete]       = useState(null);
   const [modalDeleteCat, setModalDeleteCat] = useState(null);
   const [catInput, setCatInput]             = useState("");
-  const [uploadForm, setUploadForm]         = useState({ prenom:"", nom:"", titre:"", cat:"", desc:"", file:"" });
+  const [uploadForm, setUploadForm]         = useState({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
   const [uploadErrors, setUploadErrors]     = useState({});
   const [refusComment, setRefusComment]     = useState({});
   const [refusErrors, setRefusErrors]       = useState({});
@@ -327,17 +334,26 @@ export default function App() {
     if (!uploadForm.prenom.trim()) errs.prenom = "Obligatoire";
     if (!uploadForm.nom.trim())    errs.nom    = "Obligatoire";
     if (!uploadForm.titre.trim())  errs.titre  = "Obligatoire";
-    if (!uploadForm.file)          errs.file   = "Obligatoire";
+    if (!uploadForm.fileObj)       errs.file   = "Obligatoire";
     if (Object.keys(errs).length) { setUploadErrors(errs); return; }
+
+    // Upload fichier dans Supabase Storage
+    const ext = uploadForm.file.split(".").pop();
+    const path = `${espace.id}/${Date.now()}-${uploadForm.file.replace(/\s+/g,"_")}`;
+    const { error: storErr } = await supabase.storage.from("documents").upload(path, uploadForm.fileObj, { contentType: uploadForm.fileObj.type, upsert: false });
+    if (storErr) { showToast("Erreur upload fichier", true); return; }
+    const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
+    const file_url = urlData?.publicUrl || "";
 
     const status = isSA ? "valide" : "attente";
     const { error } = await supabase.from("documents").insert({
       espace_id: espace.id,
-      categorie: uploadForm.cat || (cats[espace.id]?.[0] || "Général"),
+      categorie: cats[espace.id]?.[0] || "Général",
       titre: uploadForm.titre,
       description: uploadForm.desc,
       auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
       type: getType(uploadForm.file),
+      file_url,
       status,
       commentaire: "",
     });
@@ -346,7 +362,7 @@ export default function App() {
       if (status === "attente") {
         await supabase.from("notifications").insert({ texte:`"${uploadForm.titre}" en attente de validation`, lu:false });
       }
-      setUploadForm({ prenom:"", nom:"", titre:"", cat:"", desc:"", file:"" });
+      setUploadForm({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
       setUploadErrors({});
       setModalUpload(false);
       loadDocs();
@@ -447,20 +463,20 @@ export default function App() {
             {uploadErrors.titre && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.titre}</div>}
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Catégorie</label>
-            <select style={fieldStyle(false)} value={uploadForm.cat} onChange={e=>setUploadForm(f=>({...f,cat:e.target.value}))}>
-              <option value="">Choisir...</option>
-              {(cats[espace?.id]||[]).map(c=><option key={c}>{c}</option>)}
-            </select>
-          </div>
-          <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
             <textarea style={{...fieldStyle(false),resize:"none"}} rows={3} placeholder="Description optionnelle..." value={uploadForm.desc} onChange={e=>setUploadForm(f=>({...f,desc:e.target.value}))} />
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom du fichier *</label>
-            <input style={fieldStyle(uploadErrors.file)} placeholder="ex: reglement-2024.pdf" value={uploadForm.file} onChange={e=>setUploadForm(f=>({...f,file:e.target.value}))} />
-            {uploadErrors.file && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
+            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Fichier <span style={{color:"#dc2626"}}>*</span> <span style={{fontWeight:400,fontSize:12,color:"rgba(0,96,100,.6)"}}>(PDF, Word, image)</span></label>
+            <label style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer", padding:"10px 14px", background:uploadErrors.file?"rgba(220,38,38,.08)":"rgba(0,96,100,.06)", border:`1.5px dashed ${uploadErrors.file?"#dc2626":"rgba(0,96,100,.35)"}`, borderRadius:12, transition:"all .2s" }}>
+              <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.gif,.webp" style={{ display:"none" }}
+                onChange={e=>{ const f=e.target.files?.[0]; if(f){ setUploadForm(p=>({...p,file:f.name,fileObj:f})); setUploadErrors(p=>({...p,file:undefined})); } }} />
+              <span style={{ background:"#006064", color:"#fff", padding:"5px 14px", borderRadius:8, fontSize:12, fontWeight:600, flexShrink:0 }}>Choisir un fichier</span>
+              <span style={{ fontSize:13, color: uploadForm.file ? "#006064" : "rgba(0,96,100,.5)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                {uploadForm.file || "Aucun fichier sélectionné"}
+              </span>
+            </label>
+            {uploadErrors.file && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Veuillez sélectionner un fichier</div>}
           </div>
           {!isSA && <div style={{ background:"rgba(251,191,36,.12)", border:"1px solid rgba(251,191,36,.25)", borderRadius:10, padding:12, fontSize:13, color:"#fef3c7", marginBottom:14 }}>Votre document sera soumis à validation avant publication.</div>}
           <div style={{ display:"flex", gap:10 }}>
@@ -503,6 +519,12 @@ export default function App() {
             </div>
           )}
           <div style={{ display:"flex", gap:10 }}>
+            {modalDetail.file_url && (
+              <a href={modalDetail.file_url} target="_blank" rel="noreferrer"
+                style={{ flex:1, justifyContent:"center", background:"#006064", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
+                <Icon name="download" size={14} color="#fff" /> Télécharger
+              </a>
+            )}
             {(isSA || modalDetail.status==="attente") && (
               <button style={{ flex:1, justifyContent:"center", background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"inherit", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 }}
                 onClick={()=>{setModalDelete(modalDetail);setModalDetail(null);}}>
