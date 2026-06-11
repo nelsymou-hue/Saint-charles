@@ -214,7 +214,8 @@ export default function App() {
   const [catInput, setCatInput]             = useState("");
   const [uploadForm, setUploadForm]         = useState({ prenom:"", nom:"", titre:"", cat:"", desc:"", file:"" });
   const [uploadErrors, setUploadErrors]     = useState({});
-  const [refusComment, setRefusComment]     = useState("");
+  const [refusComment, setRefusComment]     = useState({});
+  const [refusErrors, setRefusErrors]       = useState({});
   const [loginPassword, setLoginPassword]   = useState("");
   const [loginError, setLoginError]         = useState("");
 
@@ -293,7 +294,10 @@ export default function App() {
   };
 
   const handleRefuser = async (id) => {
-    await supabase.from("documents").update({ status:"refuse", commentaire:refusComment }).eq("id", id);
+    const motif = refusComment[id]?.trim();
+    if (!motif) { setRefusErrors(e=>({...e,[id]:true})); return; }
+    setRefusErrors(e=>({...e,[id]:false}));
+    await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
     setRefusComment("");
     loadDocs();
     showToast("Document refusé", true);
@@ -493,7 +497,11 @@ export default function App() {
               </div>
             ))}
           </div>
-          {modalDetail.commentaire && <div style={{ background:"rgba(251,191,36,.12)", border:"1px solid rgba(251,191,36,.25)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:13, color:"#fef3c7" }}><strong>Commentaire admin :</strong> {modalDetail.commentaire}</div>}
+          {modalDetail.commentaire && (
+            <div style={{ background:modalDetail.status==="refuse"?"rgba(220,38,38,.1)":"rgba(251,191,36,.12)", border:`1px solid ${modalDetail.status==="refuse"?"rgba(220,38,38,.3)":"rgba(251,191,36,.25)"}`, borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:13, color:modalDetail.status==="refuse"?"#fca5a5":"#fef3c7" }}>
+              <strong>{modalDetail.status==="refuse"?"Motif du refus :":"Commentaire admin :"}</strong> {modalDetail.commentaire}
+            </div>
+          )}
           <div style={{ display:"flex", gap:10 }}>
             {(isSA || modalDetail.status==="attente") && (
               <button style={{ flex:1, justifyContent:"center", background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"inherit", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 }}
@@ -733,8 +741,8 @@ export default function App() {
                       </div>
                     </div>
                     <div style={{ marginTop:14, borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:14 }}>
-                      <label style={{ fontSize:12, color:"rgba(0,96,100,.55)", display:"block", marginBottom:6 }}>Commentaire (optionnel — affiché en cas de refus)</label>
-                      <textarea style={{...inputStyle,resize:"none",fontSize:13}} rows={2} placeholder="Raison du refus..." value={refusComment} onChange={e=>setRefusComment(e.target.value)} />
+                      <label style={{ fontSize:12, color:refusErrors[doc.id]?"#dc2626":"rgba(0,96,100,.55)", display:"block", marginBottom:6 }}>Motif du refus <span style={{color:"#dc2626"}}>*</span>{refusErrors[doc.id] && <span style={{marginLeft:8,fontStyle:"italic"}}>— champ obligatoire</span>}</label>
+                      <textarea style={{...inputStyle,resize:"none",fontSize:13,borderColor:refusErrors[doc.id]?"#dc2626":"#006064"}} rows={2} placeholder="Saisir le motif du refus..." value={refusComment[doc.id]||""} onChange={e=>{ setRefusComment(f=>({...f,[doc.id]:e.target.value})); setRefusErrors(f=>({...f,[doc.id]:false})); }} />
                     </div>
                     <div style={{ display:"flex", gap:8, marginTop:12, justifyContent:"flex-end" }}>
                       <button onClick={()=>handleRefuser(doc.id)} style={{ background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
