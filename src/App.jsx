@@ -220,7 +220,7 @@ export default function App() {
   const [modalDelete, setModalDelete]       = useState(null);
   const [modalDeleteCat, setModalDeleteCat] = useState(null);
   const [catInput, setCatInput]             = useState("");
-  const [uploadForm, setUploadForm]         = useState({ titre:"", desc:"", file:"", fileObj:null });
+  const [uploadForm, setUploadForm]         = useState({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
   const [uploadErrors, setUploadErrors]     = useState({});
   const [refusComment, setRefusComment]     = useState({});
   const [refusErrors, setRefusErrors]       = useState({});
@@ -317,7 +317,7 @@ export default function App() {
   const handleValider = async (id) => {
     const doc = docs.find(d=>d.id===id);
     await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
-    await sendNotif(`Votre document "${doc?.titre}" a été validé ✓`, { destinataire:doc?.auteur, doc_id:id });
+    await sendNotif(`Votre document "${doc?.titre}" a été validé ✓`, { destinataire:doc?.deposant||doc?.auteur, doc_id:id });
     loadDocs();
     loadNotifs(user);
     showToast("Document validé ✓");
@@ -329,7 +329,7 @@ export default function App() {
     const doc = docs.find(d=>d.id===id);
     setRefusErrors(e=>({...e,[id]:false}));
     await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
-    await sendNotif(`Votre document "${doc?.titre}" a été refusé`, { destinataire:doc?.auteur, doc_id:id });
+    await sendNotif(`Votre document "${doc?.titre}" a été refusé`, { destinataire:doc?.deposant||doc?.auteur, doc_id:id });
     setRefusMode(m=>({...m,[id]:false}));
     setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
@@ -358,8 +358,10 @@ export default function App() {
 
   const handleUpload = async () => {
     const errs = {};
-    if (!uploadForm.titre.trim()) errs.titre = "Obligatoire";
-    if (!uploadForm.fileObj)      errs.file  = "Obligatoire";
+    if (!uploadForm.prenom.trim()) errs.prenom = "Obligatoire";
+    if (!uploadForm.nom.trim())    errs.nom    = "Obligatoire";
+    if (!uploadForm.titre.trim())  errs.titre  = "Obligatoire";
+    if (!uploadForm.fileObj)       errs.file   = "Obligatoire";
     if (Object.keys(errs).length) { setUploadErrors(errs); return; }
 
     // Upload fichier dans Supabase Storage
@@ -376,7 +378,8 @@ export default function App() {
       categorie: cats[espace.id]?.[0] || "Général",
       titre: uploadForm.titre,
       description: uploadForm.desc,
-      auteur: user.name,
+      auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
+      deposant: user.name,
       type: getType(uploadForm.file),
       file_url,
       status,
@@ -387,7 +390,7 @@ export default function App() {
       if (status === "attente") {
         await sendNotif(`"${uploadForm.titre}" en attente de validation`);
       }
-      setUploadForm({ titre:"", desc:"", file:"", fileObj:null });
+      setUploadForm({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
       setUploadErrors({});
       setModalUpload(false);
       loadDocs();
@@ -417,7 +420,7 @@ export default function App() {
   });
   // Docs en attente déposés par l'utilisateur courant (non-admin)
   const espDocsPending = (espId) => (!isSA && !isAdmin)
-    ? docs.filter(d => d.espace_id === espId && d.status === "attente" && d.auteur === user?.name)
+    ? docs.filter(d => d.espace_id === espId && d.status === "attente" && (d.deposant === user?.name || d.auteur === user?.name))
     : [];
 
   const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#006064" });
@@ -475,8 +478,17 @@ export default function App() {
       {/* MODALS */}
       {modalUpload && (
         <Modal title={`Déposer dans — ${espace?.nom}`} onClose={()=>{setModalUpload(false);setUploadErrors({});}}>
-          <div style={{ marginBottom:14, padding:"10px 14px", background:"rgba(0,96,100,.07)", borderRadius:10, fontSize:13, color:"#006064" }}>
-            Déposé par : <strong>{user.name}</strong>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:14 }}>
+            <div>
+              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
+              <input style={fieldStyle(uploadErrors.prenom)} placeholder="Votre prénom..." value={uploadForm.prenom} onChange={e=>setUploadForm(f=>({...f,prenom:e.target.value}))} />
+              {uploadErrors.prenom && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
+            </div>
+            <div>
+              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
+              <input style={fieldStyle(uploadErrors.nom)} placeholder="Votre nom..." value={uploadForm.nom} onChange={e=>setUploadForm(f=>({...f,nom:e.target.value}))} />
+              {uploadErrors.nom && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
+            </div>
           </div>
           <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
