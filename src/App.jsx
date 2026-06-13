@@ -319,7 +319,7 @@ export default function App() {
     await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
     await sendNotif(`Votre document "${doc?.titre}" a été validé ✓`, { destinataire:doc?.auteur, doc_id:id });
     loadDocs();
-    loadNotifs();
+    loadNotifs(user);
     showToast("Document validé ✓");
   };
 
@@ -333,7 +333,7 @@ export default function App() {
     setRefusMode(m=>({...m,[id]:false}));
     setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
-    loadNotifs();
+    loadNotifs(user);
     showToast("Document refusé");
   };
 
@@ -393,7 +393,7 @@ export default function App() {
       setUploadErrors({});
       setModalUpload(false);
       loadDocs();
-      loadNotifs();
+      loadNotifs(user);
       showToast(status === "valide" ? "Document publié ✓" : "Soumis — en attente de validation");
     } else {
       showToast("Erreur lors du dépôt", true);
@@ -616,7 +616,7 @@ export default function App() {
                 {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{pending}</span>}
               </div>
             )}
-            <div className="nav-item" onClick={()=>{setView("notifs");}}
+            <div className="nav-item" onClick={()=>{setView("notifs");loadNotifs(user);}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{unread}</span>}
