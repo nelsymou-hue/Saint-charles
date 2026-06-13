@@ -707,15 +707,15 @@ export default function App() {
             {isSA && (
               <div className="nav-item" onClick={()=>setView("validation")}
                 style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="validation"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="validation"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="validation"?500:400, borderLeft:view==="validation"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
-                <Icon name="check" size={15} color={view==="validation"?"#fff":"rgba(255,255,255,.45)"} /> Validation
+                <Icon name="check" size={15} color={view==="validation"?"#fff":"rgba(255,255,255,.45)"} /> En attente de validation
                 {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{pending}</span>}
               </div>
             )}
-            <div className="nav-item" onClick={()=>{setView("notifs");loadNotifs(user);}}
+            {!isAdmin && <div className="nav-item" onClick={()=>{setView("notifs");loadNotifs(user);}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{unread}</span>}
-            </div>
+            </div>}
             <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
             {ESPACES.filter(e=>e.id==="ressources").map(e=>(
               <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
