@@ -55,7 +55,7 @@ const CATS_DEFAUT = {
   projets:     ["En cours","Validés","Archivés"],
   climat:      ["Vie scolaire","Bien-être","Conflits"],
   pastorale:   ["Prières","Événements","Retraites"],
-  ressources:  ["Maternelle","CP-CE1","CE2-CM2","Transversal"],
+  ressources:  ["Cycle 1","Cycle 2","Cycle 3","Transversal"],
 };
 
 const TYPE_COLORS = {
