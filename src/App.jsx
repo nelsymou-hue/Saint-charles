@@ -770,8 +770,7 @@ export default function App() {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
                 const lastSeen = getLastSeen(e.id);
                 const newCount = user?.role==="enseignant" ? docs.filter(d=>d.espace_id===e.id&&d.status==="valide"&&(!lastSeen||d.created_at>lastSeen)).length : 0;
-                const canDepose = isAdmin || user?.role==="enseignant";
-                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} onAdd={canDepose ? ()=>{ setEspace(e); setModalUpload(true); } : undefined} />;
+                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} onAdd={user?.role==="enseignant" ? ()=>{ setEspace(e); setModalUpload(true); } : undefined} />;
               })}
             </div>
             <div style={{ height:1, background:"rgba(0,96,100,0.15)", margin:"16px 0" }} />
