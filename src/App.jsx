@@ -307,7 +307,7 @@ export default function App() {
   const handleValider = async (id) => {
     const doc = docs.find(d=>d.id===id);
     await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été validé ✓`, lu:false, destinataire:doc?.auteur });
+    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été validé ✓`, lu:false, destinataire:doc?.auteur, doc_id:id });
     loadDocs();
     loadNotifs();
     showToast("Document validé ✓");
@@ -319,7 +319,7 @@ export default function App() {
     const doc = docs.find(d=>d.id===id);
     setRefusErrors(e=>({...e,[id]:false}));
     await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été refusé — ${motif}`, lu:false, destinataire:doc?.auteur });
+    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été refusé`, lu:false, destinataire:doc?.auteur, doc_id:id });
     setRefusMode(m=>({...m,[id]:false}));
     setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
@@ -401,6 +401,7 @@ export default function App() {
 
   const espDocs = (espId) => docs.filter(d => {
     if (d.espace_id !== espId) return false;
+    if (d.status === "refuse") return false;
     if (d.status === "attente" && !isSA && d.auteur !== user?.name) return false;
     if (catFilter !== "all" && d.categorie !== catFilter) return false;
     if (search && !d.titre.toLowerCase().includes(search.toLowerCase())) return false;
@@ -521,12 +522,12 @@ export default function App() {
               {modalDetail.status==="valide"?"Publié":modalDetail.status==="attente"?"En attente":"Refusé"}
             </span>
           </div>
-          {modalDetail.description && <div style={{ background:"rgba(255,255,255,.1)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#fff", lineHeight:1.6 }}>{modalDetail.description}</div>}
+          {modalDetail.description && <div style={{ background:"rgba(0,96,100,.06)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#006064", lineHeight:1.6 }}>{modalDetail.description}</div>}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
             {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)],["Type",modalDetail.type]].map(([l,v])=>(
-              <div key={l} style={{ background:"rgba(255,255,255,.1)", borderRadius:10, border:"1px solid rgba(255,255,255,.15)", padding:"10px 14px" }}>
-                <div style={{ fontSize:11, color:"rgba(255,255,255,.5)", marginBottom:3 }}>{l}</div>
-                <div style={{ fontSize:13, color:"#fff", fontWeight:500 }}>{v}</div>
+              <div key={l} style={{ background:"rgba(0,96,100,.06)", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", padding:"10px 14px" }}>
+                <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", marginBottom:3 }}>{l}</div>
+                <div style={{ fontSize:13, color:"#006064", fontWeight:500 }}>{v}</div>
               </div>
             ))}
           </div>
@@ -536,7 +537,7 @@ export default function App() {
             </div>
           )}
           <div style={{ display:"flex", gap:10 }}>
-            {modalDetail.file_url && (
+            {modalDetail.file_url && modalDetail.status !== "refuse" && (
               <a href={modalDetail.file_url} target="_blank" rel="noreferrer"
                 style={{ flex:1, justifyContent:"center", background:"#006064", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
                 <Icon name="download" size={14} color="#fff" /> Télécharger
@@ -828,8 +829,8 @@ export default function App() {
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
-                <div key={n.id} onClick={()=>{ if(!n.lu) markNotifLue(n.id); }}
-                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:n.lu?"default":"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #006064`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
+                <div key={n.id} onClick={()=>{ if(!n.lu) markNotifLue(n.id); if(n.doc_id){ const d=docs.find(x=>x.id===n.doc_id); if(d) setModalDetail(d); } }}
+                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #006064`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:n.lu?"rgba(0,96,100,.06)":"rgba(0,96,100,.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                     <Icon name="bell" size={16} color="#006064" />
                   </div>
