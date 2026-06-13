@@ -67,7 +67,7 @@ const TYPE_COLORS = {
   AUTRE:{ bg:"rgba(107,114,128,.12)", text:"#6b7280" },
 };
 const getType = n => { if (!n) return "AUTRE"; const e = n.split(".").pop().toUpperCase(); return ["PDF","DOCX","XLSX","PPTX","IMG"].includes(e) ? e : "AUTRE"; };
-const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}) + " à " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); };
+const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d.getTime())) return iso; return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}) + " à " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); };
 
 // ─── ICONES SVG ──────────────────────────────────────────────────────────────
 const Icon = ({ name, size=18, color="currentColor" }) => {
@@ -277,6 +277,14 @@ export default function App() {
 
   const showToast = (msg, err=false) => { setToast({msg,err}); setTimeout(()=>setToast(null),3000); };
 
+  const sendNotif = async (texte, opts={}) => {
+    const { error } = await supabase.from("notifications").insert({ texte, lu:false, ...opts });
+    if (error) {
+      // Colonnes destinataire/doc_id absentes — insert basique sans les champs optionnels
+      await supabase.from("notifications").insert({ texte, lu:false });
+    }
+  };
+
   const goTo = (v, esp=null) => {
     if (view !== "accueil" && view !== "dashboard") setNavHistory(h=>[...h, {view, espace}]);
     setView(v);
@@ -307,7 +315,7 @@ export default function App() {
   const handleValider = async (id) => {
     const doc = docs.find(d=>d.id===id);
     await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été validé ✓`, lu:false, destinataire:doc?.auteur, doc_id:id });
+    await sendNotif(`Votre document "${doc?.titre}" a été validé ✓`, { destinataire:doc?.auteur, doc_id:id });
     loadDocs();
     loadNotifs();
     showToast("Document validé ✓");
@@ -319,7 +327,7 @@ export default function App() {
     const doc = docs.find(d=>d.id===id);
     setRefusErrors(e=>({...e,[id]:false}));
     await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été refusé`, lu:false, destinataire:doc?.auteur, doc_id:id });
+    await sendNotif(`Votre document "${doc?.titre}" a été refusé`, { destinataire:doc?.auteur, doc_id:id });
     setRefusMode(m=>({...m,[id]:false}));
     setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
@@ -377,7 +385,7 @@ export default function App() {
 
     if (!error) {
       if (status === "attente") {
-        await supabase.from("notifications").insert({ texte:`"${uploadForm.titre}" en attente de validation`, lu:false });
+        await sendNotif(`"${uploadForm.titre}" en attente de validation`);
       }
       setUploadForm({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
       setUploadErrors({});
@@ -618,7 +626,6 @@ export default function App() {
                 <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
               </div>
             ))}
-            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Ressources</div>
             {ESPACES.filter(e=>e.id==="ressources").map(e=>(
               <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
                 style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
