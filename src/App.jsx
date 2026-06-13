@@ -838,7 +838,7 @@ export default function App() {
               </div>
               <div style={{ display:"flex", gap:8 }}>
                 {isAdmin && <button style={btnGhost} onClick={()=>setModalCat(true)}><Icon name="plus" size={13} color="#006064" /> Catégorie</button>}
-                {(isAdmin || (user.role==="enseignant" && espace.id==="ressources")) && <button style={btn} onClick={()=>setModalUpload(true)}><Icon name="upload" size={14} color="#fff" /> Déposer</button>}
+                {(isAdmin || (user.role==="enseignant" && espace.id==="ressources")) && <button style={btn} onClick={()=>setModalUpload(true)}>+ Déposer</button>}
               </div>
             </div>
             <div style={{ position:"relative", marginBottom:14 }}>
