@@ -742,29 +742,20 @@ export default function App() {
                   {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(220,38,38,.15)", border:"1px solid rgba(220,38,38,.25)", color:"#fca5a5", borderRadius:8, width:26, height:26, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0 }}><Icon name="trash" size={12} color="#fca5a5" /></button>}
                 </div>
               ))}
+              {espDocsPending(espace.id).length > 0 && (
+                <div onClick={()=>setCatFilter("__attente__")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="__attente__"?"rgba(220,38,38,.8)":"rgba(220,38,38,.1)", color:catFilter==="__attente__"?"#fff":"#dc2626", border:"1.5px solid rgba(220,38,38,.3)", fontWeight:600, display:"inline-flex", alignItems:"center", gap:6 }}>
+                  En attente
+                  <span style={{ background:catFilter==="__attente__"?"rgba(255,255,255,.3)":"rgba(220,38,38,.2)", borderRadius:"50%", width:18, height:18, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, fontWeight:700 }}>{espDocsPending(espace.id).length}</span>
+                </div>
+              )}
             </div>
             {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
 
-            {/* Section en attente — personnel uniquement */}
-            {espDocsPending(espace.id).length > 0 && (
-              <div style={{ marginBottom:24 }}>
-                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                  <div style={{ fontSize:12, fontWeight:600, color:"rgba(0,96,100,.5)", letterSpacing:1, textTransform:"uppercase" }}>En attente de validation</div>
-                  <span style={{ background:"rgba(220,38,38,.15)", color:"#dc2626", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:600 }}>{espDocsPending(espace.id).length}</span>
-                </div>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, opacity:0.65, filter:"grayscale(20%)" }}>
-                  {espDocsPending(espace.id).map(doc=>(
-                    <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={true} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14 }}>
-              {espDocs(espace.id).map(doc=>(
-                <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA} />
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, ...(catFilter==="__attente__"?{opacity:0.7}:{}) }}>
+              {(catFilter==="__attente__" ? espDocsPending(espace.id) : espDocs(espace.id)).map(doc=>(
+                <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />
               ))}
-              {espDocs(espace.id).length===0 && !loading && (
+              {catFilter!=="__attente__" && espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
                   <Icon name="inbox" size={40} color="rgba(0,96,100,.15)" />
                   <div style={{ marginTop:12, color:"#006064" }}>Aucun document trouvé</div>
