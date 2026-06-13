@@ -86,6 +86,7 @@ const Icon = ({ name, size=18, color="currentColor" }) => {
     logout:      <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
     menu:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
     download:    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+    eye:         <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
     close:       <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
     upload:      <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>,
     download:    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>,
@@ -223,6 +224,7 @@ export default function App() {
   const [uploadErrors, setUploadErrors]     = useState({});
   const [refusComment, setRefusComment]     = useState({});
   const [refusErrors, setRefusErrors]       = useState({});
+  const [refusMode, setRefusMode]           = useState({});
   const [loginPassword, setLoginPassword]   = useState("");
   const [loginError, setLoginError]         = useState("");
 
@@ -305,9 +307,12 @@ export default function App() {
     if (!motif) { setRefusErrors(e=>({...e,[id]:true})); return; }
     setRefusErrors(e=>({...e,[id]:false}));
     await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
-    setRefusComment("");
+    await supabase.from("notifications").insert({ texte:"Document refusé", lu:false });
+    setRefusMode(m=>({...m,[id]:false}));
+    setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
-    showToast("Document refusé", true);
+    loadNotifs();
+    showToast("Document refusé");
   };
 
   const handleDelete = async (doc) => {
@@ -392,9 +397,9 @@ export default function App() {
 
   const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#006064" });
 
-  const markNotifsLues = async () => {
-    await supabase.from("notifications").update({ lu:true }).eq("lu", false);
-    loadNotifs();
+  const markNotifLue = async (id) => {
+    await supabase.from("notifications").update({ lu:true }).eq("id", id);
+    setNotifs(prev => prev.map(n => n.id===id ? {...n, lu:true} : n));
   };
 
   // ══ ÉCRAN LOGIN ════════════════════════════════════════════════════════════
@@ -588,7 +593,7 @@ export default function App() {
                 {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{pending}</span>}
               </div>
             )}
-            <div className="nav-item" onClick={()=>{setView("notifs");markNotifsLues();}}
+            <div className="nav-item" onClick={()=>{setView("notifs");}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{unread}</span>}
@@ -761,18 +766,38 @@ export default function App() {
                           <span>{doc.categorie}</span><span>{doc.auteur}</span><span>{espNom}</span>
                         </div>
                       </div>
+                      {doc.file_url && (
+                        <a href={doc.file_url} target="_blank" rel="noreferrer"
+                          style={{ background:"rgba(0,96,100,.1)", color:"#006064", border:"1px solid rgba(0,96,100,.25)", padding:"7px 12px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontSize:13, fontWeight:500, textDecoration:"none", flexShrink:0 }}>
+                          <Icon name="eye" size={14} color="#006064" /> Voir
+                        </a>
+                      )}
                     </div>
-                    <div style={{ marginTop:14, borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:14 }}>
-                      <label style={{ fontSize:12, color:refusErrors[doc.id]?"#dc2626":"rgba(0,96,100,.55)", display:"block", marginBottom:6 }}>Motif du refus <span style={{color:"#dc2626"}}>*</span>{refusErrors[doc.id] && <span style={{marginLeft:8,fontStyle:"italic"}}>— champ obligatoire</span>}</label>
-                      <textarea style={{...inputStyle,resize:"none",fontSize:13,borderColor:refusErrors[doc.id]?"#dc2626":"#006064"}} rows={2} placeholder="Saisir le motif du refus..." value={refusComment[doc.id]||""} onChange={e=>{ setRefusComment(f=>({...f,[doc.id]:e.target.value})); setRefusErrors(f=>({...f,[doc.id]:false})); }} />
-                    </div>
+                    {refusMode[doc.id] && (
+                      <div style={{ marginTop:14, borderTop:"1px solid rgba(0,96,100,.1)", paddingTop:14 }}>
+                        <label style={{ fontSize:12, color:refusErrors[doc.id]?"#dc2626":"rgba(0,96,100,.55)", display:"block", marginBottom:6 }}>
+                          Motif du refus <span style={{color:"#dc2626"}}>*</span>
+                          {refusErrors[doc.id] && <span style={{marginLeft:8,fontStyle:"italic"}}>— champ obligatoire</span>}
+                        </label>
+                        <textarea style={{...inputStyle,resize:"none",fontSize:13,borderColor:refusErrors[doc.id]?"#dc2626":"#006064"}} rows={2} placeholder="Saisir le motif du refus..." value={refusComment[doc.id]||""} onChange={e=>{ setRefusComment(f=>({...f,[doc.id]:e.target.value})); setRefusErrors(f=>({...f,[doc.id]:false})); }} />
+                      </div>
+                    )}
                     <div style={{ display:"flex", gap:8, marginTop:12, justifyContent:"flex-end" }}>
-                      <button onClick={()=>handleRefuser(doc.id)} style={{ background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
-                        <Icon name="close" size={13} color="#fca5a5" /> Refuser
-                      </button>
-                      <button onClick={()=>handleValider(doc.id)} style={{ background:"rgba(5,150,105,.2)", color:"#6ee7b7", border:"1px solid rgba(5,150,105,.3)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
-                        <Icon name="check" size={13} color="#6ee7b7" /> Valider
-                      </button>
+                      {refusMode[doc.id] ? (<>
+                        <button onClick={()=>setRefusMode(m=>({...m,[doc.id]:false}))} style={{ background:"transparent", color:"rgba(0,96,100,.6)", border:"1px solid rgba(0,96,100,.2)", padding:"7px 14px", borderRadius:8, cursor:"pointer", fontSize:13, fontFamily:"inherit" }}>
+                          Annuler
+                        </button>
+                        <button onClick={()=>handleRefuser(doc.id)} style={{ background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
+                          <Icon name="close" size={13} color="#fca5a5" /> Confirmer le refus
+                        </button>
+                      </>) : (<>
+                        <button onClick={()=>setRefusMode(m=>({...m,[doc.id]:true}))} style={{ background:"rgba(220,38,38,.15)", color:"#fca5a5", border:"1px solid rgba(220,38,38,.25)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
+                          <Icon name="close" size={13} color="#fca5a5" /> Refuser
+                        </button>
+                        <button onClick={()=>handleValider(doc.id)} style={{ background:"rgba(5,150,105,.2)", color:"#6ee7b7", border:"1px solid rgba(5,150,105,.3)", padding:"7px 16px", borderRadius:8, cursor:"pointer", fontSize:13, fontWeight:500, display:"flex", alignItems:"center", gap:6, fontFamily:"inherit" }}>
+                          <Icon name="check" size={13} color="#6ee7b7" /> Valider
+                        </button>
+                      </>)}
                     </div>
                   </div>
                 );
@@ -794,15 +819,16 @@ export default function App() {
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
-                <div key={n.id} style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, opacity:n.lu?0.6:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.15)":`3px solid #e91e8c` }}>
-                  <div style={{ width:36, height:36, borderRadius:10, background:"rgba(0,96,100,.1)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                <div key={n.id} onClick={()=>{ if(!n.lu) markNotifLue(n.id); }}
+                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:n.lu?"default":"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #006064`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
+                  <div style={{ width:36, height:36, borderRadius:10, background:n.lu?"rgba(0,96,100,.06)":"rgba(0,96,100,.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                     <Icon name="bell" size={16} color="#006064" />
                   </div>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, color:"#006064", fontWeight:n.lu?400:500 }}>{n.texte}</div>
+                    <div style={{ fontSize:14, color:"#006064", fontWeight:n.lu?400:600 }}>{n.texte}</div>
                     <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{n.created_at?.split("T")[0]}</div>
                   </div>
-                  {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#e91e8c", flexShrink:0 }} />}
+                  {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#006064", flexShrink:0 }} />}
                 </div>
               ))}
               {notifs.length===0 && (
