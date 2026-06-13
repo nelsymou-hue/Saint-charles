@@ -181,12 +181,18 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
 };
 
 // ─── SPACE CARD ──────────────────────────────────────────────────────────────
-const SpaceCard = ({ esp, count, newCount=0, onClick }) => {
+const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
   const [hov, setHov] = useState(false);
   const c = SPACE_COLORS[esp.id] || PALETTE[0];
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onClick}
       style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, padding:20, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-7px) scale(1.015)":"translateY(0)", boxShadow:hov?`0 24px 48px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
+      {onAdd && (
+        <button onClick={e=>{ e.stopPropagation(); onAdd(); }}
+          style={{ position:"absolute", top:10, right:newCount>0?36:10, zIndex:10, width:26, height:26, borderRadius:"50%", background:"#006064", color:"#fff", border:"none", cursor:"pointer", fontSize:18, lineHeight:1, display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 2px 6px rgba(0,96,100,.35)", fontWeight:300 }}>
+          +
+        </button>
+      )}
       {newCount > 0 && (
         <div style={{ position:"absolute", top:10, right:10, zIndex:10, background:"#ef4444", color:"#fff", borderRadius:"50%", minWidth:20, height:20, fontSize:11, fontWeight:700, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 4px", boxShadow:"0 2px 6px rgba(239,68,68,.5)" }}>
           {newCount}
@@ -764,7 +770,8 @@ export default function App() {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
                 const lastSeen = getLastSeen(e.id);
                 const newCount = user?.role==="enseignant" ? docs.filter(d=>d.espace_id===e.id&&d.status==="valide"&&(!lastSeen||d.created_at>lastSeen)).length : 0;
-                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} />;
+                const canDepose = isAdmin || user?.role==="enseignant";
+                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} onAdd={canDepose ? ()=>{ setEspace(e); setModalUpload(true); } : undefined} />;
               })}
             </div>
             <div style={{ height:1, background:"rgba(0,96,100,0.15)", margin:"16px 0" }} />
