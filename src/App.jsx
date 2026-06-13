@@ -338,8 +338,8 @@ export default function App() {
     if (Object.keys(errs).length) { setUploadErrors(errs); return; }
 
     // Upload fichier dans Supabase Storage
-    const ext = uploadForm.file.split(".").pop();
-    const path = `${espace.id}/${Date.now()}-${uploadForm.file.replace(/\s+/g,"_")}`;
+    const cleanName = uploadForm.file.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-zA-Z0-9.\-_]/g,"_");
+    const path = `${espace.id}/${Date.now()}-${cleanName}`;
     const { error: storErr } = await supabase.storage.from("documents").upload(path, uploadForm.fileObj, { contentType: uploadForm.fileObj.type, upsert: false });
     if (storErr) { showToast(`Erreur upload : ${storErr.message}`, true); return; }
     const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
