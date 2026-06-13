@@ -189,8 +189,7 @@ const SpaceCard = ({ esp, count, onClick }) => {
       <div style={{ position:"absolute", top:0, left:0, right:0, height:55, background:"linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)", pointerEvents:"none" }} />
       <div style={{ position:"relative", zIndex:2 }}>
         <div style={{ marginBottom:14 }}><SpaceIcon id={esp.id} size={42} /></div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, marginBottom:6, color:c.accent }}>{esp.nom}</div>
-        <div style={{ fontSize:13, color:"rgba(0,96,100,.6)", marginBottom:14 }}>{esp.desc}</div>
+        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, marginBottom:14, color:c.accent }}>{esp.nom}</div>
         <div style={{ height:1, background:`linear-gradient(90deg,${c.border},transparent)`, marginBottom:10 }} />
         <div style={{ fontSize:12, color:"#006064", fontWeight:500 }}>{count} document(s) publié(s)</div>
       </div>
@@ -646,8 +645,7 @@ export default function App() {
         {/* ACCUEIL */}
         {view==="accueil" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#006064" }}>Bonjour, {user.name.split(" ").slice(-1)[0]}</h1>
-            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 28px", fontSize:14 }}>Bienvenue sur l'espace documents de l'École Privée Saint-Charles</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Bienvenue dans votre espace</h1>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
               {ESPACES.map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
@@ -660,8 +658,7 @@ export default function App() {
         {/* DASHBOARD */}
         {view==="dashboard" && isAdmin && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 6px", color:"#006064" }}>Tableau de bord</h1>
-            <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 28px", fontSize:14 }}>Vue d'ensemble de l'activité documentaire</p>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Tableau de bord</h1>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))", gap:14, marginBottom:28 }}>
               {[
                 {label:"Total",val:docs.length,color:"#006064",icon:"file"},
@@ -709,8 +706,7 @@ export default function App() {
               <div style={{ display:"flex", alignItems:"center", gap:14 }}>
                 <SpaceIcon id={espace.id} size={46} />
                 <div>
-                  <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, margin:"0 0 2px", color:c_esp.accent }}>{espace.nom}</h1>
-                  <p style={{ color:"rgba(0,96,100,.55)", margin:0, fontSize:13 }}>{espace.desc}</p>
+                  <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, margin:0, color:c_esp.accent }}>{espace.nom}</h1>
                 </div>
               </div>
               <div style={{ display:"flex", gap:8 }}>
