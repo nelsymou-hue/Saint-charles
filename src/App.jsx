@@ -750,7 +750,7 @@ export default function App() {
               <div style={{ marginBottom:24 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
                   <div style={{ fontSize:12, fontWeight:600, color:"rgba(0,96,100,.5)", letterSpacing:1, textTransform:"uppercase" }}>En attente de validation</div>
-                  <span style={{ background:"rgba(217,119,6,.15)", color:"#d97706", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:600 }}>{espDocsPending(espace.id).length}</span>
+                  <span style={{ background:"rgba(220,38,38,.15)", color:"#dc2626", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:600 }}>{espDocsPending(espace.id).length}</span>
                 </div>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, opacity:0.65, filter:"grayscale(20%)" }}>
                   {espDocsPending(espace.id).map(doc=>(
