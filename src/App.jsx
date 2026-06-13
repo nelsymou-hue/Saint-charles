@@ -372,7 +372,7 @@ export default function App() {
     const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
     const file_url = urlData?.publicUrl || "";
 
-    const status = isSA ? "valide" : "attente";
+    const status = isAdmin ? "valide" : "attente";
     const { error } = await supabase.from("documents").insert({
       espace_id: espace.id,
       categorie: cats[espace.id]?.[0] || "Général",
@@ -739,7 +739,7 @@ export default function App() {
               </div>
               <div style={{ display:"flex", gap:8 }}>
                 {isAdmin && <button style={btnGhost} onClick={()=>setModalCat(true)}><Icon name="plus" size={13} color="#006064" /> Catégorie</button>}
-                {(isAdmin||user.role==="enseignant") && <button style={btn} onClick={()=>setModalUpload(true)}><Icon name="upload" size={14} color="#fff" /> Déposer</button>}
+                {(isAdmin || (user.role==="enseignant" && espace.id==="ressources")) && <button style={btn} onClick={()=>setModalUpload(true)}><Icon name="upload" size={14} color="#fff" /> Déposer</button>}
               </div>
             </div>
             <div style={{ position:"relative", marginBottom:14 }}>
