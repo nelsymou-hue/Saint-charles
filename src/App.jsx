@@ -514,14 +514,55 @@ export default function App() {
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
     <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'DM Sans',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}`}</style>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
+        *{box-sizing:border-box}
+        .nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+        input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}
+        @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+
+        /* ── SIDEBAR ── */
+        .sc-sidebar{position:sticky;top:0;height:100vh;flex-shrink:0;transition:width .25s,min-width .25s,padding .25s}
+        .sc-overlay{display:none}
+
+        /* ── GRIDS ── */
+        .sc-spaces-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+        .sc-docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+        .sc-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+        .sc-upload-name{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+        .sc-main-pad{padding:28px 32px}
+        .sc-topbar{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+
+        /* ── TABLETTE (≤ 1024px) ── */
+        @media(max-width:1024px){
+          .sc-spaces-grid{grid-template-columns:repeat(2,1fr)}
+          .sc-docs-grid{grid-template-columns:repeat(2,1fr)}
+          .sc-main-pad{padding:20px 20px}
+        }
+
+        /* ── MOBILE (≤ 767px) ── */
+        @media(max-width:767px){
+          .sc-sidebar{position:fixed!important;z-index:200;height:100vh;top:0;left:0}
+          .sc-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199;backdrop-filter:blur(2px)}
+          .sc-spaces-grid{grid-template-columns:1fr}
+          .sc-docs-grid{grid-template-columns:1fr}
+          .sc-stat-grid{grid-template-columns:1fr}
+          .sc-upload-name{grid-template-columns:1fr}
+          .sc-main-pad{padding:16px 14px}
+          .sc-topbar{margin-bottom:18px}
+          button,a[role=button]{min-height:44px}
+        }
+      `}</style>
 
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
+
+      {/* Overlay mobile pour fermer la sidebar */}
+      {sidebar && <div className="sc-overlay" onClick={()=>setSidebar(false)} />}
 
       {/* MODALS */}
       {modalUpload && (
         <Modal title={`Déposer dans — ${espace?.nom}`} onClose={()=>{setModalUpload(false);setUploadErrors({});}}>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:14 }}>
+          <div className="sc-upload-name">
             <div>
               <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
               <input style={fieldStyle(uploadErrors.prenom)} placeholder="Votre prénom..." value={uploadForm.prenom} onChange={e=>setUploadForm(f=>({...f,prenom:e.target.value}))} />
@@ -644,7 +685,7 @@ export default function App() {
       )}
 
       {/* SIDEBAR */}
-      <div style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px":"0", display:"flex", flexDirection:"column", position:"sticky", top:0, height:"100vh", overflow:"hidden", transition:"all .25s", overflowY:sidebar?"auto":"hidden", flexShrink:0 }}>
+      <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px":"0", display:"flex", flexDirection:"column", overflow:"hidden", overflowY:sidebar?"auto":"hidden" }}>
         {sidebar && <>
           <div style={{ textAlign:"center", marginBottom:24 }}>
             <div style={{ width:56, height:56, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 8px", fontSize:18, fontWeight:700, color:"#fff" }}>SC</div>
@@ -698,7 +739,7 @@ export default function App() {
       </div>
 
       {/* MAIN */}
-      <div style={{ flex:1, padding:"28px 32px", overflowY:"auto", minWidth:0 }}>
+      <div className="sc-main-pad" style={{ flex:1, overflowY:"auto", minWidth:0 }}>
         {/* TOPBAR */}
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
           <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
@@ -718,7 +759,7 @@ export default function App() {
         {view==="accueil" && (
           <div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Bienvenue dans votre espace</h1>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
+            <div className="sc-spaces-grid">
               {ESPACES.filter(e=>e.id==="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
                 const lastSeen = getLastSeen(e.id);
@@ -727,7 +768,7 @@ export default function App() {
               })}
             </div>
             <div style={{ height:1, background:"rgba(0,96,100,0.15)", margin:"16px 0" }} />
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
+            <div className="sc-spaces-grid">
               {ESPACES.filter(e=>e.id!=="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
                 const lastSeen = getLastSeen(e.id);
@@ -742,7 +783,7 @@ export default function App() {
         {view==="dashboard" && isAdmin && (
           <div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Tableau de bord</h1>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginBottom:28 }}>
+            <div className="sc-stat-grid">
               {[
                 {label:"Publiés",val:docs.filter(d=>d.status==="valide").length,color:"#6ee7b7",icon:"check"},
                 {label:"En attente",val:pending,color:"#fcd34d",icon:"inbox"},
@@ -814,7 +855,7 @@ export default function App() {
             </div>
             {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, ...(catFilter==="__attente__"?{opacity:0.7}:{}) }}>
+            <div className="sc-docs-grid" style={{ ...(catFilter==="__attente__"?{opacity:0.7}:{}) }}>
               {(catFilter==="__attente__" ? espDocsPending(espace.id) : espDocs(espace.id)).map(doc=>{
                 const lastSeen = getLastSeen(espace.id);
                 const isNew = !isAdmin && user?.role==="enseignant" && doc.status==="valide" && !!lastSeen && doc.created_at > lastSeen && !seenDocs.has(doc.id);
