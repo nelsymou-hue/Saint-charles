@@ -752,9 +752,7 @@ export default function App() {
               <Icon name="back" size={16} color="#006064" />
             </button>
           )}
-          <div style={{ fontSize:13, color:"rgba(0,96,100,.6)", flex:1 }}>
-            {view==="accueil"&&"Accueil"}{view==="dashboard"&&"Tableau de bord"}{view==="espace"&&espace?.nom}{view==="validation"&&"Validation"}{view==="notifs"&&"Notifications"}
-          </div>
+          <div style={{ flex:1 }} />
         </div>
 
         {/* ACCUEIL */}
