@@ -67,7 +67,7 @@ const TYPE_COLORS = {
   AUTRE:{ bg:"rgba(107,114,128,.12)", text:"#6b7280" },
 };
 const getType = n => { if (!n) return "AUTRE"; const e = n.split(".").pop().toUpperCase(); return ["PDF","DOCX","XLSX","PPTX","IMG"].includes(e) ? e : "AUTRE"; };
-const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d.getTime())) return iso; return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}) + " à " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); };
+const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d.getTime())) return iso; const opts = { timeZone:"Indian/Reunion", day:"numeric", month:"long", year:"numeric" }; const optsT = { timeZone:"Indian/Reunion", hour:"2-digit", minute:"2-digit" }; return d.toLocaleDateString("fr-FR",opts) + " à " + d.toLocaleTimeString("fr-FR",optsT); };
 
 // ─── ICONES SVG ──────────────────────────────────────────────────────────────
 const Icon = ({ name, size=18, color="currentColor" }) => {
@@ -264,13 +264,14 @@ export default function App() {
     const u = currentUser || user;
     if (!u) return;
     const adminRoles = ["superadmin","admin"];
-    const { data } = await supabase.from("notifications").select("*").order("created_at", { ascending: false }).limit(50);
+    const { data, error } = await supabase.from("notifications").select("*").order("created_at", { ascending: false }).limit(50);
+    if (error) { console.error("[loadNotifs]", error); return; }
     if (data) {
-      const filtered = data.filter(n =>
-        !n.destinataire
-          ? adminRoles.includes(u.role)
-          : n.destinataire === u.name
-      );
+      // Si toutes les notifs ont destinataire=null, la colonne n'existe pas encore → afficher tout
+      const colonneActive = data.some(n => n.destinataire !== null && n.destinataire !== undefined);
+      const filtered = colonneActive
+        ? data.filter(n => n.destinataire ? n.destinataire === u.name : adminRoles.includes(u.role))
+        : data; // fallback : colonne absente → tout afficher
       setNotifs(filtered);
     }
   };
@@ -280,8 +281,9 @@ export default function App() {
   const sendNotif = async (texte, opts={}) => {
     const { error } = await supabase.from("notifications").insert({ texte, lu:false, ...opts });
     if (error) {
-      // Colonnes destinataire/doc_id absentes — insert basique sans les champs optionnels
-      await supabase.from("notifications").insert({ texte, lu:false });
+      console.error("[sendNotif] colonnes optionnelles absentes, insert basique :", error.message);
+      const { error: err2 } = await supabase.from("notifications").insert({ texte, lu:false });
+      if (err2) console.error("[sendNotif] échec insert basique :", err2.message);
     }
   };
 
@@ -611,13 +613,13 @@ export default function App() {
               <div className="nav-item" onClick={()=>setView("validation")}
                 style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="validation"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="validation"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="validation"?500:400, borderLeft:view==="validation"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
                 <Icon name="check" size={15} color={view==="validation"?"#fff":"rgba(255,255,255,.45)"} /> Validation
-                {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{pending}</span>}
+                {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{pending}</span>}
               </div>
             )}
             <div className="nav-item" onClick={()=>{setView("notifs");}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
-              {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:20, padding:"1px 7px", fontSize:11, marginLeft:"auto" }}>{unread}</span>}
+              {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{unread}</span>}
             </div>
             <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
             {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
