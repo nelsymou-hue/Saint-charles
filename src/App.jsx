@@ -133,7 +133,7 @@ const Modal = ({ title, onClose, children, maxWidth=480 }) => (
 );
 
 // ─── DOC CARD ────────────────────────────────────────────────────────────────
-const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
+const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) => {
   const [hov, setHov] = useState(false);
   const c = SPACE_COLORS[espaceId] || PALETTE[0];
   const tc = TYPE_COLORS[doc.type] || TYPE_COLORS.AUTRE;
@@ -141,6 +141,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onOpen}
       style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-6px) scale(1.012)":"translateY(0)", boxShadow:hov?`0 22px 44px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
+      {isNew && <div style={{ position:"absolute", top:10, right:10, zIndex:10, width:10, height:10, borderRadius:"50%", background:"#4CAF50", boxShadow:"0 0 0 2px rgba(76,175,80,.3)", animation:"pulse-dot 1.8s ease-in-out infinite" }} />}
       <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:c.grad, borderRadius:"20px 20px 0 0" }} />
       <div style={{ position:"absolute", top:0, left:0, right:0, height:60, background:"linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)", pointerEvents:"none" }} />
       <div style={{ padding:"18px 16px 15px", position:"relative", zIndex:2 }}>
@@ -218,6 +219,7 @@ export default function App() {
   const [toast, setToast]       = useState(null);
   const [navHistory, setNavHistory] = useState([]);
   const [seenEspaces, setSeenEspaces] = useState({});
+  const [seenDocs, setSeenDocs] = useState(new Set());
 
   // Modals
   const [modalUpload, setModalUpload]       = useState(false);
@@ -293,6 +295,16 @@ export default function App() {
     }
   };
 
+  const markDocSeen = (docId) => {
+    if (!user) return;
+    setSeenDocs(prev => {
+      const next = new Set(prev);
+      next.add(docId);
+      localStorage.setItem(`seen_docs_${user.id}`, JSON.stringify([...next]));
+      return next;
+    });
+  };
+
   const markEspaceSeen = (espId, currentUser) => {
     const u = currentUser || user;
     if (!u || !espId) return;
@@ -339,6 +351,9 @@ export default function App() {
       if (val) seen[`${u.id}_${e.id}`] = val;
     });
     setSeenEspaces(seen);
+    // restore seen-docs from localStorage
+    const raw = localStorage.getItem(`seen_docs_${u.id}`);
+    setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
     setView(isAdmin || u.role === "superadmin" || u.role === "admin" ? "dashboard" : "accueil");
   };
 
@@ -499,7 +514,7 @@ export default function App() {
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
     <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'DM Sans',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}.nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}`}</style>
 
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
 
@@ -800,9 +815,11 @@ export default function App() {
             {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
 
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, ...(catFilter==="__attente__"?{opacity:0.7}:{}) }}>
-              {(catFilter==="__attente__" ? espDocsPending(espace.id) : espDocs(espace.id)).map(doc=>(
-                <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />
-              ))}
+              {(catFilter==="__attente__" ? espDocsPending(espace.id) : espDocs(espace.id)).map(doc=>{
+                const lastSeen = getLastSeen(espace.id);
+                const isNew = !isAdmin && user?.role==="enseignant" && doc.status==="valide" && !!lastSeen && doc.created_at > lastSeen && !seenDocs.has(doc.id);
+                return <DocCard key={doc.id} doc={doc} espaceId={espace.id} isNew={isNew} onOpen={()=>{ markDocSeen(doc.id); setModalDetail(doc); }} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />;
+              })}
               {catFilter!=="__attente__" && espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
                   <Icon name="inbox" size={40} color="rgba(0,96,100,.15)" />
