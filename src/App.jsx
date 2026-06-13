@@ -220,7 +220,7 @@ export default function App() {
   const [modalDelete, setModalDelete]       = useState(null);
   const [modalDeleteCat, setModalDeleteCat] = useState(null);
   const [catInput, setCatInput]             = useState("");
-  const [uploadForm, setUploadForm]         = useState({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
+  const [uploadForm, setUploadForm]         = useState({ titre:"", desc:"", file:"", fileObj:null });
   const [uploadErrors, setUploadErrors]     = useState({});
   const [refusComment, setRefusComment]     = useState({});
   const [refusErrors, setRefusErrors]       = useState({});
@@ -358,10 +358,8 @@ export default function App() {
 
   const handleUpload = async () => {
     const errs = {};
-    if (!uploadForm.prenom.trim()) errs.prenom = "Obligatoire";
-    if (!uploadForm.nom.trim())    errs.nom    = "Obligatoire";
-    if (!uploadForm.titre.trim())  errs.titre  = "Obligatoire";
-    if (!uploadForm.fileObj)       errs.file   = "Obligatoire";
+    if (!uploadForm.titre.trim()) errs.titre = "Obligatoire";
+    if (!uploadForm.fileObj)      errs.file  = "Obligatoire";
     if (Object.keys(errs).length) { setUploadErrors(errs); return; }
 
     // Upload fichier dans Supabase Storage
@@ -378,7 +376,7 @@ export default function App() {
       categorie: cats[espace.id]?.[0] || "Général",
       titre: uploadForm.titre,
       description: uploadForm.desc,
-      auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
+      auteur: user.name,
       type: getType(uploadForm.file),
       file_url,
       status,
@@ -389,7 +387,7 @@ export default function App() {
       if (status === "attente") {
         await sendNotif(`"${uploadForm.titre}" en attente de validation`);
       }
-      setUploadForm({ prenom:"", nom:"", titre:"", desc:"", file:"", fileObj:null });
+      setUploadForm({ titre:"", desc:"", file:"", fileObj:null });
       setUploadErrors({});
       setModalUpload(false);
       loadDocs();
@@ -409,14 +407,18 @@ export default function App() {
     showToast("Catégorie créée");
   };
 
+  // Docs publiés visibles dans l'espace (pas refusés, pas en attente)
   const espDocs = (espId) => docs.filter(d => {
     if (d.espace_id !== espId) return false;
-    if (d.status === "refuse") return false;
-    if (d.status === "attente" && !isSA && d.auteur !== user?.name) return false;
+    if (d.status !== "valide") return false;
     if (catFilter !== "all" && d.categorie !== catFilter) return false;
     if (search && !d.titre.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
+  // Docs en attente déposés par l'utilisateur courant (non-admin)
+  const espDocsPending = (espId) => (!isSA && !isAdmin)
+    ? docs.filter(d => d.espace_id === espId && d.status === "attente" && d.auteur === user?.name)
+    : [];
 
   const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#006064" });
 
@@ -473,17 +475,8 @@ export default function App() {
       {/* MODALS */}
       {modalUpload && (
         <Modal title={`Déposer dans — ${espace?.nom}`} onClose={()=>{setModalUpload(false);setUploadErrors({});}}>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:14 }}>
-            <div>
-              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
-              <input style={fieldStyle(uploadErrors.prenom)} placeholder="Votre prénom..." value={uploadForm.prenom} onChange={e=>setUploadForm(f=>({...f,prenom:e.target.value}))} />
-              {uploadErrors.prenom && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.prenom}</div>}
-            </div>
-            <div>
-              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
-              <input style={fieldStyle(uploadErrors.nom)} placeholder="Votre nom..." value={uploadForm.nom} onChange={e=>setUploadForm(f=>({...f,nom:e.target.value}))} />
-              {uploadErrors.nom && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.nom}</div>}
-            </div>
+          <div style={{ marginBottom:14, padding:"10px 14px", background:"rgba(0,96,100,.07)", borderRadius:10, fontSize:13, color:"#006064" }}>
+            Déposé par : <strong>{user.name}</strong>
           </div>
           <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
@@ -751,9 +744,25 @@ export default function App() {
               ))}
             </div>
             {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement...</div>}
+
+            {/* Section en attente — personnel uniquement */}
+            {espDocsPending(espace.id).length > 0 && (
+              <div style={{ marginBottom:24 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
+                  <div style={{ fontSize:12, fontWeight:600, color:"rgba(0,96,100,.5)", letterSpacing:1, textTransform:"uppercase" }}>En attente de validation</div>
+                  <span style={{ background:"rgba(217,119,6,.15)", color:"#d97706", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:600 }}>{espDocsPending(espace.id).length}</span>
+                </div>
+                <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14, opacity:0.65, filter:"grayscale(20%)" }}>
+                  {espDocsPending(espace.id).map(doc=>(
+                    <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={true} />
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:14 }}>
               {espDocs(espace.id).map(doc=>(
-                <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />
+                <DocCard key={doc.id} doc={doc} espaceId={espace.id} onOpen={()=>setModalDetail(doc)} onDelete={d=>setModalDelete(d)} canDelete={isSA} />
               ))}
               {espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
