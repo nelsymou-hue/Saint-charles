@@ -67,6 +67,7 @@ const TYPE_COLORS = {
   AUTRE:{ bg:"rgba(107,114,128,.12)", text:"#6b7280" },
 };
 const getType = n => { if (!n) return "AUTRE"; const e = n.split(".").pop().toUpperCase(); return ["PDF","DOCX","XLSX","PPTX","IMG"].includes(e) ? e : "AUTRE"; };
+const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}) + " à " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); };
 
 // ─── ICONES SVG ──────────────────────────────────────────────────────────────
 const Icon = ({ name, size=18, color="currentColor" }) => {
@@ -154,7 +155,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
         <div style={{ display:"inline-block", background:"rgba(0,96,100,.08)", color:"#006064", padding:"3px 10px", borderRadius:20, fontSize:11, fontWeight:600, border:"1px solid rgba(0,96,100,.18)", marginBottom:10 }}>{doc.categorie}</div>
         <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
           <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="user" size={10} color="rgba(0,96,100,.4)" /> {doc.auteur}</span>
-          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="calendar" size={10} color="rgba(0,96,100,.4)" /> {doc.created_at?.split("T")[0]}</span>
+          <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="calendar" size={10} color="rgba(0,96,100,.4)" /> {fmtDate(doc.created_at)}</span>
         </div>
         <div style={{ height:1, background:"linear-gradient(90deg,rgba(0,96,100,.15),transparent)", marginBottom:11 }} />
         <div style={{ display:"flex", alignItems:"center", gap:7 }} onClick={e=>e.stopPropagation()}>
@@ -236,7 +237,7 @@ export default function App() {
     if (user) {
       loadDocs();
       loadCats();
-      loadNotifs();
+      loadNotifs(user);
     }
   }, [user]);
 
@@ -259,9 +260,19 @@ export default function App() {
     }
   };
 
-  const loadNotifs = async () => {
-    const { data } = await supabase.from("notifications").select("*").order("created_at", { ascending: false }).limit(20);
-    if (data) setNotifs(data);
+  const loadNotifs = async (currentUser) => {
+    const u = currentUser || user;
+    if (!u) return;
+    const adminRoles = ["superadmin","admin"];
+    const { data } = await supabase.from("notifications").select("*").order("created_at", { ascending: false }).limit(50);
+    if (data) {
+      const filtered = data.filter(n =>
+        !n.destinataire
+          ? adminRoles.includes(u.role)
+          : n.destinataire === u.name
+      );
+      setNotifs(filtered);
+    }
   };
 
   const showToast = (msg, err=false) => { setToast({msg,err}); setTimeout(()=>setToast(null),3000); };
@@ -294,8 +305,9 @@ export default function App() {
   };
 
   const handleValider = async (id) => {
+    const doc = docs.find(d=>d.id===id);
     await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:"Document validé ✓", lu:false });
+    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été validé ✓`, lu:false, destinataire:doc?.auteur });
     loadDocs();
     loadNotifs();
     showToast("Document validé ✓");
@@ -304,9 +316,10 @@ export default function App() {
   const handleRefuser = async (id) => {
     const motif = refusComment[id]?.trim();
     if (!motif) { setRefusErrors(e=>({...e,[id]:true})); return; }
+    const doc = docs.find(d=>d.id===id);
     setRefusErrors(e=>({...e,[id]:false}));
     await supabase.from("documents").update({ status:"refuse", commentaire:motif }).eq("id", id);
-    await supabase.from("notifications").insert({ texte:"Document refusé", lu:false });
+    await supabase.from("notifications").insert({ texte:`Votre document "${doc?.titre}" a été refusé — ${motif}`, lu:false, destinataire:doc?.auteur });
     setRefusMode(m=>({...m,[id]:false}));
     setRefusComment(c=>({...c,[id]:""}));
     loadDocs();
@@ -510,7 +523,7 @@ export default function App() {
           </div>
           {modalDetail.description && <div style={{ background:"rgba(255,255,255,.1)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#fff", lineHeight:1.6 }}>{modalDetail.description}</div>}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
-            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",modalDetail.created_at?.split("T")[0]],["Type",modalDetail.type]].map(([l,v])=>(
+            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)],["Type",modalDetail.type]].map(([l,v])=>(
               <div key={l} style={{ background:"rgba(255,255,255,.1)", borderRadius:10, border:"1px solid rgba(255,255,255,.15)", padding:"10px 14px" }}>
                 <div style={{ fontSize:11, color:"rgba(255,255,255,.5)", marginBottom:3 }}>{l}</div>
                 <div style={{ fontSize:13, color:"#fff", fontWeight:500 }}>{v}</div>
@@ -688,7 +701,7 @@ export default function App() {
                       <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type}</span>
                       <div style={{ flex:1, minWidth:0 }}>
                         <div style={{ fontSize:14, color:"#006064", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
-                        <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {doc.created_at?.split("T")[0]}</div>
+                        <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {fmtDate(doc.created_at)}</div>
                       </div>
                       <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>{doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}</span>
                     </div>
@@ -822,7 +835,7 @@ export default function App() {
                   </div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, color:"#006064", fontWeight:n.lu?400:600 }}>{n.texte}</div>
-                    <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{n.created_at?.split("T")[0]}</div>
+                    <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{fmtDate(n.created_at)}</div>
                   </div>
                   {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#006064", flexShrink:0 }} />}
                 </div>
