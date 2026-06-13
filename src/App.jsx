@@ -511,7 +511,7 @@ export default function App() {
             </label>
             {uploadErrors.file && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Veuillez sélectionner un fichier</div>}
           </div>
-          {!isSA && <div style={{ background:"rgba(251,191,36,.12)", border:"1px solid rgba(251,191,36,.25)", borderRadius:10, padding:12, fontSize:13, color:"#fef3c7", marginBottom:14 }}>Votre document sera soumis à validation avant publication.</div>}
+          {!isSA && <div style={{ fontSize:12, color:"#999", fontStyle:"italic", marginBottom:14 }}>* Votre document sera soumis à validation avant publication.</div>}
           <div style={{ display:"flex", gap:10 }}>
             <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>{setModalUpload(false);setUploadErrors({});}}>Annuler</button>
             <button style={{...btn,flex:1,justifyContent:"center"}} onClick={handleUpload}><Icon name="upload" size={14} color="#fff" /> Déposer</button>
