@@ -180,12 +180,17 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete }) => {
 };
 
 // ─── SPACE CARD ──────────────────────────────────────────────────────────────
-const SpaceCard = ({ esp, count, onClick }) => {
+const SpaceCard = ({ esp, count, newCount=0, onClick }) => {
   const [hov, setHov] = useState(false);
   const c = SPACE_COLORS[esp.id] || PALETTE[0];
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onClick}
       style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, padding:20, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-7px) scale(1.015)":"translateY(0)", boxShadow:hov?`0 24px 48px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
+      {newCount > 0 && (
+        <div style={{ position:"absolute", top:10, right:10, zIndex:10, background:"#ef4444", color:"#fff", borderRadius:"50%", minWidth:20, height:20, fontSize:11, fontWeight:700, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 4px", boxShadow:"0 2px 6px rgba(239,68,68,.5)" }}>
+          {newCount}
+        </div>
+      )}
       <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:c.grad, borderRadius:"20px 20px 0 0" }} />
       <div style={{ position:"absolute", top:0, left:0, right:0, height:55, background:"linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)", pointerEvents:"none" }} />
       <div style={{ position:"relative", zIndex:2 }}>
@@ -212,6 +217,7 @@ export default function App() {
   const [sidebar, setSidebar]   = useState(true);
   const [toast, setToast]       = useState(null);
   const [navHistory, setNavHistory] = useState([]);
+  const [seenEspaces, setSeenEspaces] = useState({});
 
   // Modals
   const [modalUpload, setModalUpload]       = useState(false);
@@ -287,10 +293,25 @@ export default function App() {
     }
   };
 
+  const markEspaceSeen = (espId, currentUser) => {
+    const u = currentUser || user;
+    if (!u || !espId) return;
+    const key = `seen_${u.id}_${espId}`;
+    const now = new Date().toISOString();
+    localStorage.setItem(key, now);
+    setSeenEspaces(prev => ({ ...prev, [`${u.id}_${espId}`]: now }));
+  };
+
+  const getLastSeen = (espId, currentUser) => {
+    const u = currentUser || user;
+    if (!u) return null;
+    return seenEspaces[`${u.id}_${espId}`] || localStorage.getItem(`seen_${u.id}_${espId}`);
+  };
+
   const goTo = (v, esp=null) => {
     if (view !== "accueil" && view !== "dashboard") setNavHistory(h=>[...h, {view, espace}]);
     setView(v);
-    if (esp) setEspace(esp);
+    if (esp) { setEspace(esp); if (v === "espace") markEspaceSeen(esp.id); }
     setCatFilter("all");
     setSearch("");
   };
@@ -311,6 +332,13 @@ export default function App() {
     setLoginError("");
     setLoginPassword("");
     setUser(u);
+    // restore seen-espaces from localStorage for this user
+    const seen = {};
+    ESPACES.forEach(e => {
+      const val = localStorage.getItem(`seen_${u.id}_${e.id}`);
+      if (val) seen[`${u.id}_${e.id}`] = val;
+    });
+    setSeenEspaces(seen);
     setView(isAdmin || u.role === "superadmin" || u.role === "admin" ? "dashboard" : "accueil");
   };
 
@@ -678,14 +706,18 @@ export default function App() {
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
               {ESPACES.filter(e=>e.id==="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
-                return <SpaceCard key={e.id} esp={e} count={count} onClick={()=>goTo("espace",e)} />;
+                const lastSeen = getLastSeen(e.id);
+                const newCount = user?.role==="enseignant" ? docs.filter(d=>d.espace_id===e.id&&d.status==="valide"&&(!lastSeen||d.created_at>lastSeen)).length : 0;
+                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} />;
               })}
             </div>
             <div style={{ height:1, background:"rgba(0,96,100,0.15)", margin:"16px 0" }} />
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
               {ESPACES.filter(e=>e.id!=="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
-                return <SpaceCard key={e.id} esp={e} count={count} onClick={()=>goTo("espace",e)} />;
+                const lastSeen = getLastSeen(e.id);
+                const newCount = user?.role==="enseignant" ? docs.filter(d=>d.espace_id===e.id&&d.status==="valide"&&(!lastSeen||d.created_at>lastSeen)).length : 0;
+                return <SpaceCard key={e.id} esp={e} count={count} newCount={newCount} onClick={()=>goTo("espace",e)} />;
               })}
             </div>
           </div>
