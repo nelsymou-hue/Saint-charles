@@ -695,20 +695,16 @@ export default function App() {
         {view==="dashboard" && isAdmin && (
           <div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Tableau de bord</h1>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))", gap:14, marginBottom:28 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginBottom:28 }}>
               {[
-                {label:"Total",val:docs.length,color:"#006064",icon:"file"},
                 {label:"Publiés",val:docs.filter(d=>d.status==="valide").length,color:"#6ee7b7",icon:"check"},
                 {label:"En attente",val:pending,color:"#fcd34d",icon:"inbox"},
                 {label:"Refusés",val:docs.filter(d=>d.status==="refuse").length,color:"#fca5a5",icon:"close"},
               ].map(s=>(
-                <div key={s.label} style={{...glassCard,textAlign:"center",cursor:s.label==="En attente"&&isSA?"pointer":"default"}}
+                <div key={s.label} style={{...glassCard,textAlign:"center",padding:"12px 10px",cursor:s.label==="En attente"&&isSA?"pointer":"default"}}
                   onClick={()=>s.label==="En attente"&&isSA&&setView("validation")}>
-                  <div style={{ width:42, height:42, borderRadius:12, background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 10px" }}>
-                    <Icon name={s.icon} size={20} color={s.color} />
-                  </div>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:700, color:s.color }}>{s.val}</div>
-                  <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:4 }}>{s.label}</div>
+                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, color:s.color }}>{s.val}</div>
+                  <div style={{ fontSize:11, color:"rgba(0,96,100,.55)", marginTop:2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -721,12 +717,12 @@ export default function App() {
                   const sc=doc.status==="valide"?{bg:"rgba(5,150,105,.15)",text:"#6ee7b7"}:doc.status==="attente"?{bg:"rgba(217,119,6,.15)",text:"#fcd34d"}:{bg:"rgba(220,38,38,.15)",text:"#fca5a5"};
                   return (
                     <div key={doc.id} onClick={()=>setModalDetail(doc)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", cursor:"pointer", background:"rgba(255,255,255,.6)", transition:"all .15s" }}>
-                      <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type}</span>
+                      <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>{doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}</span>
                       <div style={{ flex:1, minWidth:0 }}>
                         <div style={{ fontSize:14, color:"#006064", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
                         <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {fmtDate(doc.created_at)}</div>
                       </div>
-                      <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>{doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}</span>
+                      <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type==="AUTRE"?"...":doc.type}</span>
                     </div>
                   );
                 })}
