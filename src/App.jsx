@@ -189,7 +189,7 @@ const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
       style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, padding:20, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-7px) scale(1.015)":"translateY(0)", boxShadow:hov?`0 24px 48px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
       {onAdd && (
         <button onClick={e=>{ e.stopPropagation(); onAdd(); }}
-          style={{ position:"absolute", top:10, right:newCount>0?36:10, zIndex:10, width:26, height:26, borderRadius:"50%", background:"#006064", color:"#fff", border:"none", cursor:"pointer", fontSize:18, lineHeight:1, display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 2px 6px rgba(0,96,100,.35)", fontWeight:300 }}>
+          style={{ position:"absolute", top:8, right:newCount>0?32:8, zIndex:10, background:"none", border:"none", cursor:"pointer", fontSize:22, lineHeight:1, color:"#006064", fontWeight:300, padding:2 }}>
           +
         </button>
       )}
