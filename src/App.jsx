@@ -627,15 +627,16 @@ export default function App() {
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{unread}</span>}
             </div>
             <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
-            {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
-              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
-                style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s", whiteSpace:"nowrap", overflow:"hidden" }}>
-                <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
-              </div>
-            ))}
             {ESPACES.filter(e=>e.id==="ressources").map(e=>(
               <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
                 style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
+                <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
+              </div>
+            ))}
+            <div style={{ height:1, background:"rgba(255,255,255,.12)", margin:"6px 14px" }} />
+            {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
+              <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
+                style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s", whiteSpace:"nowrap", overflow:"hidden" }}>
                 <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
               </div>
             ))}
@@ -675,7 +676,14 @@ export default function App() {
           <div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Bienvenue dans votre espace</h1>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
-              {ESPACES.map(e => {
+              {ESPACES.filter(e=>e.id==="ressources").map(e => {
+                const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
+                return <SpaceCard key={e.id} esp={e} count={count} onClick={()=>goTo("espace",e)} />;
+              })}
+            </div>
+            <div style={{ height:1, background:"rgba(0,96,100,0.15)", margin:"16px 0" }} />
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:16 }}>
+              {ESPACES.filter(e=>e.id!=="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
                 return <SpaceCard key={e.id} esp={e} count={count} onClick={()=>goTo("espace",e)} />;
               })}
