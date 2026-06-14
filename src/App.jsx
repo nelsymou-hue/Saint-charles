@@ -240,6 +240,7 @@ export default function App() {
   const [refusErrors, setRefusErrors]       = useState({});
   const [refusMode, setRefusMode]           = useState({});
   const [loginPassword, setLoginPassword]   = useState("");
+  const [loginScreen, setLoginScreen]       = useState("welcome"); // "welcome" | "profiles"
   const [loginError, setLoginError]         = useState("");
 
   const isSA    = user?.role === "superadmin";
@@ -480,40 +481,137 @@ export default function App() {
   };
 
   // ══ ÉCRAN LOGIN ════════════════════════════════════════════════════════════
-  if (!user) return (
-    <div style={{ minHeight:"100vh", background:BG, display:"flex", alignItems:"center", justifyContent:"center", padding:20, fontFamily:"'DM Sans',sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}`}</style>
-      <div style={{ width:"100%", maxWidth:460 }}>
-        <div style={{ textAlign:"center", marginBottom:24 }}>
-          <div style={{ width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,.5)", border:"2px solid rgba(255,255,255,.7)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 14px", boxShadow:"0 8px 28px rgba(26,26,94,.15)", fontSize:28, fontWeight:700, color:"#1a237e" }}>SC</div>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#006064", fontSize:22, margin:"0 0 4px" }}>École Privée Saint-Charles</h1>
-          <p style={{ color:"#006064", fontSize:13, margin:0 }}>Espace de partage de documents</p>
-        </div>
+  if (!user) {
+    const loginBg = "linear-gradient(165deg, #004246 20%, #006064 35%, #f5f0e8 100%)";
 
-        <div style={{ background:"#006064", borderRadius:20, padding:20, marginBottom:14, boxShadow:"0 8px 32px rgba(0,0,0,.18)", borderTop:"3px solid rgba(255,255,255,.25)" }}>
-          <div style={{ fontSize:11, color:"rgba(255,255,255,.6)", fontWeight:600, letterSpacing:1, textTransform:"uppercase", marginBottom:12 }}>Profils</div>
-          {USERS.map(u=>(
-            <div key={u.id} style={{ background:"rgba(255,255,255,.12)", border:`1px solid rgba(255,255,255,.18)`, borderLeft:`3px solid ${u.color}`, borderRadius:12, padding:"12px 16px", cursor:"pointer", display:"flex", alignItems:"center", gap:12, marginBottom:8, transition:"all .2s" }}
-              onClick={()=>{ setLoginError(""); handleLogin(u); }}>
-              <div style={{ width:38, height:38, borderRadius:"50%", background:`${u.color}30`, color:"#fff", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700 }}>{u.avatar}</div>
-              <div style={{ flex:1 }}>
-                <div style={{ color:"#fff", fontSize:14, fontWeight:500 }}>{u.name}</div>
-                <div style={{ color:"rgba(255,255,255,.6)", fontSize:12 }}>{u.post || (u.role==="superadmin"?"Super Admin":u.role==="admin"?"Admin":"Personnel Enseignant")}</div>
-              </div>
-              <div style={{ width:7, height:7, borderRadius:"50%", background:u.color }} />
-            </div>
+    // ── ÉCRAN 1 : Accueil ──
+    if (loginScreen === "welcome") return (
+      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif", position:"relative", overflow:"hidden" }}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}`}</style>
+
+        {/* Arbre SVG décoratif — fixe, asymétrique */}
+        <svg viewBox="0 0 360 480" width="360" height="480" style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-54%)", opacity:0.16, pointerEvents:"none" }} fill="none" stroke="#f5f0e8" strokeLinecap="round" strokeLinejoin="round">
+          {/* Tronc légèrement courbé */}
+          <path d="M 182 480 C 180 420 176 360 179 290 C 181 250 178 220 180 195" strokeWidth="7"/>
+          {/* Branche gauche principale — basse, angle doux */}
+          <path d="M 179 300 C 158 288 128 268 92 245 C 68 232 42 225 18 228" strokeWidth="4.5"/>
+          {/* Branche droite principale — plus haute, angle prononcé */}
+          <path d="M 180 265 C 202 248 228 222 256 190 C 275 168 295 148 318 132" strokeWidth="4.5"/>
+          {/* Branche gauche secondaire — monte vers logo */}
+          <path d="M 180 240 C 162 224 138 200 108 178 C 84 160 58 145 32 138" strokeWidth="3.2"/>
+          {/* Branche droite secondaire — asymétrique, plus courte */}
+          <path d="M 180 250 C 198 238 218 220 242 205 C 260 193 282 186 305 182" strokeWidth="3"/>
+          {/* Petite branche gauche haute */}
+          <path d="M 148 210 C 130 195 108 178 80 165 C 62 156 40 150 20 148" strokeWidth="2.2"/>
+          {/* Petite branche droite haute — différente longueur */}
+          <path d="M 192 220 C 210 205 232 186 255 168 C 270 155 285 142 295 128" strokeWidth="2.2"/>
+          {/* Rameau gauche terminal */}
+          <path d="M 92 245 C 74 238 52 232 28 235" strokeWidth="1.8"/>
+          <path d="M 80 165 C 62 155 44 145 25 140" strokeWidth="1.5"/>
+          {/* Rameau droit terminal */}
+          <path d="M 256 190 C 270 175 285 160 298 142" strokeWidth="1.8"/>
+          <path d="M 295 128 C 305 112 312 95 308 78" strokeWidth="1.5"/>
+          {/* Petites tiges irrégulières gauche */}
+          <path d="M 108 178 C 95 168 82 158 72 148" strokeWidth="1.3"/>
+          <path d="M 42 225 C 35 212 30 198 28 182" strokeWidth="1.2"/>
+          {/* Petites tiges irrégulières droite */}
+          <path d="M 242 205 C 252 192 258 178 255 162" strokeWidth="1.3"/>
+          <path d="M 318 132 C 324 118 326 102 320 88" strokeWidth="1.2"/>
+        </svg>
+
+        {/* Feuilles & points décoratifs */}
+        <svg viewBox="0 0 360 480" width="360" height="480" style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-54%)", pointerEvents:"none" }} fill="none">
+          {/* Feuilles vertes */}
+          {[
+            [28,228,"#43a047",5,3],[18,148,"#66bb6a",6,3.5],[25,140,"#43a047",4,2.5],
+            [305,182,"#66bb6a",5,3],[298,142,"#43a047",6,3.5],[308,78,"#66bb6a",4,2.5],
+            [52,232,"#43a047",7,4],[72,148,"#66bb6a",5,3],[255,162,"#43a047",6,3.5],
+            [28,182,"#66bb6a",4,2.5],[320,88,"#43a047",5,3],[82,158,"#66bb6a",6,3],
+            [258,178,"#43a047",4,2.5],[35,212,"#66bb6a",5,3],[285,160,"#43a047",6,3.5],
+          ].map(([cx,cy,fill,rx,ry],i)=>(
+            <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} fill={fill} opacity="0.5" transform={`rotate(${i*23},${cx},${cy})`}/>
           ))}
-        </div>
+          {/* Points colorés */}
+          {[
+            [44,145,"#ce93d8"],[62,156,"#81d4fa"],[270,155,"#fff176"],[232,186,"#ce93d8"],
+            [130,195,"#81d4fa"],[108,178,"#fff176"],[275,168,"#ce93d8"],[68,232,"#81d4fa"],
+            [312,95,"#fff176"],[40,150,"#ce93d8"],[295,182,"#81d4fa"],[58,145,"#fff176"],
+          ].map(([cx,cy,fill],i)=>(
+            <circle key={i} cx={cx} cy={cy} r="3" fill={fill} opacity="0.5"/>
+          ))}
+        </svg>
 
-        <div style={{ background:"rgba(255,255,255,.55)", backdropFilter:"blur(20px)", borderRadius:20, padding:20, marginBottom:14, border:"1px solid #006064", boxShadow:"0 4px 16px rgba(0,96,100,.1)" }}>
-          <label style={{ fontSize:13, color:"#6b7280", display:"block", marginBottom:8, fontWeight:500 }}>Mot de passe</label>
-          <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
-            style={{ width:"100%", padding:"10px 14px", background:"rgba(0,96,100,.15)", backdropFilter:"blur(8px)", border:`1px solid ${loginError?"#dc2626":"rgba(0,96,100,.4)"}`, borderRadius:12, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#006064", boxSizing:"border-box" }} />
-          {loginError && <div style={{ color:"#dc2626", fontSize:12, marginTop:6, fontStyle:"italic" }}>{loginError}</div>}
+        {/* Contenu centré */}
+        <div style={{ position:"relative", zIndex:2, display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}>
+          {/* Logo */}
+          <div style={{ width:72, height:72, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"2px solid rgba(255,255,255,.35)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:28, backdropFilter:"blur(8px)", boxShadow:"0 4px 24px rgba(0,0,0,.2)" }}>
+            <span style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, color:"#f5f0e8", letterSpacing:1 }}>SC</span>
+          </div>
+
+          <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:22, margin:"0 0 8px", textAlign:"center", fontWeight:700 }}>École Privée Saint-Charles</h1>
+          <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 36px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>Espace numérique</p>
+
+          <button onClick={()=>setLoginScreen("profiles")}
+            style={{ background:"#006064", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'DM Sans',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
+            Se connecter
+          </button>
         </div>
       </div>
-    </div>
-  );
+    );
+
+    // ── ÉCRAN 2 : Profils ──
+    return (
+      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", padding:20, fontFamily:"'DM Sans',sans-serif" }}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}input::placeholder{color:rgba(245,240,232,.55)!important;opacity:1}`}</style>
+        <div style={{ width:"100%", maxWidth:420 }}>
+          <div style={{ textAlign:"center", marginBottom:22 }}>
+            <div style={{ width:52, height:52, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"1.5px solid rgba(255,255,255,.3)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 12px", backdropFilter:"blur(8px)" }}>
+              <span style={{ fontFamily:"'Playfair Display',serif", fontSize:16, fontWeight:700, color:"#f5f0e8" }}>SC</span>
+            </div>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:20, margin:"0 0 4px", fontWeight:700 }}>École Privée Saint-Charles</h1>
+            <p style={{ color:"rgba(245,240,232,.6)", fontSize:12, margin:0 }}>Espace de partage de documents</p>
+          </div>
+
+          {/* Boîte profils */}
+          <div style={{ background:"rgba(0,66,70,.75)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.18)", backdropFilter:"blur(20px)", boxShadow:"0 8px 32px rgba(0,0,0,.25)" }}>
+            <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
+            {USERS.map(u=>(
+              <div key={u.id}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.1)", background:"rgba(255,255,255,.07)", transition:"background .15s" }}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
+                onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.07)"}
+                onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
+                <div style={{ width:36, height:36, borderRadius:"50%", background:`${u.color}35`, border:`1.5px solid ${u.color}70`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0 }}>{u.avatar}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
+                  <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
+                </div>
+                <div style={{ width:8, height:8, borderRadius:"50%", background:u.color, flexShrink:0 }} />
+              </div>
+            ))}
+          </div>
+
+          {/* Mot de passe */}
+          <div style={{ background:"rgba(0,66,70,.6)", borderRadius:14, padding:"14px 16px", border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(20px)" }}>
+            <label style={{ fontSize:12, color:"rgba(245,240,232,.7)", display:"block", marginBottom:8, fontWeight:500, letterSpacing:".3px" }}>Mot de passe</label>
+            <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
+              style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
+            {loginError && <div style={{ color:"#ef9a9a", fontSize:12, marginTop:6, fontStyle:"italic" }}>{loginError}</div>}
+            <div style={{ marginTop:12, display:"flex", gap:8 }}>
+              <button onClick={()=>{ setLoginScreen("welcome"); setLoginPassword(""); setLoginError(""); }}
+                style={{ flex:1, background:"rgba(255,255,255,.1)", color:"rgba(245,240,232,.7)", border:"1px solid rgba(255,255,255,.15)", borderRadius:10, padding:"8px 0", fontSize:13, cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
+                ← Retour
+              </button>
+              <button onClick={()=>{ const u=USERS.find(x=>x.password===loginPassword); if(u){ handleLogin(u); } else { setLoginError("Mot de passe incorrect"); } }}
+                style={{ flex:2, background:"#006064", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
+                Connexion
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const c_esp = espace ? SPACE_COLORS[espace.id] : PALETTE[0];
 
@@ -739,7 +837,7 @@ export default function App() {
               <div style={{ fontSize:12, fontWeight:500, color:"rgba(255,255,255,.9)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
               <div style={{ fontSize:11, color:"rgba(255,255,255,.45)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
             </div>
-            <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
+            <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
               <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
             </button>
           </div>
