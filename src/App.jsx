@@ -489,67 +489,91 @@ export default function App() {
       <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif", position:"relative", overflow:"hidden" }}>
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}`}</style>
 
-        {/* Arbre SVG décoratif — fixe, asymétrique */}
-        <svg viewBox="0 0 360 480" width="360" height="480" style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-54%)", opacity:0.16, pointerEvents:"none" }} fill="none" stroke="#f5f0e8" strokeLinecap="round" strokeLinejoin="round">
-          {/* Tronc légèrement courbé */}
-          <path d="M 182 480 C 180 420 176 360 179 290 C 181 250 178 220 180 195" strokeWidth="7"/>
-          {/* Branche gauche principale — basse, angle doux */}
-          <path d="M 179 300 C 158 288 128 268 92 245 C 68 232 42 225 18 228" strokeWidth="4.5"/>
-          {/* Branche droite principale — plus haute, angle prononcé */}
-          <path d="M 180 265 C 202 248 228 222 256 190 C 275 168 295 148 318 132" strokeWidth="4.5"/>
-          {/* Branche gauche secondaire — monte vers logo */}
-          <path d="M 180 240 C 162 224 138 200 108 178 C 84 160 58 145 32 138" strokeWidth="3.2"/>
-          {/* Branche droite secondaire — asymétrique, plus courte */}
-          <path d="M 180 250 C 198 238 218 220 242 205 C 260 193 282 186 305 182" strokeWidth="3"/>
-          {/* Petite branche gauche haute */}
-          <path d="M 148 210 C 130 195 108 178 80 165 C 62 156 40 150 20 148" strokeWidth="2.2"/>
-          {/* Petite branche droite haute — différente longueur */}
-          <path d="M 192 220 C 210 205 232 186 255 168 C 270 155 285 142 295 128" strokeWidth="2.2"/>
-          {/* Rameau gauche terminal */}
-          <path d="M 92 245 C 74 238 52 232 28 235" strokeWidth="1.8"/>
-          <path d="M 80 165 C 62 155 44 145 25 140" strokeWidth="1.5"/>
-          {/* Rameau droit terminal */}
-          <path d="M 256 190 C 270 175 285 160 298 142" strokeWidth="1.8"/>
-          <path d="M 295 128 C 305 112 312 95 308 78" strokeWidth="1.5"/>
-          {/* Petites tiges irrégulières gauche */}
-          <path d="M 108 178 C 95 168 82 158 72 148" strokeWidth="1.3"/>
-          <path d="M 42 225 C 35 212 30 198 28 182" strokeWidth="1.2"/>
-          {/* Petites tiges irrégulières droite */}
-          <path d="M 242 205 C 252 192 258 178 255 162" strokeWidth="1.3"/>
-          <path d="M 318 132 C 324 118 326 102 320 88" strokeWidth="1.2"/>
-        </svg>
-
-        {/* Feuilles & points décoratifs */}
-        <svg viewBox="0 0 360 480" width="360" height="480" style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-54%)", pointerEvents:"none" }} fill="none">
-          {/* Feuilles vertes */}
-          {[
-            [28,228,"#43a047",5,3],[18,148,"#66bb6a",6,3.5],[25,140,"#43a047",4,2.5],
-            [305,182,"#66bb6a",5,3],[298,142,"#43a047",6,3.5],[308,78,"#66bb6a",4,2.5],
-            [52,232,"#43a047",7,4],[72,148,"#66bb6a",5,3],[255,162,"#43a047",6,3.5],
-            [28,182,"#66bb6a",4,2.5],[320,88,"#43a047",5,3],[82,158,"#66bb6a",6,3],
-            [258,178,"#43a047",4,2.5],[35,212,"#66bb6a",5,3],[285,160,"#43a047",6,3.5],
-          ].map(([cx,cy,fill,rx,ry],i)=>(
-            <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} fill={fill} opacity="0.5" transform={`rotate(${i*23},${cx},${cy})`}/>
-          ))}
-          {/* Points colorés */}
-          {[
-            [44,145,"#ce93d8"],[62,156,"#81d4fa"],[270,155,"#fff176"],[232,186,"#ce93d8"],
-            [130,195,"#81d4fa"],[108,178,"#fff176"],[275,168,"#ce93d8"],[68,232,"#81d4fa"],
-            [312,95,"#fff176"],[40,150,"#ce93d8"],[295,182,"#81d4fa"],[58,145,"#fff176"],
-          ].map(([cx,cy,fill],i)=>(
-            <circle key={i} cx={cx} cy={cy} r="3" fill={fill} opacity="0.5"/>
-          ))}
-        </svg>
-
         {/* Contenu centré */}
-        <div style={{ position:"relative", zIndex:2, display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}>
-          {/* Logo */}
-          <div style={{ width:72, height:72, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"2px solid rgba(255,255,255,.35)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:28, backdropFilter:"blur(8px)", boxShadow:"0 4px 24px rgba(0,0,0,.2)" }}>
-            <span style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, color:"#f5f0e8", letterSpacing:1 }}>SC</span>
+        <div style={{ position:"relative", zIndex:2, display:"flex", flexDirection:"column", alignItems:"center" }}>
+
+          {/* Arbre + Logo combinés */}
+          <div style={{ position:"relative", width:330, height:310, display:"flex", alignItems:"flex-start", justifyContent:"center", marginBottom:8 }}>
+            <svg width="330" height="310" viewBox="0 0 330 310" xmlns="http://www.w3.org/2000/svg">
+              <g opacity="0.16" stroke="#f5f0e8" fill="none" strokeLinecap="round">
+                <path d="M165,310 Q160,250 168,185 Q170,178 165,172" strokeWidth="7" />
+                <path d="M166,210 Q120,200 88,158 Q70,135 55,98" strokeWidth="4.5" />
+                <path d="M88,158 Q66,150 42,162" strokeWidth="2.3" />
+                <path d="M55,98 Q44,76 50,52" strokeWidth="2.6" />
+                <path d="M55,98 Q70,88 84,92" strokeWidth="2" />
+                <path d="M50,52 Q56,38 70,34" strokeWidth="1.8" />
+                <path d="M166,224 Q132,222 104,202 Q88,190 80,172" strokeWidth="3.2" />
+                <path d="M104,202 Q94,184 100,160" strokeWidth="2" />
+                <path d="M168,196 Q140,180 126,150 Q120,138 124,120" strokeWidth="2.8" />
+                <path d="M126,150 Q112,142 102,128" strokeWidth="1.8" />
+                <path d="M166,205 Q214,192 244,138 Q258,112 252,74" strokeWidth="4.8" />
+                <path d="M244,138 Q266,130 288,144" strokeWidth="2.4" />
+                <path d="M252,74 Q262,52 256,32" strokeWidth="2.5" />
+                <path d="M252,74 Q238,62 224,68" strokeWidth="2" />
+                <path d="M256,32 Q250,18 236,18" strokeWidth="1.8" />
+                <path d="M167,228 Q200,224 230,206 Q248,194 258,176" strokeWidth="3" />
+                <path d="M230,206 Q242,188 238,164" strokeWidth="2" />
+                <path d="M169,192 Q196,176 208,148 Q214,134 210,116" strokeWidth="2.6" />
+                <path d="M208,148 Q222,138 234,124" strokeWidth="1.8" />
+                <path d="M167,180 Q158,148 172,118 Q178,104 174,88" strokeWidth="3" />
+                <path d="M172,118 Q188,108 196,90" strokeWidth="1.8" />
+              </g>
+              <g opacity="0.5">
+                <path d="M50,52 Q38,34 47,26 Q57,38 50,52Z" fill="#66bb6a" />
+                <path d="M70,34 Q80,18 71,12 Q62,24 70,34Z" fill="#43a047" />
+                <path d="M42,162 Q30,148 38,140 Q48,152 42,162Z" fill="#66bb6a" />
+                <path d="M100,160 Q88,146 96,138 Q106,150 100,160Z" fill="#43a047" />
+                <path d="M102,128 Q92,114 100,107 Q110,119 102,128Z" fill="#66bb6a" />
+                <path d="M256,32 Q268,14 259,8 Q249,20 256,32Z" fill="#66bb6a" />
+                <path d="M236,18 Q226,2 235,-2 Q244,10 236,18Z" fill="#43a047" />
+                <path d="M288,144 Q300,130 292,122 Q282,134 288,144Z" fill="#66bb6a" />
+                <path d="M238,164 Q250,148 241,141 Q231,153 238,164Z" fill="#43a047" />
+                <path d="M234,124 Q246,110 237,103 Q227,115 234,124Z" fill="#66bb6a" />
+                <path d="M196,90 Q208,74 199,68 Q189,80 196,90Z" fill="#43a047" />
+                <path d="M224,68 Q214,52 222,46 Q232,58 224,68Z" fill="#66bb6a" />
+                <path d="M84,92 Q74,78 82,71 Q92,83 84,92Z" fill="#43a047" />
+                <circle cx="44" cy="32" r="4.5" fill="#ce93d8" />
+                <circle cx="262" cy="14" r="4" fill="#81d4fa" />
+                <circle cx="76" cy="20" r="3" fill="#fff176" />
+                <circle cx="296" cy="128" r="3.5" fill="#fff176" />
+                <circle cx="34" cy="148" r="3" fill="#81d4fa" />
+                <circle cx="206" cy="74" r="3.5" fill="#ce93d8" />
+                <circle cx="120" cy="115" r="2.5" fill="#fff176" />
+                <circle cx="248" cy="150" r="3" fill="#81d4fa" />
+                <circle cx="218" cy="52" r="2.8" fill="#fff176" />
+                <circle cx="92" cy="76" r="2.5" fill="#ce93d8" />
+                <circle cx="186" cy="100" r="2.5" fill="#81d4fa" />
+              </g>
+            </svg>
+            {/* Logo centré en haut, positionné par-dessus l'arbre */}
+            <div style={{ position:"absolute", top:14, left:"50%", marginLeft:-58, zIndex:6, width:116, height:116, borderRadius:"50%", background:"rgba(255,255,255,0.92)", border:"3px solid rgba(255,255,255,0.7)", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 24px rgba(0,0,0,.22)" }}>
+              <svg viewBox="0 0 200 200" width="104" height="104" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="96" fill="#1a56c4" />
+                <rect x="86" y="8" width="28" height="184" fill="white" />
+                <rect x="8" y="86" width="184" height="28" fill="white" />
+                <path d="M30,70 Q50,30 68,15 Q60,40 62,72" fill="#43a047" />
+                <path d="M55,68 Q68,35 82,18 Q76,45 78,70" fill="#66bb6a" />
+                <circle cx="56" cy="48" r="5" fill="#ce93d8" />
+                <circle cx="70" cy="32" r="4" fill="#81d4fa" />
+                <circle cx="42" cy="38" r="4" fill="#fff176" />
+                <path d="M118,68 Q132,28 152,12 Q146,40 148,70" fill="#43a047" />
+                <path d="M142,66 Q155,30 168,16 Q162,44 164,68" fill="#66bb6a" />
+                <circle cx="143" cy="44" r="5" fill="#fff176" />
+                <circle cx="158" cy="28" r="4" fill="#ce93d8" />
+                <path d="M42,110 Q40,160 44,178" stroke="#8d5524" strokeWidth="6" fill="none" />
+                <path d="M44,130 Q22,148 14,168" fill="#43a047" />
+                <path d="M44,118 Q68,136 72,160" fill="#66bb6a" />
+                <circle cx="20" cy="162" r="4" fill="#81d4fa" />
+                <path d="M118,110 Q116,158 120,178" stroke="#8d5524" strokeWidth="6" fill="none" />
+                <path d="M120,132 Q100,150 94,172" fill="#43a047" />
+                <path d="M120,120 Q142,138 148,164" fill="#66bb6a" />
+                <circle cx="144" cy="158" r="4" fill="#81d4fa" />
+              </svg>
+            </div>
           </div>
 
           <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:22, margin:"0 0 8px", textAlign:"center", fontWeight:700 }}>École Privée Saint-Charles</h1>
-          <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 36px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>Espace numérique</p>
+          <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 32px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>Espace numérique</p>
 
           <button onClick={()=>setLoginScreen("profiles")}
             style={{ background:"#006064", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'DM Sans',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
