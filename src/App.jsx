@@ -546,28 +546,84 @@ export default function App() {
               </g>
             </svg>
             {/* Logo centré en haut, positionné par-dessus l'arbre */}
-            <div style={{ position:"absolute", top:14, left:"50%", marginLeft:-58, zIndex:6, width:116, height:116, borderRadius:"50%", background:"rgba(255,255,255,0.92)", border:"3px solid rgba(255,255,255,0.7)", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 24px rgba(0,0,0,.22)" }}>
-              <svg viewBox="0 0 200 200" width="104" height="104" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="100" cy="100" r="96" fill="#1a56c4" />
-                <rect x="86" y="8" width="28" height="184" fill="white" />
-                <rect x="8" y="86" width="184" height="28" fill="white" />
-                <path d="M30,70 Q50,30 68,15 Q60,40 62,72" fill="#43a047" />
-                <path d="M55,68 Q68,35 82,18 Q76,45 78,70" fill="#66bb6a" />
-                <circle cx="56" cy="48" r="5" fill="#ce93d8" />
-                <circle cx="70" cy="32" r="4" fill="#81d4fa" />
-                <circle cx="42" cy="38" r="4" fill="#fff176" />
-                <path d="M118,68 Q132,28 152,12 Q146,40 148,70" fill="#43a047" />
-                <path d="M142,66 Q155,30 168,16 Q162,44 164,68" fill="#66bb6a" />
-                <circle cx="143" cy="44" r="5" fill="#fff176" />
-                <circle cx="158" cy="28" r="4" fill="#ce93d8" />
-                <path d="M42,110 Q40,160 44,178" stroke="#8d5524" strokeWidth="6" fill="none" />
-                <path d="M44,130 Q22,148 14,168" fill="#43a047" />
-                <path d="M44,118 Q68,136 72,160" fill="#66bb6a" />
-                <circle cx="20" cy="162" r="4" fill="#81d4fa" />
-                <path d="M118,110 Q116,158 120,178" stroke="#8d5524" strokeWidth="6" fill="none" />
-                <path d="M120,132 Q100,150 94,172" fill="#43a047" />
-                <path d="M120,120 Q142,138 148,164" fill="#66bb6a" />
-                <circle cx="144" cy="158" r="4" fill="#81d4fa" />
+            <div style={{ position:"absolute", top:14, left:"50%", marginLeft:-58, zIndex:6, width:116, height:116, borderRadius:"50%", overflow:"hidden", border:"3px solid rgba(255,255,255,.5)", boxShadow:"0 4px 24px rgba(0,0,0,.3)" }}>
+              <svg viewBox="0 0 200 200" width="116" height="116" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="scl"><circle cx="100" cy="100" r="97"/></clipPath>
+                  <path id="sct" d="M 18,100 A 82,82 0 0,1 182,100"/>
+                  <path id="scb" d="M 18,100 A 82,82 0 0,0 182,100"/>
+                </defs>
+                <circle cx="100" cy="100" r="100" fill="#1b50bd"/>
+                <g clipPath="url(#scl)">
+                  <rect x="0" y="85" width="200" height="30" fill="white"/>
+                  <rect x="85" y="0" width="30" height="200" fill="white"/>
+                  {/* TOP-LEFT */}
+                  <path d="M87,84 C76,75 64,63 48,46" stroke="#7d4420" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                  <path d="M73,70 C63,64 47,66 34,72" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <path d="M62,58 C57,47 54,35 58,23" stroke="#7d4420" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M76,62 C70,51 67,39 71,27" stroke="#7d4420" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="32" cy="70" rx="10" ry="6" fill="#4caf50" transform="rotate(-20,32,70)"/>
+                  <ellipse cx="42" cy="74" rx="8" ry="5" fill="#2e7d32" transform="rotate(10,42,74)"/>
+                  <ellipse cx="23" cy="63" rx="7" ry="4" fill="#66bb6a" transform="rotate(-35,23,63)"/>
+                  <ellipse cx="56" cy="21" rx="9" ry="5" fill="#4caf50" transform="rotate(15,56,21)"/>
+                  <ellipse cx="44" cy="29" rx="8" ry="5" fill="#e91e8c" transform="rotate(-10,44,29)"/>
+                  <ellipse cx="63" cy="17" rx="7" ry="4" fill="#66bb6a" transform="rotate(25,63,17)"/>
+                  <ellipse cx="69" cy="26" rx="7" ry="4" fill="#fdd835" transform="rotate(-20,69,26)"/>
+                  <ellipse cx="43" cy="45" rx="11" ry="6" fill="#4caf50" transform="rotate(-30,43,45)"/>
+                  <ellipse cx="30" cy="51" rx="8" ry="5" fill="#29b6f6" transform="rotate(20,30,51)"/>
+                  <ellipse cx="57" cy="39" rx="9" ry="5" fill="#388e3c" transform="rotate(10,57,39)"/>
+                  <ellipse cx="68" cy="46" rx="7" ry="4" fill="#e91e8c" transform="rotate(-15,68,46)"/>
+                  <ellipse cx="74" cy="58" rx="8" ry="5" fill="#66bb6a" transform="rotate(30,74,58)"/>
+                  {/* TOP-RIGHT */}
+                  <path d="M113,84 C124,75 136,63 152,46" stroke="#7d4420" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                  <path d="M127,70 C137,64 153,66 166,72" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <path d="M138,58 C143,47 146,35 142,23" stroke="#7d4420" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M124,62 C130,51 133,39 129,27" stroke="#7d4420" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="168" cy="70" rx="10" ry="6" fill="#388e3c" transform="rotate(20,168,70)"/>
+                  <ellipse cx="158" cy="74" rx="8" ry="5" fill="#4caf50" transform="rotate(-10,158,74)"/>
+                  <ellipse cx="177" cy="63" rx="7" ry="4" fill="#66bb6a" transform="rotate(35,177,63)"/>
+                  <ellipse cx="144" cy="21" rx="9" ry="5" fill="#e91e8c" transform="rotate(-15,144,21)"/>
+                  <ellipse cx="156" cy="29" rx="8" ry="5" fill="#4caf50" transform="rotate(10,156,29)"/>
+                  <ellipse cx="137" cy="17" rx="7" ry="4" fill="#fdd835" transform="rotate(-25,137,17)"/>
+                  <ellipse cx="131" cy="26" rx="7" ry="4" fill="#66bb6a" transform="rotate(20,131,26)"/>
+                  <ellipse cx="157" cy="45" rx="11" ry="6" fill="#4caf50" transform="rotate(30,157,45)"/>
+                  <ellipse cx="170" cy="51" rx="8" ry="5" fill="#29b6f6" transform="rotate(-20,170,51)"/>
+                  <ellipse cx="143" cy="39" rx="9" ry="5" fill="#388e3c" transform="rotate(-10,143,39)"/>
+                  <ellipse cx="132" cy="46" rx="7" ry="4" fill="#4caf50" transform="rotate(15,132,46)"/>
+                  <ellipse cx="126" cy="58" rx="8" ry="5" fill="#e91e8c" transform="rotate(-30,126,58)"/>
+                  {/* BOTTOM-LEFT */}
+                  <path d="M50,186 C52,166 59,146 73,116" stroke="#7d4420" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+                  <path d="M61,153 C44,143 28,141 16,149" stroke="#7d4420" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                  <path d="M67,135 C53,124 40,114 28,110" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="14" cy="147" rx="9" ry="5" fill="#4caf50" transform="rotate(20,14,147)"/>
+                  <ellipse cx="22" cy="141" rx="8" ry="5" fill="#388e3c" transform="rotate(-10,22,141)"/>
+                  <ellipse cx="26" cy="108" rx="9" ry="5" fill="#29b6f6" transform="rotate(30,26,108)"/>
+                  <ellipse cx="39" cy="113" rx="8" ry="5" fill="#4caf50" transform="rotate(-20,39,113)"/>
+                  <ellipse cx="51" cy="119" rx="10" ry="6" fill="#66bb6a" transform="rotate(15,51,119)"/>
+                  <ellipse cx="42" cy="127" rx="7" ry="4" fill="#e91e8c" transform="rotate(-30,42,127)"/>
+                  <ellipse cx="28" cy="130" rx="8" ry="5" fill="#fdd835" transform="rotate(10,28,130)"/>
+                  <ellipse cx="18" cy="156" rx="7" ry="4" fill="#66bb6a" transform="rotate(-15,18,156)"/>
+                  <ellipse cx="63" cy="120" rx="9" ry="5" fill="#4caf50" transform="rotate(25,63,120)"/>
+                  {/* BOTTOM-RIGHT */}
+                  <path d="M148,186 C146,166 144,146 138,116" stroke="#7d4420" strokeWidth="4.5" fill="none" strokeLinecap="round"/>
+                  <path d="M140,153 C156,141 168,136 176,141" stroke="#7d4420" strokeWidth="2.2" fill="none" strokeLinecap="round"/>
+                  <path d="M138,133 C152,121 164,112 172,108" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <path d="M137,118 C124,108 116,103 115,116" stroke="#7d4420" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="175" cy="139" rx="9" ry="5" fill="#388e3c" transform="rotate(-20,175,139)"/>
+                  <ellipse cx="178" cy="147" rx="8" ry="5" fill="#4caf50" transform="rotate(15,178,147)"/>
+                  <ellipse cx="172" cy="106" rx="9" ry="5" fill="#fdd835" transform="rotate(25,172,106)"/>
+                  <ellipse cx="164" cy="111" rx="8" ry="5" fill="#4caf50" transform="rotate(-15,164,111)"/>
+                  <ellipse cx="118" cy="116" rx="9" ry="5" fill="#66bb6a" transform="rotate(20,118,116)"/>
+                  <ellipse cx="116" cy="125" rx="7" ry="4" fill="#e91e8c" transform="rotate(-10,116,125)"/>
+                  <ellipse cx="130" cy="119" rx="10" ry="6" fill="#388e3c" transform="rotate(30,130,119)"/>
+                  <ellipse cx="126" cy="129" rx="7" ry="4" fill="#29b6f6" transform="rotate(-25,126,129)"/>
+                </g>
+                <text fontFamily="Arial,Helvetica,sans-serif" fontSize="12" fontWeight="900" fill="white" letterSpacing="0.5">
+                  <textPath href="#sct" startOffset="50%" textAnchor="middle">ÉCOLE SAINT-CHARLES</textPath>
+                </text>
+                <text fontFamily="Arial,Helvetica,sans-serif" fontSize="7.5" fontWeight="700" fill="white" letterSpacing="0.3">
+                  <textPath href="#scb" startOffset="50%" textAnchor="middle">PERSÉVÉRANCE • TEMPÉRANCE • CHARITÉ</textPath>
+                </text>
               </svg>
             </div>
           </div>
@@ -589,8 +645,43 @@ export default function App() {
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}input::placeholder{color:rgba(245,240,232,.55)!important;opacity:1}`}</style>
         <div style={{ width:"100%", maxWidth:420 }}>
           <div style={{ textAlign:"center", marginBottom:22 }}>
-            <div style={{ width:52, height:52, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"1.5px solid rgba(255,255,255,.3)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 12px", backdropFilter:"blur(8px)" }}>
-              <span style={{ fontFamily:"'Playfair Display',serif", fontSize:16, fontWeight:700, color:"#f5f0e8" }}>SC</span>
+            <div style={{ width:60, height:60, borderRadius:"50%", overflow:"hidden", border:"2px solid rgba(255,255,255,.45)", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,.25)" }}>
+              <svg viewBox="0 0 200 200" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="scl2"><circle cx="100" cy="100" r="97"/></clipPath>
+                  <path id="sct2" d="M 18,100 A 82,82 0 0,1 182,100"/>
+                  <path id="scb2" d="M 18,100 A 82,82 0 0,0 182,100"/>
+                </defs>
+                <circle cx="100" cy="100" r="100" fill="#1b50bd"/>
+                <g clipPath="url(#scl2)">
+                  <rect x="0" y="85" width="200" height="30" fill="white"/>
+                  <rect x="85" y="0" width="30" height="200" fill="white"/>
+                  <path d="M87,84 C76,75 64,63 48,46" stroke="#7d4420" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                  <path d="M73,70 C63,64 47,66 34,72" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="32" cy="70" rx="10" ry="6" fill="#4caf50" transform="rotate(-20,32,70)"/>
+                  <ellipse cx="44" cy="29" rx="8" ry="5" fill="#e91e8c" transform="rotate(-10,44,29)"/>
+                  <ellipse cx="43" cy="45" rx="11" ry="6" fill="#4caf50" transform="rotate(-30,43,45)"/>
+                  <ellipse cx="30" cy="51" rx="8" ry="5" fill="#29b6f6" transform="rotate(20,30,51)"/>
+                  <path d="M113,84 C124,75 136,63 152,46" stroke="#7d4420" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                  <path d="M127,70 C137,64 153,66 166,72" stroke="#7d4420" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="168" cy="70" rx="10" ry="6" fill="#388e3c" transform="rotate(20,168,70)"/>
+                  <ellipse cx="144" cy="21" rx="9" ry="5" fill="#e91e8c" transform="rotate(-15,144,21)"/>
+                  <ellipse cx="157" cy="45" rx="11" ry="6" fill="#4caf50" transform="rotate(30,157,45)"/>
+                  <ellipse cx="170" cy="51" rx="8" ry="5" fill="#29b6f6" transform="rotate(-20,170,51)"/>
+                  <path d="M50,186 C52,166 59,146 73,116" stroke="#7d4420" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="39" cy="113" rx="8" ry="5" fill="#4caf50" transform="rotate(-20,39,113)"/>
+                  <ellipse cx="42" cy="127" rx="7" ry="4" fill="#e91e8c" transform="rotate(-30,42,127)"/>
+                  <path d="M148,186 C146,166 144,146 138,116" stroke="#7d4420" strokeWidth="4.5" fill="none" strokeLinecap="round"/>
+                  <ellipse cx="118" cy="116" rx="9" ry="5" fill="#66bb6a" transform="rotate(20,118,116)"/>
+                  <ellipse cx="130" cy="119" rx="10" ry="6" fill="#388e3c" transform="rotate(30,130,119)"/>
+                </g>
+                <text fontFamily="Arial,Helvetica,sans-serif" fontSize="12" fontWeight="900" fill="white" letterSpacing="0.5">
+                  <textPath href="#sct2" startOffset="50%" textAnchor="middle">ÉCOLE SAINT-CHARLES</textPath>
+                </text>
+                <text fontFamily="Arial,Helvetica,sans-serif" fontSize="7.5" fontWeight="700" fill="white" letterSpacing="0.3">
+                  <textPath href="#scb2" startOffset="50%" textAnchor="middle">PERSÉVÉRANCE • TEMPÉRANCE • CHARITÉ</textPath>
+                </text>
+              </svg>
             </div>
             <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:20, margin:"0 0 4px", fontWeight:700 }}>École Privée Saint-Charles</h1>
             <p style={{ color:"rgba(245,240,232,.6)", fontSize:12, margin:0 }}>Espace de partage de documents</p>
