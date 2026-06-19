@@ -580,9 +580,9 @@ export default function App() {
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
             {USERS.map(u=>(
               <div key={u.id}
-                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.1)", background:"rgba(255,255,255,.07)", transition:"background .15s" }}
-                onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
-                onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.07)"}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.08)", background:"rgba(15,44,92,.55)", transition:"background .15s" }}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(15,44,92,.75)"}
+                onMouseLeave={e=>e.currentTarget.style.background="rgba(15,44,92,.55)"}
                 onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
                 <div style={{ width:36, height:36, borderRadius:"50%", background:`${u.color}35`, border:`1.5px solid ${u.color}70`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0 }}>{u.avatar}</div>
                 <div style={{ flex:1 }}>
