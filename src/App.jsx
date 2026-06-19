@@ -482,7 +482,7 @@ export default function App() {
 
   // ══ ÉCRAN LOGIN ════════════════════════════════════════════════════════════
   if (!user) {
-    const loginBg = "linear-gradient(165deg, #004246 20%, #006064 35%, #f5f0e8 100%)";
+    const loginBg = "linear-gradient(165deg, #0F2C5C 20%, #1C49A6 55%, #e8eaf6 100%)";
 
     // ── ÉCRAN 1 : Accueil ──
     if (loginScreen === "welcome") return (
@@ -632,7 +632,7 @@ export default function App() {
           <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 32px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>Espace numérique</p>
 
           <button onClick={()=>setLoginScreen("profiles")}
-            style={{ background:"#006064", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'DM Sans',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
+            style={{ background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'DM Sans',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
             Se connecter
           </button>
         </div>
@@ -718,7 +718,7 @@ export default function App() {
                 ← Retour
               </button>
               <button onClick={()=>{ const u=USERS.find(x=>x.password===loginPassword); if(u){ handleLogin(u); } else { setLoginError("Mot de passe incorrect"); } }}
-                style={{ flex:2, background:"#006064", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
+                style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
                 Connexion
               </button>
             </div>
@@ -907,7 +907,9 @@ export default function App() {
       <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px":"0", display:"flex", flexDirection:"column", overflow:"hidden", overflowY:sidebar?"auto":"hidden" }}>
         {sidebar && <>
           <div style={{ textAlign:"center", marginBottom:24 }}>
-            <div style={{ width:56, height:56, borderRadius:"50%", background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 8px", fontSize:18, fontWeight:700, color:"#fff" }}>SC</div>
+            <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
+                <img src="/logo-saint-charles.png" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
+              </div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
           </div>
           <nav style={{ display:"flex", flexDirection:"column", gap:3, flex:1 }}>
