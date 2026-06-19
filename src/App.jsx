@@ -584,12 +584,11 @@ export default function App() {
                 onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
                 onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
                 onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
-                <div style={{ width:36, height:36, borderRadius:"50%", background:`${u.color}35`, border:`1.5px solid ${u.color}70`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0 }}>{u.avatar}</div>
                 <div style={{ flex:1 }}>
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
                   <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
                 </div>
-                <div style={{ width:8, height:8, borderRadius:"50%", background:u.color, flexShrink:0 }} />
+                <span style={{ color:u.color, fontSize:16, fontWeight:700, flexShrink:0 }}>→</span>
               </div>
             ))}
           </div>
