@@ -576,13 +576,13 @@ export default function App() {
           </div>
 
           {/* Boîte profils */}
-          <div style={{ background:"rgba(0,66,70,.75)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.18)", backdropFilter:"blur(20px)", boxShadow:"0 8px 32px rgba(0,0,0,.25)" }}>
+          <div style={{ background:"rgba(255,255,255,.08)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)", boxShadow:"0 8px 32px rgba(0,0,0,.2)" }}>
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
             {USERS.map(u=>(
               <div key={u.id}
-                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.08)", background:"rgba(15,44,92,.55)", transition:"background .15s" }}
-                onMouseEnter={e=>e.currentTarget.style.background="rgba(15,44,92,.75)"}
-                onMouseLeave={e=>e.currentTarget.style.background="rgba(15,44,92,.55)"}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"background .15s" }}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
+                onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
                 onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
                 <div style={{ width:36, height:36, borderRadius:"50%", background:`${u.color}35`, border:`1.5px solid ${u.color}70`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"#fff", flexShrink:0 }}>{u.avatar}</div>
                 <div style={{ flex:1 }}>
@@ -595,7 +595,7 @@ export default function App() {
           </div>
 
           {/* Mot de passe */}
-          <div style={{ background:"rgba(0,66,70,.6)", borderRadius:14, padding:"14px 16px", border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(20px)" }}>
+          <div style={{ background:"rgba(255,255,255,.08)", borderRadius:14, padding:"14px 16px", border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)" }}>
             <label style={{ fontSize:12, color:"rgba(245,240,232,.7)", display:"block", marginBottom:8, fontWeight:500, letterSpacing:".3px" }}>Mot de passe</label>
             <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
               style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
