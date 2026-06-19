@@ -908,7 +908,7 @@ export default function App() {
         {sidebar && <>
           <div style={{ textAlign:"center", marginBottom:24 }}>
             <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
-                <img src="/logo-saint-charles.png" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
+                <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
               </div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
           </div>
