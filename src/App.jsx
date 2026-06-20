@@ -215,6 +215,7 @@ export default function App() {
   const [user, setUser]         = useState(null);
   const [docs, setDocs]         = useState([]);
   const [cats, setCats]         = useState(CATS_DEFAUT);
+  const [deletedCats, setDeletedCats] = useState(() => { try { return JSON.parse(localStorage.getItem("sc_deleted_cats")||"{}"); } catch(e){ return {}; } });
   const [notifs, setNotifs]     = useState([]);
   const [notifMenu, setNotifMenu] = useState(null);
   const [loading, setLoading]   = useState(false);
@@ -265,13 +266,19 @@ export default function App() {
     setLoading(false);
   };
 
-  const loadCats = async () => {
+  const loadCats = async (overrideDeleted) => {
+    const del = overrideDeleted || deletedCats;
     const { data } = await supabase.from("categories").select("*");
-    const grouped = { ...CATS_DEFAUT };
+    const grouped = {};
+    Object.entries(CATS_DEFAUT).forEach(([k,v]) => {
+      grouped[k] = v.filter(c => !(del[k]||[]).includes(c));
+    });
     if (data) {
       data.forEach(c => {
-        if (!grouped[c.espace_id]) grouped[c.espace_id] = [];
-        if (!grouped[c.espace_id].includes(c.nom)) grouped[c.espace_id].push(c.nom);
+        if (!(del[c.espace_id]||[]).includes(c.nom)) {
+          if (!grouped[c.espace_id]) grouped[c.espace_id] = [];
+          if (!grouped[c.espace_id].includes(c.nom)) grouped[c.espace_id].push(c.nom);
+        }
       });
     }
     setCats(grouped);
@@ -401,10 +408,13 @@ export default function App() {
     const { espId, cat } = modalDeleteCat;
     await supabase.from("documents").delete().eq("espace_id", espId).eq("categorie", cat);
     await supabase.from("categories").delete().eq("espace_id", espId).eq("nom", cat);
+    const newDeleted = { ...deletedCats, [espId]: [...(deletedCats[espId]||[]), cat] };
+    setDeletedCats(newDeleted);
+    localStorage.setItem("sc_deleted_cats", JSON.stringify(newDeleted));
     if (catFilter === cat) setCatFilter("all");
     setModalDeleteCat(null);
     loadDocs();
-    loadCats();
+    loadCats(newDeleted);
     showToast(`Catégorie "${cat}" supprimée`);
   };
 
