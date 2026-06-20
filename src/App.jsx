@@ -952,7 +952,7 @@ export default function App() {
                         <div style={{ fontSize:14, color:"#0F2C5C", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
                         <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {fmtDate(doc.created_at)}</div>
                       </div>
-                      <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type==="AUTRE"?"...":doc.type}</span>
+                      <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700, letterSpacing:2 }}>···</span>
                     </div>
                   );
                 })}
@@ -1025,7 +1025,7 @@ export default function App() {
                 return (
                   <div key={doc.id} style={{...glassCard, border:"1px solid rgba(251,191,36,.35)"}}>
                     <div style={{ display:"flex", gap:14, alignItems:"flex-start", flexWrap:"wrap" }}>
-                      <span style={{ background:tc.bg, color:tc.text, padding:"8px 12px", borderRadius:6, fontSize:12, fontWeight:700, flexShrink:0 }}>{doc.type}</span>
+                      <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"8px 12px", borderRadius:6, fontSize:12, fontWeight:700, flexShrink:0, letterSpacing:2 }}>···</span>
                       <div style={{ flex:1 }}>
                         <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#0F2C5C" }}>{doc.titre}</h3>
                         {doc.description && <p style={{ fontSize:13, color:"rgba(0,96,100,.6)", margin:"0 0 8px" }}>{doc.description}</p>}
