@@ -426,7 +426,7 @@ export default function App() {
     const status = isAdmin ? "valide" : "attente";
     const { error } = await supabase.from("documents").insert({
       espace_id: espace.id,
-      categorie: cats[espace.id]?.[0] || "Général",
+      categorie: uploadForm.categorie?.trim() || cats[espace.id]?.[0] || "Général",
       titre: uploadForm.titre,
       description: uploadForm.desc,
       auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
@@ -720,6 +720,10 @@ export default function App() {
             <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
             <input style={fieldStyle(uploadErrors.titre)} placeholder="Titre du document..." value={uploadForm.titre} onChange={e=>setUploadForm(f=>({...f,titre:e.target.value}))} />
             {uploadErrors.titre && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.titre}</div>}
+          </div>
+          <div style={{ marginBottom:14 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Catégorie</label>
+            <input style={fieldStyle(false)} placeholder="Ex: Réunion, Circulaire, Projet..." value={uploadForm.categorie||""} onChange={e=>setUploadForm(f=>({...f,categorie:e.target.value}))} />
           </div>
           <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
