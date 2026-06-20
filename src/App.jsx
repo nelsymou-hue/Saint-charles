@@ -738,13 +738,6 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div style={{ position:"absolute", bottom:16, left:0, right:0, textAlign:"center", fontSize:11, color:"rgba(255,255,255,.4)" }}>
-          <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
-          {" · "}
-          <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
-          {" · "}
-          <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
-        </div>
       </div>
     );
   }
@@ -1224,6 +1217,13 @@ export default function App() {
             </div>
           </div>
         )}
+      </div>
+      <div style={{ textAlign:"center", padding:"20px 0 12px", fontSize:11, color:"rgba(15,44,92,.35)", borderTop:"1px solid rgba(15,44,92,.08)" }}>
+        <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
+        {" · "}
+        <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
+        {" · "}
+        <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
       </div>
     </div>
   );
