@@ -245,6 +245,7 @@ export default function App() {
   const [loginScreen, setLoginScreen]       = useState("welcome"); // "welcome" | "profiles"
   const [loginError, setLoginError]         = useState("");
   const [selectedUser, setSelectedUser]     = useState(null);
+  const [legalView, setLegalView]           = useState(null); // "mentions"|"cgu"|"confidentialite"
 
   const isSA    = user?.role === "superadmin";
   const isAdmin = ["superadmin","admin"].includes(user?.role);
@@ -496,6 +497,81 @@ export default function App() {
     setNotifs(prev => prev.filter(n => n.id !== id));
   };
 
+  // ══ PAGES LÉGALES ══════════════════════════════════════════════════════════
+  const LEGAL_PAGES = {
+    mentions: {
+      title: "Mentions Légales",
+      sections: [
+        { h:"1. Éditeur de l'application", body: <><p>L'application Saint-Charles est éditée par la direction de l'établissement scolaire Saint-Charles.</p><ul><li>Établissement : École Saint-Charles</li><li>Adresse : 7A, avenue de la Palestine, ZAC Moulin Joli, 97419 La Possession</li></ul></> },
+        { h:"2. Responsable de la publication", body: <p>La direction de l'établissement assure la responsabilité de la publication des contenus diffusés sur l'application.</p> },
+        { h:"3. Hébergement", body: <><p>L'application est hébergée par :</p><ul><li>Vercel Inc. — 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis (vercel.com)</li><li>Supabase Inc. — services de base de données, d'authentification et de stockage de fichiers (supabase.com)</li></ul></> },
+        { h:"4. Propriété intellectuelle", body: <><p>L'ensemble des éléments composant l'application (textes, logo, charte graphique, structure des espaces documentaires) est protégé par le droit de la propriété intellectuelle. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation préalable de la direction de l'établissement, est interdite.</p><p>Les documents déposés par les utilisateurs restent la propriété de leurs auteurs respectifs ou de l'établissement, selon leur nature.</p></> },
+        { h:"5. Données personnelles", body: <><p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, les utilisateurs disposent d'un droit d'accès, de rectification, de suppression, de limitation et d'opposition concernant leurs données personnelles.</p><p>Ces droits peuvent être exercés en contactant la direction de l'établissement par courrier, à l'adresse mentionnée ci-dessus.</p><p>Les données collectées (identifiants de connexion, documents déposés, historique de validation) sont strictement réservées à l'usage interne de l'établissement et ne sont en aucun cas cédées à des tiers.</p></> },
+        { h:"6. Cookies", body: <p>L'application peut utiliser des cookies techniques strictement nécessaires à son fonctionnement (maintien de la session de connexion). Aucun cookie de mesure d'audience ou publicitaire n'est utilisé.</p> },
+        { h:"7. Limitation de responsabilité", body: <p>La direction de l'établissement s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur l'application, mais ne peut garantir l'absence d'erreur ou d'interruption de service.</p> },
+        { h:"8. Contact", body: <p>Pour toute question relative à l'application, vous pouvez contacter la direction de l'établissement par courrier, à l'adresse mentionnée en début de document.</p> },
+      ]
+    },
+    cgu: {
+      title: "Conditions Générales d'Utilisation",
+      sections: [
+        { h:"Article 1 — Objet", body: <><p>Les présentes Conditions Générales d'Utilisation (ci-après « CGU ») ont pour objet de définir les modalités et conditions d'accès et d'utilisation de l'application Saint-Charles, plateforme de partage et de gestion de documents scolaires destinée à la communauté de l'établissement.</p><p>Toute utilisation de l'application implique l'acceptation pleine et entière des présentes CGU.</p></> },
+        { h:"Article 2 — Accès à l'application", body: <p>L'accès à l'application est réservé aux personnes disposant d'un compte créé par la direction de l'établissement. Aucune inscription libre n'est possible : la création des comptes relève exclusivement de la direction.</p> },
+        { h:"Article 3 — Comptes utilisateurs et rôles", body: <><p>L'application distingue plusieurs niveaux d'accès : Super-administrateur, Administrateur, Personnel enseignant.</p><p>Chaque utilisateur s'engage à :</p><ul><li>conserver la confidentialité de ses identifiants de connexion ;</li><li>ne pas les communiquer à un tiers ;</li><li>signaler sans délai à la direction toute utilisation suspecte de son compte.</li></ul><p>La direction se réserve le droit de suspendre ou de supprimer un compte en cas de non-respect des présentes CGU.</p></> },
+        { h:"Article 4 — Description des services", body: <><p>L'application propose notamment :</p><ul><li>des espaces documentaires thématiques organisés par catégorie ;</li><li>le téléversement et la consultation de documents ;</li><li>un système de validation des documents déposés ;</li><li>des notifications liées à l'activité des espaces documentaires.</li></ul></> },
+        { h:"Article 5 — Obligations des utilisateurs", body: <><p>L'utilisateur s'engage à :</p><ul><li>utiliser l'application conformément à sa destination (gestion documentaire scolaire) ;</li><li>ne déposer que des documents dont il a le droit de diffusion ;</li><li>ne pas déposer de contenu illicite, diffamatoire, ou portant atteinte aux droits de tiers ;</li><li>respecter la confidentialité des informations auxquelles il a accès dans le cadre de ses fonctions.</li></ul></> },
+        { h:"Article 6 — Propriété intellectuelle", body: <p>La structure de l'application, sa charte graphique et son contenu éditorial sont protégés par le droit de la propriété intellectuelle. Les documents déposés par les utilisateurs restent la propriété de leurs auteurs respectifs ou de l'établissement, selon leur nature, et ne peuvent être réutilisés hors du cadre de l'application sans autorisation.</p> },
+        { h:"Article 7 — Responsabilité", body: <><p>La direction de l'établissement met tout en œuvre pour assurer la disponibilité et la sécurité de l'application, sans pouvoir garantir une disponibilité continue ni l'absence totale d'incident technique.</p><p>Chaque utilisateur est seul responsable des documents qu'il dépose et de l'usage qu'il fait de son compte.</p></> },
+        { h:"Article 8 — Protection des données personnelles", body: <p>Les données à caractère personnel traitées dans le cadre de l'application (identifiants, documents associés à un compte) le sont conformément au RGPD. Pour plus de détails, l'utilisateur est invité à consulter la Politique de Confidentialité de l'application.</p> },
+        { h:"Article 9 — Modification des CGU", body: <p>La direction de l'établissement se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés de toute modification substantielle.</p> },
+        { h:"Article 10 — Droit applicable et juridiction", body: <p>Les présentes CGU sont soumises au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux compétents de Saint-Denis de La Réunion seront seuls compétents.</p> },
+      ]
+    },
+    confidentialite: {
+      title: "Politique de Confidentialité",
+      sections: [
+        { h:"1. Responsable du traitement", body: <><p>Le responsable du traitement des données à caractère personnel collectées via l'application Saint-Charles est la direction de l'établissement scolaire Saint-Charles.</p><ul><li>Adresse : École Saint-Charles, 7A avenue de la Palestine, ZAC Moulin Joli, 97419 La Possession</li></ul></> },
+        { h:"2. Données collectées", body: <><p>Dans le cadre du fonctionnement de l'application, les données suivantes sont collectées :</p><ul><li>Données de compte : identifiant de connexion, adresse email, rôle (super-administrateur, administrateur, personnel enseignant)</li><li>Données d'usage : documents déposés, statut de validation des documents, historique d'activité dans les espaces documentaires</li><li>Données techniques : journaux de connexion nécessaires à la sécurité de l'application</li></ul><p>Aucune donnée bancaire ni donnée sensible (au sens de l'article 9 du RGPD) n'est collectée par l'application.</p></> },
+        { h:"3. Finalités du traitement", body: <><p>Les données sont collectées et traitées pour les finalités suivantes :</p><ul><li>gestion des accès et des comptes utilisateurs ;</li><li>partage et validation des documents scolaires entre les membres autorisés de l'établissement ;</li><li>envoi de notifications liées à l'activité des espaces documentaires ;</li><li>sécurité et bon fonctionnement de l'application.</li></ul></> },
+        { h:"4. Base légale du traitement", body: <><p>Le traitement repose sur :</p><ul><li>l'intérêt légitime de l'établissement à organiser la gestion documentaire interne ;</li><li>l'exécution des missions confiées aux utilisateurs dans le cadre de leurs fonctions au sein de l'établissement.</li></ul></> },
+        { h:"5. Durée de conservation", body: <p>Les données sont conservées pendant toute la durée d'activité du compte utilisateur au sein de l'établissement. À la suppression d'un compte par la direction, les données associées sont supprimées ou archivées selon la politique interne de l'établissement.</p> },
+        { h:"6. Destinataires des données", body: <><p>Les données sont accessibles uniquement :</p><ul><li>aux utilisateurs habilités selon leur rôle (super-administrateur, administrateur, personnel enseignant) ;</li><li>à la direction de l'établissement, en sa qualité de responsable du traitement.</li></ul><p>Aucune donnée n'est cédée, louée ou vendue à des tiers à des fins commerciales.</p></> },
+        { h:"7. Sous-traitants et hébergement", body: <><p>L'application repose sur les prestataires techniques suivants, agissant en qualité de sous-traitants au sens du RGPD :</p><ul><li>Vercel Inc. (hébergement de l'application) — États-Unis</li><li>Supabase Inc. (base de données, authentification, stockage des documents) — États-Unis</li></ul><p>Ces prestataires étant situés hors de l'Union européenne, les transferts de données sont encadrés par des garanties appropriées (clauses contractuelles types de la Commission européenne), conformément aux dispositions du RGPD.</p></> },
+        { h:"8. Sécurité des données", body: <><p>L'application met en œuvre les mesures de sécurité suivantes :</p><ul><li>authentification sécurisée des utilisateurs (Supabase Auth) ;</li><li>restriction des accès par rôle (Row Level Security) ;</li><li>stockage des documents sur un espace de stockage sécurisé à accès restreint ;</li><li>chiffrement des données en transit (HTTPS).</li></ul></> },
+        { h:"9. Droits des personnes concernées", body: <><p>Conformément au RGPD, chaque utilisateur dispose des droits suivants sur ses données personnelles :</p><ul><li>droit d'accès : obtenir une copie des données le concernant ;</li><li>droit de rectification : corriger des données inexactes ;</li><li>droit à l'effacement : demander la suppression de ses données, sous réserve des obligations de conservation de l'établissement ;</li><li>droit à la limitation du traitement ;</li><li>droit d'opposition, pour motif légitime ;</li><li>droit à la portabilité, lorsqu'applicable.</li></ul><p>Ces droits peuvent être exercés en contactant la direction de l'établissement par courrier, à l'adresse mentionnée en début de document.</p><p>Une réponse sera apportée dans un délai maximal d'un mois conformément à la réglementation en vigueur.</p></> },
+        { h:"10. Droit de réclamation", body: <p>En cas de désaccord sur le traitement de ses données, l'utilisateur peut introduire une réclamation auprès de la CNIL (Commission Nationale de l'Informatique et des Libertés) — www.cnil.fr.</p> },
+        { h:"11. Modification de la politique de confidentialité", body: <p>La direction de l'établissement se réserve le droit de modifier la présente politique de confidentialité à tout moment, notamment pour se conformer à toute évolution réglementaire. Les utilisateurs seront informés de toute modification substantielle.</p> },
+        { h:"12. Contact", body: <p>Pour toute question relative à la protection des données personnelles, contactez la direction de l'établissement par courrier, à l'adresse mentionnée en début de document.</p> },
+      ]
+    }
+  };
+
+  if (legalView && LEGAL_PAGES[legalView]) {
+    const page = LEGAL_PAGES[legalView];
+    return (
+      <div style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'DM Sans',sans-serif", padding:"32px 20px" }}>
+        <div style={{ maxWidth:760, margin:"0 auto" }}>
+          <button onClick={()=>setLegalView(null)} style={{ background:"none", border:"1.5px solid #0F2C5C", color:"#0F2C5C", borderRadius:8, padding:"7px 16px", cursor:"pointer", fontSize:13, fontFamily:"'DM Sans',sans-serif", marginBottom:32, display:"inline-flex", alignItems:"center", gap:6 }}>← Retour</button>
+          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, color:"#0F2C5C", marginBottom:8 }}>{page.title}</h1>
+          <div style={{ height:3, width:60, background:"linear-gradient(90deg,#0F2C5C,#1C49A6)", borderRadius:2, marginBottom:32 }} />
+          {page.sections.map((s,i)=>(
+            <div key={i} style={{ marginBottom:28 }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10, borderLeft:"3px solid #1C49A6", paddingLeft:12 }}>{s.h}</h2>
+              <div style={{ fontSize:14, color:"#374151", lineHeight:1.75, paddingLeft:15 }}>{s.body}</div>
+            </div>
+          ))}
+          <div style={{ borderTop:"1px solid rgba(15,44,92,.15)", paddingTop:20, marginTop:40, textAlign:"center", fontSize:12, color:"rgba(15,44,92,.45)" }}>
+            <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
+            {" · "}
+            <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
+            {" · "}
+            <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ══ ÉCRAN LOGIN ════════════════════════════════════════════════════════════
   if (!user) {
     const loginBg = "linear-gradient(165deg, #0F2C5C 20%, #1C49A6 55%, #e8eaf6 100%)";
@@ -662,6 +738,13 @@ export default function App() {
             </div>
           </div>
         </div>
+        <div style={{ position:"absolute", bottom:16, left:0, right:0, textAlign:"center", fontSize:11, color:"rgba(255,255,255,.4)" }}>
+          <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
+          {" · "}
+          <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
+          {" · "}
+          <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
+        </div>
       </div>
     );
   }
@@ -677,6 +760,7 @@ export default function App() {
         .nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
         input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}
         @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+        .legal-content ul{margin:8px 0 8px 18px;padding:0}.legal-content li{margin-bottom:4px}.legal-content p{margin:0 0 10px}
 
         /* ── SIDEBAR ── */
         .sc-sidebar{position:sticky;top:0;height:100vh;flex-shrink:0;transition:width .25s,min-width .25s,padding .25s}
