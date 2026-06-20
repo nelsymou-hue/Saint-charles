@@ -1105,7 +1105,7 @@ export default function App() {
                     <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{fmtDate(n.created_at)}</div>
                   </div>
                   <div style={{ position:"relative", flexShrink:0 }} onClick={e=>{ e.stopPropagation(); setNotifMenu(notifMenu===n.id?null:n.id); }}>
-                    <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.3)", padding:"4px 8px", borderRadius:6 }}>⋮</button>
+                    <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.55)", padding:"4px 8px", borderRadius:6 }}>⋮</button>
                     {notifMenu===n.id && (
                       <div style={{ position:"absolute", right:0, top:"100%", background:"#fff", borderRadius:10, boxShadow:"0 4px 20px rgba(0,0,0,.15)", border:"1px solid rgba(0,0,0,.08)", zIndex:50, minWidth:140, overflow:"hidden" }}>
                         <div onClick={e=>{ e.stopPropagation(); deleteNotif(n.id); setNotifMenu(null); }}
