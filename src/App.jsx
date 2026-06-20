@@ -437,7 +437,7 @@ export default function App() {
     const status = isAdmin ? "valide" : "attente";
     const { error } = await supabase.from("documents").insert({
       espace_id: espace.id,
-      categorie: uploadForm.categorie?.trim() || cats[espace.id]?.[0] || "Général",
+      categorie: uploadForm.categorie || cats[espace.id]?.[0] || "Général",
       titre: uploadForm.titre,
       description: uploadForm.desc,
       auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
@@ -738,7 +738,11 @@ export default function App() {
           </div>
           <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Catégorie</label>
-            <input style={fieldStyle(false)} placeholder="Ex: Réunion, Circulaire, Projet..." value={uploadForm.categorie||""} onChange={e=>setUploadForm(f=>({...f,categorie:e.target.value}))} />
+            <select style={{...fieldStyle(false), appearance:"none", WebkitAppearance:"none", backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230F2C5C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 12px center", paddingRight:36 }}
+              value={uploadForm.categorie||""} onChange={e=>setUploadForm(f=>({...f,categorie:e.target.value}))}>
+              <option value="">— Choisir une catégorie —</option>
+              {(cats[espace?.id]||[]).map(c=><option key={c} value={c}>{c}</option>)}
+            </select>
           </div>
           <div style={{ marginBottom:14 }}>
             <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
