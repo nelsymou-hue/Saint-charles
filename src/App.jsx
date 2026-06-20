@@ -559,6 +559,15 @@ export default function App() {
                 <circle cx="286" cy="156" r="3" fill="#ce93d8" />
                 <circle cx="108" cy="78" r="2.5" fill="#81d4fa" />
                 <circle cx="226" cy="76" r="2.5" fill="#fff176" />
+                {/* Feuilles supplémentaires */}
+                <path d="M55,98 Q42,86 50,78 Q62,90 55,98Z" fill="#4caf50" />
+                <path d="M166,224 Q154,212 160,204 Q172,216 166,224Z" fill="#66bb6a" />
+                <path d="M167,228 Q178,214 170,207 Q160,219 167,228Z" fill="#43a047" />
+                <path d="M126,150 Q114,140 120,132 Q132,142 126,150Z" fill="#4caf50" />
+                <path d="M244,138 Q256,126 250,118 Q238,128 244,138Z" fill="#66bb6a" />
+                <path d="M168,196 Q156,186 162,178 Q174,188 168,196Z" fill="#43a047" />
+                <path d="M230,206 Q218,196 224,188 Q236,198 230,206Z" fill="#4caf50" />
+                <path d="M104,202 Q92,192 98,184 Q110,194 104,202Z" fill="#66bb6a" />
               </g>
             </svg>
             {/* Logo centré en haut, positionné par-dessus l'arbre */}
