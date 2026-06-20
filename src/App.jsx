@@ -552,12 +552,11 @@ export default function App() {
       <div style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'DM Sans',sans-serif", padding:"32px 20px" }}>
         <div style={{ maxWidth:760, margin:"0 auto" }}>
           <button onClick={()=>setLegalView(null)} style={{ background:"none", border:"1.5px solid #0F2C5C", color:"#0F2C5C", borderRadius:8, padding:"7px 16px", cursor:"pointer", fontSize:13, fontFamily:"'DM Sans',sans-serif", marginBottom:32, display:"inline-flex", alignItems:"center", gap:6 }}>← Retour</button>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, color:"#0F2C5C", marginBottom:8 }}>{page.title}</h1>
-          <div style={{ height:3, width:60, background:"linear-gradient(90deg,#0F2C5C,#1C49A6)", borderRadius:2, marginBottom:32 }} />
+          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, color:"#0F2C5C", marginBottom:32 }}>{page.title}</h1>
           {page.sections.map((s,i)=>(
             <div key={i} style={{ marginBottom:28 }}>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10 }}>{s.h}</h2>
-              <div style={{ fontSize:14, color:"#374151", lineHeight:1.75, paddingLeft:15 }}>{s.body}</div>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10, textAlign:"left" }}>{s.h}</h2>
+              <div style={{ fontSize:14, color:"#374151", lineHeight:1.75, textAlign:"left" }}>{s.body}</div>
             </div>
           ))}
           <div style={{ borderTop:"1px solid rgba(15,44,92,.15)", paddingTop:20, marginTop:40, textAlign:"center", fontSize:12, color:"rgba(15,44,92,.45)" }}>
@@ -753,7 +752,7 @@ export default function App() {
         .nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
         input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}
         @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
-        .legal-content ul{margin:8px 0 8px 18px;padding:0}.legal-content li{margin-bottom:4px}.legal-content p{margin:0 0 10px}
+        .legal-content ul{margin:8px 0 8px 18px;padding:0;text-align:left}.legal-content li{margin-bottom:4px;text-align:left}.legal-content p{margin:0 0 10px;text-align:left}
 
         /* ── SIDEBAR ── */
         .sc-sidebar{position:sticky;top:0;height:100vh;flex-shrink:0;transition:width .25s,min-width .25s,padding .25s}
