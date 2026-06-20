@@ -970,6 +970,13 @@ export default function App() {
               ))}
             </div>
           </nav>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.3)", lineHeight:1.8 }}>
+            <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
+            {" · "}
+            <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
+            {" · "}
+            <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
+          </div>
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ flex:1, overflow:"hidden" }}>
               <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
@@ -1217,13 +1224,6 @@ export default function App() {
             </div>
           </div>
         )}
-      </div>
-      <div style={{ textAlign:"center", padding:"20px 0 12px", fontSize:11, color:"rgba(15,44,92,.35)", borderTop:"1px solid rgba(15,44,92,.08)" }}>
-        <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
-        {" · "}
-        <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
-        {" · "}
-        <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
       </div>
     </div>
   );
