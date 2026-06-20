@@ -495,7 +495,7 @@ export default function App() {
           {/* Arbre + Logo combinés */}
           <div style={{ position:"relative", width:330, height:310, display:"flex", alignItems:"flex-start", justifyContent:"center", marginBottom:8 }}>
             <svg width="330" height="310" viewBox="0 0 330 310" xmlns="http://www.w3.org/2000/svg">
-              <g opacity="0.16" stroke="#f5f0e8" fill="none" strokeLinecap="round">
+              <g opacity="0.35" stroke="#f5f0e8" fill="none" strokeLinecap="round">
                 <path d="M165,310 Q160,250 168,185 Q170,178 165,172" strokeWidth="7" />
                 <path d="M166,210 Q120,200 88,158 Q70,135 55,98" strokeWidth="4.5" />
                 <path d="M88,158 Q66,150 42,162" strokeWidth="2.3" />
@@ -517,8 +517,12 @@ export default function App() {
                 <path d="M208,148 Q222,138 234,124" strokeWidth="1.8" />
                 <path d="M167,180 Q158,148 172,118 Q178,104 174,88" strokeWidth="3" />
                 <path d="M172,118 Q188,108 196,90" strokeWidth="1.8" />
+                <path d="M80,172 Q62,162 48,172" strokeWidth="1.8" />
+                <path d="M258,176 Q274,164 290,170" strokeWidth="1.8" />
+                <path d="M124,120 Q110,106 114,90" strokeWidth="1.8" />
+                <path d="M210,116 Q224,104 220,88" strokeWidth="1.8" />
               </g>
-              <g opacity="0.5">
+              <g opacity="0.75">
                 <path d="M50,52 Q38,34 47,26 Q57,38 50,52Z" fill="#66bb6a" />
                 <path d="M70,34 Q80,18 71,12 Q62,24 70,34Z" fill="#43a047" />
                 <path d="M42,162 Q30,148 38,140 Q48,152 42,162Z" fill="#66bb6a" />
@@ -532,6 +536,14 @@ export default function App() {
                 <path d="M196,90 Q208,74 199,68 Q189,80 196,90Z" fill="#43a047" />
                 <path d="M224,68 Q214,52 222,46 Q232,58 224,68Z" fill="#66bb6a" />
                 <path d="M84,92 Q74,78 82,71 Q92,83 84,92Z" fill="#43a047" />
+                <path d="M48,172 Q36,158 44,150 Q54,162 48,172Z" fill="#66bb6a" />
+                <path d="M290,170 Q302,156 294,148 Q284,160 290,170Z" fill="#43a047" />
+                <path d="M114,90 Q104,76 112,69 Q122,81 114,90Z" fill="#66bb6a" />
+                <path d="M220,88 Q232,72 223,66 Q213,78 220,88Z" fill="#43a047" />
+                <path d="M80,172 Q68,162 74,154 Q84,164 80,172Z" fill="#4caf50" />
+                <path d="M258,176 Q270,164 264,156 Q254,166 258,176Z" fill="#4caf50" />
+                <path d="M174,88 Q166,72 174,65 Q182,76 174,88Z" fill="#43a047" />
+                <path d="M196,90 Q186,76 192,68 Q202,78 196,90Z" fill="#66bb6a" />
                 <circle cx="44" cy="32" r="4.5" fill="#ce93d8" />
                 <circle cx="262" cy="14" r="4" fill="#81d4fa" />
                 <circle cx="76" cy="20" r="3" fill="#fff176" />
@@ -543,6 +555,10 @@ export default function App() {
                 <circle cx="218" cy="52" r="2.8" fill="#fff176" />
                 <circle cx="92" cy="76" r="2.5" fill="#ce93d8" />
                 <circle cx="186" cy="100" r="2.5" fill="#81d4fa" />
+                <circle cx="40" cy="158" r="3" fill="#fff176" />
+                <circle cx="286" cy="156" r="3" fill="#ce93d8" />
+                <circle cx="108" cy="78" r="2.5" fill="#81d4fa" />
+                <circle cx="226" cy="76" r="2.5" fill="#fff176" />
               </g>
             </svg>
             {/* Logo centré en haut, positionné par-dessus l'arbre */}
