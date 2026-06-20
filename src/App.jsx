@@ -115,16 +115,16 @@ const SpaceIcon = ({ id, size=42 }) => {
 
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 const glassCard = { background:"rgba(255,255,255,0.72)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1px solid rgba(0,96,100,0.15)", borderRadius:16, padding:20, boxShadow:"0 4px 20px rgba(0,0,0,.06)" };
-const btn = { background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
-const btnGhost = { background:"transparent", border:"1.5px solid #0F2C5C", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"#0F2C5C", display:"inline-flex", alignItems:"center", gap:7 };
-const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #0F2C5C", borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#0F2C5C", boxSizing:"border-box" };
+const btn = { background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
+const btnGhost = { background:"transparent", border:"1.5px solid #0F2C5C", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, color:"#0F2C5C", display:"inline-flex", alignItems:"center", gap:7 };
+const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #0F2C5C", borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:14, outline:"none", color:"#0F2C5C", boxSizing:"border-box" };
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children, maxWidth=480 }) => (
   <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.5)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20, backdropFilter:"blur(4px)" }}>
     <div onClick={e=>e.stopPropagation()} style={{ background:BG, borderRadius:20, padding:28, width:"100%", maxWidth, maxHeight:"90vh", overflowY:"auto", border:"1px solid rgba(255,255,255,.3)", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-        <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, margin:0, color:"#0F2C5C" }}>{title}</h2>
+        <h2 style={{ fontFamily:"'Calibri',sans-serif", fontSize:20, margin:0, color:"#0F2C5C" }}>{title}</h2>
         <button onClick={onClose} style={{ background:"none", border:"none", cursor:"pointer", color:"rgba(0,96,100,.5)", fontSize:20 }}>✕</button>
       </div>
       {children}
@@ -151,7 +151,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
           </div>
           <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"3px 9px", borderRadius:6, fontSize:13, fontWeight:700, letterSpacing:2, cursor:"pointer" }}>···</span>
         </div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
+        <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
         {doc.description && <div style={{ fontSize:12, color:"rgba(0,96,100,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
         <div style={{ display:"inline-block", background:"rgba(0,96,100,.08)", color:"#0F2C5C", padding:"3px 10px", borderRadius:20, fontSize:11, fontWeight:600, border:"1px solid rgba(0,96,100,.18)", marginBottom:10 }}>{doc.categorie}</div>
         <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
@@ -202,7 +202,7 @@ const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
       <div style={{ position:"absolute", top:0, left:0, right:0, height:55, background:"linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)", pointerEvents:"none" }} />
       <div style={{ position:"relative", zIndex:2 }}>
         <div style={{ marginBottom:14 }}><SpaceIcon id={esp.id} size={42} /></div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, marginBottom:14, color:c.accent }}>{esp.nom}</div>
+        <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:16, marginBottom:14, color:c.accent }}>{esp.nom}</div>
         <div style={{ height:1, background:`linear-gradient(90deg,${c.border},transparent)`, marginBottom:10 }} />
         <div style={{ fontSize:12, color:"#0F2C5C", fontWeight:500 }}>{count} document(s) publié(s)</div>
       </div>
@@ -549,13 +549,13 @@ export default function App() {
   if (legalView && LEGAL_PAGES[legalView]) {
     const page = LEGAL_PAGES[legalView];
     return (
-      <div style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'DM Sans',sans-serif", padding:"32px 20px" }}>
+      <div style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'Calibri',sans-serif", padding:"32px 20px" }}>
         <div style={{ maxWidth:760, margin:"0 auto" }}>
-          <button onClick={()=>setLegalView(null)} style={{ background:"none", border:"1.5px solid #0F2C5C", color:"#0F2C5C", borderRadius:8, padding:"7px 16px", cursor:"pointer", fontSize:13, fontFamily:"'DM Sans',sans-serif", marginBottom:32, display:"inline-flex", alignItems:"center", gap:6 }}>← Retour</button>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, color:"#0F2C5C", marginBottom:32 }}>{page.title}</h1>
+          <button onClick={()=>setLegalView(null)} style={{ background:"none", border:"1.5px solid #0F2C5C", color:"#0F2C5C", borderRadius:8, padding:"7px 16px", cursor:"pointer", fontSize:13, fontFamily:"'Calibri',sans-serif", marginBottom:32, display:"inline-flex", alignItems:"center", gap:6 }}>← Retour</button>
+          <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, color:"#0F2C5C", marginBottom:32 }}>{page.title}</h1>
           {page.sections.map((s,i)=>(
             <div key={i} style={{ marginBottom:28 }}>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10, textAlign:"left" }}>{s.h}</h2>
+              <h2 style={{ fontFamily:"'Calibri',sans-serif", fontSize:17, color:"#0F2C5C", marginBottom:10, textAlign:"left" }}>{s.h}</h2>
               <div style={{ fontSize:14, color:"#374151", lineHeight:1.75, textAlign:"left" }}>{s.body}</div>
             </div>
           ))}
@@ -577,7 +577,7 @@ export default function App() {
 
     // ── ÉCRAN 1 : Accueil ──
     if (loginScreen === "welcome") return (
-      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif", position:"relative", overflow:"hidden" }}>
+      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Calibri',sans-serif", position:"relative", overflow:"hidden" }}>
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}`}</style>
 
         {/* Contenu centré */}
@@ -671,11 +671,11 @@ export default function App() {
             </div>
           </div>
 
-          <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:22, margin:"0 0 8px", textAlign:"center", fontWeight:700 }}>École Privée Saint-Charles</h1>
-          <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 32px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'DM Sans',sans-serif" }}>Espace numérique</p>
+          <h1 style={{ fontFamily:"'Calibri',sans-serif", color:"#f5f0e8", fontSize:22, margin:"0 0 8px", textAlign:"center", fontWeight:700 }}>École Privée Saint-Charles</h1>
+          <p style={{ color:"rgba(245,240,232,.6)", fontSize:11, margin:"0 0 32px", letterSpacing:"2px", textTransform:"uppercase", fontFamily:"'Calibri',sans-serif" }}>Espace numérique</p>
 
           <button onClick={()=>setLoginScreen("profiles")}
-            style={{ background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'DM Sans',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
+            style={{ background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.35)", borderRadius:20, padding:"8px 28px", fontSize:14, fontWeight:500, fontFamily:"'Calibri',sans-serif", cursor:"pointer", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.2), 0 4px 14px rgba(0,0,0,.25)", letterSpacing:".3px" }}>
             Se connecter
           </button>
         </div>
@@ -684,14 +684,14 @@ export default function App() {
 
     // ── ÉCRAN 2 : Profils ──
     return (
-      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", padding:20, fontFamily:"'DM Sans',sans-serif" }}>
+      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", padding:20, fontFamily:"'Calibri',sans-serif" }}>
         <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');*{box-sizing:border-box}input::placeholder{color:rgba(245,240,232,.55)!important;opacity:1}`}</style>
         <div style={{ width:"100%", maxWidth:420 }}>
           <div style={{ textAlign:"center", marginBottom:22 }}>
             <div style={{ width:60, height:60, borderRadius:"50%", overflow:"hidden", border:"2px solid rgba(255,255,255,.45)", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,.25)" }}>
               <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
             </div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#f5f0e8", fontSize:20, margin:"0 0 4px", fontWeight:700 }}>École Privée Saint-Charles</h1>
+            <h1 style={{ fontFamily:"'Calibri',sans-serif", color:"#f5f0e8", fontSize:20, margin:"0 0 4px", fontWeight:700 }}>École Privée Saint-Charles</h1>
             <p style={{ color:"rgba(245,240,232,.6)", fontSize:12, margin:0 }}>Espace de partage de documents</p>
           </div>
 
@@ -723,15 +723,15 @@ export default function App() {
           <div style={{ background:"rgba(255,255,255,.08)", borderRadius:14, padding:"14px 16px", border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)" }}>
             <label style={{ fontSize:12, color:"rgba(245,240,232,.7)", display:"block", marginBottom:8, fontWeight:500, letterSpacing:".3px" }}>Mot de passe</label>
             <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
-              style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
+              style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:14, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
             {loginError && <div style={{ color:"#ef9a9a", fontSize:12, marginTop:6, fontStyle:"italic" }}>{loginError}</div>}
             <div style={{ marginTop:12, display:"flex", gap:8 }}>
               <button onClick={()=>{ setLoginScreen("welcome"); setLoginPassword(""); setLoginError(""); }}
-                style={{ flex:1, background:"rgba(255,255,255,.1)", color:"rgba(245,240,232,.7)", border:"1px solid rgba(255,255,255,.15)", borderRadius:10, padding:"8px 0", fontSize:13, cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
+                style={{ flex:1, background:"rgba(255,255,255,.1)", color:"rgba(245,240,232,.7)", border:"1px solid rgba(255,255,255,.15)", borderRadius:10, padding:"8px 0", fontSize:13, cursor:"pointer", fontFamily:"'Calibri',sans-serif" }}>
                 ← Retour
               </button>
               <button onClick={()=>{ if(!selectedUser){ setLoginError("Veuillez sélectionner un profil"); return; } if(selectedUser.password===loginPassword){ handleLogin(selectedUser); } else { setLoginError("Mot de passe incorrect"); } }}
-                style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
+                style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'Calibri',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
                 Connexion
               </button>
             </div>
@@ -745,7 +745,7 @@ export default function App() {
 
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
-    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'DM Sans',sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'Calibri',sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
         *{box-sizing:border-box}
@@ -878,7 +878,7 @@ export default function App() {
           <div style={{ display:"flex", gap:10 }}>
             {modalDetail.file_url && modalDetail.status !== "refuse" && (
               <a href={modalDetail.file_url} target="_blank" rel="noreferrer"
-                style={{ flex:1, justifyContent:"center", background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
+                style={{ flex:1, justifyContent:"center", background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
                 <Icon name="download" size={14} color="#fff" /> Télécharger
               </a>
             )}
@@ -931,7 +931,7 @@ export default function App() {
             <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
                 <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
               </div>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
+            <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
           </div>
           <nav style={{ display:"flex", flexDirection:"column", gap:3, flex:1 }}>
             {[{id:"accueil",label:"Accueil",icon:"home"},{id:"dashboard",label:"Tableau de bord",icon:"dashboard",adminOnly:true}].filter(x=>!x.adminOnly||isAdmin).map(item=>(
@@ -1006,7 +1006,7 @@ export default function App() {
         {/* ACCUEIL */}
         {view==="accueil" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Bienvenue dans votre espace</h1>
+            <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Bienvenue dans votre espace</h1>
             <div className="sc-spaces-grid">
               {ESPACES.filter(e=>e.id==="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
@@ -1030,7 +1030,7 @@ export default function App() {
         {/* DASHBOARD */}
         {view==="dashboard" && isAdmin && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Tableau de bord</h1>
+            <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Tableau de bord</h1>
             <div className="sc-stat-grid">
               {[
                 {label:"Publiés",val:docs.filter(d=>d.status==="valide").length,color:"#6ee7b7",icon:"check"},
@@ -1039,13 +1039,13 @@ export default function App() {
               ].map(s=>(
                 <div key={s.label} style={{...glassCard,textAlign:"center",padding:"12px 10px",cursor:s.label==="En attente"&&isSA?"pointer":"default"}}
                   onClick={()=>s.label==="En attente"&&isSA&&setView("validation")}>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, color:"#0F2C5C" }}>{s.val}</div>
+                  <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:24, fontWeight:700, color:"#0F2C5C" }}>{s.val}</div>
                   <div style={{ fontSize:11, color:"rgba(15,44,92,.55)", marginTop:2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
             <div style={glassCard}>
-              <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:18, margin:"0 0 18px", color:"#0F2C5C" }}>Activité récente</h3>
+              <h3 style={{ fontFamily:"'Calibri',sans-serif", fontSize:18, margin:"0 0 18px", color:"#0F2C5C" }}>Activité récente</h3>
               {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14 }}>Chargement...</div>}
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 {docs.slice(0,5).map(doc => {
@@ -1074,7 +1074,7 @@ export default function App() {
               <div style={{ display:"flex", alignItems:"center", gap:14 }}>
                 <SpaceIcon id={espace.id} size={46} />
                 <div>
-                  <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:24, margin:0, color:c_esp.accent }}>{espace.nom}</h1>
+                  <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:24, margin:0, color:c_esp.accent }}>{espace.nom}</h1>
                 </div>
               </div>
               <div style={{ display:"flex", gap:8 }}>
@@ -1122,7 +1122,7 @@ export default function App() {
         {/* VALIDATION */}
         {view==="validation" && isSA && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Validation</h1>
+            <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Validation</h1>
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{pending} document(s) en attente</p>
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {docs.filter(d=>d.status==="attente").map(doc => {
@@ -1133,7 +1133,7 @@ export default function App() {
                     <div style={{ display:"flex", gap:14, alignItems:"flex-start", flexWrap:"wrap" }}>
                       <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"8px 12px", borderRadius:6, fontSize:12, fontWeight:700, flexShrink:0, letterSpacing:2 }}>···</span>
                       <div style={{ flex:1 }}>
-                        <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#0F2C5C" }}>{doc.titre}</h3>
+                        <h3 style={{ fontFamily:"'Calibri',sans-serif", fontSize:16, margin:"0 0 4px", color:"#0F2C5C" }}>{doc.titre}</h3>
                         {doc.description && <p style={{ fontSize:13, color:"rgba(0,96,100,.6)", margin:"0 0 8px" }}>{doc.description}</p>}
                         <div style={{ fontSize:12, color:"rgba(0,96,100,.5)", display:"flex", gap:12, flexWrap:"wrap" }}>
                           <span>{doc.categorie}</span><span>{doc.auteur}</span><span>{espNom}</span>
@@ -1188,7 +1188,7 @@ export default function App() {
         {/* NOTIFICATIONS */}
         {view==="notifs" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Notifications</h1>
+            <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Notifications</h1>
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
