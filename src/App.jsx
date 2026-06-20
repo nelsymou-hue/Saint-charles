@@ -575,7 +575,7 @@ export default function App() {
               </g>
             </svg>
             {/* Logo centré en haut, positionné par-dessus l'arbre */}
-            <div style={{ position:"absolute", top:14, left:"50%", marginLeft:-58, zIndex:6, width:116, height:116, borderRadius:"50%", overflow:"hidden", border:"3px solid rgba(255,255,255,.5)", boxShadow:"0 4px 24px rgba(0,0,0,.3)", background:"#fff" }}>
+            <div style={{ position:"absolute", top:14, left:"50%", marginLeft:-70, zIndex:6, width:140, height:140, borderRadius:"50%", overflow:"hidden", border:"3px solid rgba(255,255,255,.5)", boxShadow:"0 4px 24px rgba(0,0,0,.3)", background:"#fff" }}>
               <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
             </div>
           </div>
