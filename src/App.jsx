@@ -935,8 +935,8 @@ export default function App() {
               ].map(s=>(
                 <div key={s.label} style={{...glassCard,textAlign:"center",padding:"12px 10px",cursor:s.label==="En attente"&&isSA?"pointer":"default"}}
                   onClick={()=>s.label==="En attente"&&isSA&&setView("validation")}>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, color:s.color }}>{s.val}</div>
-                  <div style={{ fontSize:11, color:"rgba(0,96,100,.55)", marginTop:2 }}>{s.label}</div>
+                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:24, fontWeight:700, color:"#0F2C5C" }}>{s.val}</div>
+                  <div style={{ fontSize:11, color:"rgba(15,44,92,.55)", marginTop:2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
