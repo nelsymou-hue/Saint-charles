@@ -115,16 +115,16 @@ const SpaceIcon = ({ id, size=42 }) => {
 
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 const glassCard = { background:"rgba(255,255,255,0.72)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1px solid rgba(0,96,100,0.15)", borderRadius:16, padding:20, boxShadow:"0 4px 20px rgba(0,0,0,.06)" };
-const btn = { background:"#006064", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
-const btnGhost = { background:"transparent", border:"1.5px solid #006064", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"#006064", display:"inline-flex", alignItems:"center", gap:7 };
-const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #006064", borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#006064", boxSizing:"border-box" };
+const btn = { background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
+const btnGhost = { background:"transparent", border:"1.5px solid #0F2C5C", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"#0F2C5C", display:"inline-flex", alignItems:"center", gap:7 };
+const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #0F2C5C", borderRadius:10, fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", color:"#0F2C5C", boxSizing:"border-box" };
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children, maxWidth=480 }) => (
   <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.5)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20, backdropFilter:"blur(4px)" }}>
     <div onClick={e=>e.stopPropagation()} style={{ background:BG, borderRadius:20, padding:28, width:"100%", maxWidth, maxHeight:"90vh", overflowY:"auto", border:"1px solid rgba(255,255,255,.3)", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-        <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, margin:0, color:"#006064" }}>{title}</h2>
+        <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, margin:0, color:"#0F2C5C" }}>{title}</h2>
         <button onClick={onClose} style={{ background:"none", border:"none", cursor:"pointer", color:"rgba(0,96,100,.5)", fontSize:20 }}>✕</button>
       </div>
       {children}
@@ -153,7 +153,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
         </div>
         <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
         {doc.description && <div style={{ fontSize:12, color:"rgba(0,96,100,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
-        <div style={{ display:"inline-block", background:"rgba(0,96,100,.08)", color:"#006064", padding:"3px 10px", borderRadius:20, fontSize:11, fontWeight:600, border:"1px solid rgba(0,96,100,.18)", marginBottom:10 }}>{doc.categorie}</div>
+        <div style={{ display:"inline-block", background:"rgba(0,96,100,.08)", color:"#0F2C5C", padding:"3px 10px", borderRadius:20, fontSize:11, fontWeight:600, border:"1px solid rgba(0,96,100,.18)", marginBottom:10 }}>{doc.categorie}</div>
         <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
           <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="user" size={10} color="rgba(0,96,100,.4)" /> {doc.auteur}</span>
           <span style={{ display:"flex", alignItems:"center", gap:3 }}><Icon name="calendar" size={10} color="rgba(0,96,100,.4)" /> {fmtDate(doc.created_at)}</span>
@@ -165,8 +165,8 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
           </span>
           {doc.file_url && (
             <a href={doc.file_url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
-              style={{ background:"rgba(0,96,100,.12)", color:"#006064", border:"1px solid rgba(0,96,100,.25)", padding:"6px 9px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", textDecoration:"none" }}>
-              <Icon name="download" size={13} color="#006064" />
+              style={{ background:"rgba(0,96,100,.12)", color:"#0F2C5C", border:"1px solid rgba(0,96,100,.25)", padding:"6px 9px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", textDecoration:"none" }}>
+              <Icon name="download" size={13} color="#0F2C5C" />
             </a>
           )}
           {canDelete && (
@@ -189,7 +189,7 @@ const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
       style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, padding:20, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-7px) scale(1.015)":"translateY(0)", boxShadow:hov?`0 24px 48px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
       {onAdd && (
         <button onClick={e=>{ e.stopPropagation(); onAdd(); }}
-          style={{ position:"absolute", top:8, right:newCount>0?32:8, zIndex:10, background:"none", border:"none", cursor:"pointer", fontSize:22, lineHeight:1, color:"#006064", fontWeight:300, padding:2 }}>
+          style={{ position:"absolute", top:8, right:newCount>0?32:8, zIndex:10, background:"none", border:"none", cursor:"pointer", fontSize:22, lineHeight:1, color:"#0F2C5C", fontWeight:300, padding:2 }}>
           +
         </button>
       )}
@@ -204,7 +204,7 @@ const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
         <div style={{ marginBottom:14 }}><SpaceIcon id={esp.id} size={42} /></div>
         <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, marginBottom:14, color:c.accent }}>{esp.nom}</div>
         <div style={{ height:1, background:`linear-gradient(90deg,${c.border},transparent)`, marginBottom:10 }} />
-        <div style={{ fontSize:12, color:"#006064", fontWeight:500 }}>{count} document(s) publié(s)</div>
+        <div style={{ fontSize:12, color:"#0F2C5C", fontWeight:500 }}>{count} document(s) publié(s)</div>
       </div>
     </div>
   );
@@ -474,7 +474,7 @@ export default function App() {
     ? docs.filter(d => d.espace_id === espId && d.status === "attente" && (d.deposant === user?.name || d.auteur === user?.name))
     : [];
 
-  const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#006064" });
+  const fieldStyle = (err) => ({ ...inputStyle, borderColor: err ? "#dc2626" : "#0F2C5C" });
 
   const markNotifLue = async (id) => {
     await supabase.from("notifications").update({ lu:true }).eq("id", id);
@@ -706,32 +706,32 @@ export default function App() {
         <Modal title={`Déposer dans — ${espace?.nom}`} onClose={()=>{setModalUpload(false);setUploadErrors({});}}>
           <div className="sc-upload-name">
             <div>
-              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
+              <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Prénom *</label>
               <input style={fieldStyle(uploadErrors.prenom)} placeholder="Votre prénom..." value={uploadForm.prenom} onChange={e=>setUploadForm(f=>({...f,prenom:e.target.value}))} />
               {uploadErrors.prenom && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
             </div>
             <div>
-              <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
+              <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Nom *</label>
               <input style={fieldStyle(uploadErrors.nom)} placeholder="Votre nom..." value={uploadForm.nom} onChange={e=>setUploadForm(f=>({...f,nom:e.target.value}))} />
               {uploadErrors.nom && <div style={{ fontSize:12, color:"#dc2626", marginTop:4, fontStyle:"italic" }}>Obligatoire</div>}
             </div>
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Titre du document *</label>
             <input style={fieldStyle(uploadErrors.titre)} placeholder="Titre du document..." value={uploadForm.titre} onChange={e=>setUploadForm(f=>({...f,titre:e.target.value}))} />
             {uploadErrors.titre && <div style={{ fontSize:12, color:"#fca5a5", marginTop:4, fontStyle:"italic" }}>{uploadErrors.titre}</div>}
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Description</label>
             <textarea style={{...fieldStyle(false),resize:"none"}} rows={3} placeholder="Description optionnelle..." value={uploadForm.desc} onChange={e=>setUploadForm(f=>({...f,desc:e.target.value}))} />
           </div>
           <div style={{ marginBottom:14 }}>
-            <label style={{ fontSize:13, color:"#006064", display:"block", marginBottom:6, fontWeight:500 }}>Fichier <span style={{color:"#dc2626"}}>*</span> <span style={{fontWeight:400,fontSize:12,color:"rgba(0,96,100,.6)"}}>(PDF, Word, image)</span></label>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Fichier <span style={{color:"#dc2626"}}>*</span> <span style={{fontWeight:400,fontSize:12,color:"rgba(0,96,100,.6)"}}>(PDF, Word, image)</span></label>
             <label style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer", padding:"10px 14px", background:uploadErrors.file?"rgba(220,38,38,.08)":"rgba(0,96,100,.06)", border:`1.5px dashed ${uploadErrors.file?"#dc2626":"rgba(0,96,100,.35)"}`, borderRadius:12, transition:"all .2s" }}>
               <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.gif,.webp" style={{ display:"none" }}
                 onChange={e=>{ const f=e.target.files?.[0]; if(f){ setUploadForm(p=>({...p,file:f.name,fileObj:f})); setUploadErrors(p=>({...p,file:undefined})); } }} />
-              <span style={{ background:"#006064", color:"#fff", padding:"5px 14px", borderRadius:8, fontSize:12, fontWeight:600, flexShrink:0 }}>Choisir un fichier</span>
-              <span style={{ fontSize:13, color: uploadForm.file ? "#006064" : "rgba(0,96,100,.5)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+              <span style={{ background:"#0F2C5C", color:"#fff", padding:"5px 14px", borderRadius:8, fontSize:12, fontWeight:600, flexShrink:0 }}>Choisir un fichier</span>
+              <span style={{ fontSize:13, color: uploadForm.file ? "#0F2C5C" : "rgba(0,96,100,.5)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
                 {uploadForm.file || "Aucun fichier sélectionné"}
               </span>
             </label>
@@ -763,12 +763,12 @@ export default function App() {
               {modalDetail.status==="valide"?"Publié":modalDetail.status==="attente"?"En attente":"Refusé"}
             </span>
           </div>
-          {modalDetail.description && <div style={{ background:"rgba(0,96,100,.06)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#006064", lineHeight:1.6 }}>{modalDetail.description}</div>}
+          {modalDetail.description && <div style={{ background:"rgba(0,96,100,.06)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#0F2C5C", lineHeight:1.6 }}>{modalDetail.description}</div>}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
             {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)],["Type",modalDetail.type]].map(([l,v])=>(
               <div key={l} style={{ background:"rgba(0,96,100,.06)", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", padding:"10px 14px" }}>
                 <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", marginBottom:3 }}>{l}</div>
-                <div style={{ fontSize:13, color:"#006064", fontWeight:500 }}>{v}</div>
+                <div style={{ fontSize:13, color:"#0F2C5C", fontWeight:500 }}>{v}</div>
               </div>
             ))}
           </div>
@@ -780,7 +780,7 @@ export default function App() {
           <div style={{ display:"flex", gap:10 }}>
             {modalDetail.file_url && modalDetail.status !== "refuse" && (
               <a href={modalDetail.file_url} target="_blank" rel="noreferrer"
-                style={{ flex:1, justifyContent:"center", background:"#006064", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
+                style={{ flex:1, justifyContent:"center", background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
                 <Icon name="download" size={14} color="#fff" /> Télécharger
               </a>
             )}
@@ -889,11 +889,11 @@ export default function App() {
         {/* TOPBAR */}
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
           <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
-            <Icon name="menu" size={16} color="#006064" />
+            <Icon name="menu" size={16} color="#0F2C5C" />
           </button>
           {navHistory.length>0 && (
             <button onClick={goBack} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
-              <Icon name="back" size={16} color="#006064" />
+              <Icon name="back" size={16} color="#0F2C5C" />
             </button>
           )}
           <div style={{ flex:1 }} />
@@ -902,7 +902,7 @@ export default function App() {
         {/* ACCUEIL */}
         {view==="accueil" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Bienvenue dans votre espace</h1>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Bienvenue dans votre espace</h1>
             <div className="sc-spaces-grid">
               {ESPACES.filter(e=>e.id==="ressources").map(e => {
                 const count = docs.filter(d=>d.espace_id===e.id&&d.status==="valide").length;
@@ -926,7 +926,7 @@ export default function App() {
         {/* DASHBOARD */}
         {view==="dashboard" && isAdmin && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#006064" }}>Tableau de bord</h1>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 28px", color:"#0F2C5C" }}>Tableau de bord</h1>
             <div className="sc-stat-grid">
               {[
                 {label:"Publiés",val:docs.filter(d=>d.status==="valide").length,color:"#6ee7b7",icon:"check"},
@@ -941,7 +941,7 @@ export default function App() {
               ))}
             </div>
             <div style={glassCard}>
-              <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:18, margin:"0 0 18px", color:"#006064" }}>Activité récente</h3>
+              <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:18, margin:"0 0 18px", color:"#0F2C5C" }}>Activité récente</h3>
               {loading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14 }}>Chargement...</div>}
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 {docs.slice(0,5).map(doc => {
@@ -951,7 +951,7 @@ export default function App() {
                     <div key={doc.id} onClick={()=>setModalDetail(doc)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", cursor:"pointer", background:"rgba(255,255,255,.6)", transition:"all .15s" }}>
                       <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>{doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}</span>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:14, color:"#006064", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
+                        <div style={{ fontSize:14, color:"#0F2C5C", fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{doc.titre}</div>
                         <div style={{ fontSize:12, color:"rgba(0,96,100,.5)" }}>{doc.auteur} · {fmtDate(doc.created_at)}</div>
                       </div>
                       <span style={{ background:tc.bg, color:tc.text, padding:"3px 8px", borderRadius:5, fontSize:11, fontWeight:700 }}>{doc.type==="AUTRE"?"...":doc.type}</span>
@@ -974,19 +974,19 @@ export default function App() {
                 </div>
               </div>
               <div style={{ display:"flex", gap:8 }}>
-                {isAdmin && <button style={btnGhost} onClick={()=>setModalCat(true)}><Icon name="plus" size={13} color="#006064" /> Catégorie</button>}
+                {isAdmin && <button style={btnGhost} onClick={()=>setModalCat(true)}><Icon name="plus" size={13} color="#0F2C5C" /> Catégorie</button>}
                 {(isAdmin || (user.role==="enseignant" && espace.id==="ressources")) && <button style={btn} onClick={()=>setModalUpload(true)}>+ Déposer</button>}
               </div>
             </div>
             <div style={{ position:"relative", marginBottom:14 }}>
               <div style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)" }}><Icon name="search" size={15} color="rgba(0,96,100,.4)" /></div>
-              <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#006064"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
+              <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#0F2C5C"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
             </div>
             <div style={{ display:"flex", gap:8, marginBottom:20, overflowX:"auto", paddingBottom:4 }}>
-              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter==="all"?"#fff":"#006064", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
+              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter==="all"?"#fff":"#0F2C5C", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
               {(cats[espace.id]||[]).map(cat=>(
                 <div key={cat} style={{ display:"inline-flex", alignItems:"center", gap:4, flexShrink:0 }}>
-                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#006064", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
+                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
                   {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(220,38,38,.15)", border:"1px solid rgba(220,38,38,.25)", color:"#fca5a5", borderRadius:8, width:26, height:26, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0 }}><Icon name="trash" size={12} color="#fca5a5" /></button>}
                 </div>
               ))}
@@ -1008,7 +1008,7 @@ export default function App() {
               {catFilter!=="__attente__" && espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
                   <Icon name="inbox" size={40} color="rgba(0,96,100,.15)" />
-                  <div style={{ marginTop:12, color:"#006064" }}>Aucun document trouvé</div>
+                  <div style={{ marginTop:12, color:"#0F2C5C" }}>Aucun document trouvé</div>
                 </div>
               )}
             </div>
@@ -1018,7 +1018,7 @@ export default function App() {
         {/* VALIDATION */}
         {view==="validation" && isSA && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#006064" }}>Validation</h1>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Validation</h1>
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{pending} document(s) en attente</p>
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {docs.filter(d=>d.status==="attente").map(doc => {
@@ -1029,7 +1029,7 @@ export default function App() {
                     <div style={{ display:"flex", gap:14, alignItems:"flex-start", flexWrap:"wrap" }}>
                       <span style={{ background:tc.bg, color:tc.text, padding:"8px 12px", borderRadius:6, fontSize:12, fontWeight:700, flexShrink:0 }}>{doc.type}</span>
                       <div style={{ flex:1 }}>
-                        <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#006064" }}>{doc.titre}</h3>
+                        <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:16, margin:"0 0 4px", color:"#0F2C5C" }}>{doc.titre}</h3>
                         {doc.description && <p style={{ fontSize:13, color:"rgba(0,96,100,.6)", margin:"0 0 8px" }}>{doc.description}</p>}
                         <div style={{ fontSize:12, color:"rgba(0,96,100,.5)", display:"flex", gap:12, flexWrap:"wrap" }}>
                           <span>{doc.categorie}</span><span>{doc.auteur}</span><span>{espNom}</span>
@@ -1037,8 +1037,8 @@ export default function App() {
                       </div>
                       {doc.file_url && (
                         <a href={doc.file_url} target="_blank" rel="noreferrer"
-                          style={{ background:"rgba(0,96,100,.1)", color:"#006064", border:"1px solid rgba(0,96,100,.25)", padding:"7px 12px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontSize:13, fontWeight:500, textDecoration:"none", flexShrink:0 }}>
-                          <Icon name="eye" size={14} color="#006064" /> Voir
+                          style={{ background:"rgba(0,96,100,.1)", color:"#0F2C5C", border:"1px solid rgba(0,96,100,.25)", padding:"7px 12px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontSize:13, fontWeight:500, textDecoration:"none", flexShrink:0 }}>
+                          <Icon name="eye" size={14} color="#0F2C5C" /> Voir
                         </a>
                       )}
                     </div>
@@ -1048,7 +1048,7 @@ export default function App() {
                           Motif du refus <span style={{color:"#dc2626"}}>*</span>
                           {refusErrors[doc.id] && <span style={{marginLeft:8,fontStyle:"italic"}}>— champ obligatoire</span>}
                         </label>
-                        <textarea style={{...inputStyle,resize:"none",fontSize:13,borderColor:refusErrors[doc.id]?"#dc2626":"#006064"}} rows={2} placeholder="Saisir le motif du refus..." value={refusComment[doc.id]||""} onChange={e=>{ setRefusComment(f=>({...f,[doc.id]:e.target.value})); setRefusErrors(f=>({...f,[doc.id]:false})); }} />
+                        <textarea style={{...inputStyle,resize:"none",fontSize:13,borderColor:refusErrors[doc.id]?"#dc2626":"#0F2C5C"}} rows={2} placeholder="Saisir le motif du refus..." value={refusComment[doc.id]||""} onChange={e=>{ setRefusComment(f=>({...f,[doc.id]:e.target.value})); setRefusErrors(f=>({...f,[doc.id]:false})); }} />
                       </div>
                     )}
                     <div style={{ display:"flex", gap:8, marginTop:12, justifyContent:"flex-end" }}>
@@ -1074,7 +1074,7 @@ export default function App() {
               {pending===0 && (
                 <div style={{ textAlign:"center", padding:80, color:"rgba(0,96,100,.4)" }}>
                   <Icon name="check" size={40} color="rgba(0,96,100,.15)" />
-                  <div style={{ marginTop:12, color:"#006064" }}>Aucun document en attente</div>
+                  <div style={{ marginTop:12, color:"#0F2C5C" }}>Aucun document en attente</div>
                 </div>
               )}
             </div>
@@ -1084,26 +1084,26 @@ export default function App() {
         {/* NOTIFICATIONS */}
         {view==="notifs" && (
           <div>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#006064" }}>Notifications</h1>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, margin:"0 0 8px", color:"#0F2C5C" }}>Notifications</h1>
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
                 <div key={n.id} onClick={()=>{ if(!n.lu) markNotifLue(n.id); if(n.doc_id){ const d=docs.find(x=>x.id===n.doc_id); if(d) setModalDetail(d); } }}
-                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #006064`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
+                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #0F2C5C`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:n.lu?"rgba(0,96,100,.06)":"rgba(0,96,100,.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                    <Icon name="bell" size={16} color="#006064" />
+                    <Icon name="bell" size={16} color="#0F2C5C" />
                   </div>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, color:"#006064", fontWeight:n.lu?400:600 }}>{n.texte}</div>
+                    <div style={{ fontSize:14, color:"#0F2C5C", fontWeight:n.lu?400:600 }}>{n.texte}</div>
                     <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{fmtDate(n.created_at)}</div>
                   </div>
-                  {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#006064", flexShrink:0 }} />}
+                  {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#0F2C5C", flexShrink:0 }} />}
                 </div>
               ))}
               {notifs.length===0 && (
                 <div style={{ textAlign:"center", padding:80, color:"rgba(0,96,100,.4)" }}>
                   <Icon name="bell" size={40} color="rgba(0,96,100,.15)" />
-                  <div style={{ marginTop:12, color:"#006064" }}>Aucune notification</div>
+                  <div style={{ marginTop:12, color:"#0F2C5C" }}>Aucune notification</div>
                 </div>
               )}
             </div>
