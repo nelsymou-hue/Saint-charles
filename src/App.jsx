@@ -519,8 +519,8 @@ export default function App() {
                 <path d="M172,118 Q188,108 196,90" strokeWidth="1.8" />
                 <path d="M80,172 Q62,162 48,172" strokeWidth="1.8" />
                 <path d="M258,176 Q274,164 290,170" strokeWidth="1.8" />
-                <path d="M252,74 Q276,60 300,72 Q314,80 318,100" strokeWidth="1.8" />
-                <path d="M318,100 Q330,88 326,76" strokeWidth="1.5" />
+                <path d="M252,90 Q276,76 300,88 Q314,96 318,116" strokeWidth="1.8" />
+                <path d="M318,116 Q330,104 326,92" strokeWidth="1.5" />
                 <path d="M124,120 Q110,106 114,90" strokeWidth="1.8" />
                 <path d="M210,116 Q224,104 220,88" strokeWidth="1.8" />
               </g>
@@ -570,8 +570,8 @@ export default function App() {
                 <path d="M168,196 Q156,186 162,178 Q174,188 168,196Z" fill="#43a047" />
                 <path d="M230,206 Q218,196 224,188 Q236,198 230,206Z" fill="#4caf50" />
                 <path d="M104,202 Q92,192 98,184 Q110,194 104,202Z" fill="#66bb6a" />
-                <path d="M326,76 Q338,60 329,54 Q318,66 326,76Z" fill="#66bb6a" />
-                <path d="M326,76 Q340,70 338,60 Q326,64 326,76Z" fill="#43a047" />
+                <path d="M326,92 Q338,76 329,70 Q318,82 326,92Z" fill="#66bb6a" />
+                <path d="M326,92 Q340,86 338,76 Q326,80 326,92Z" fill="#43a047" />
               </g>
             </svg>
             {/* Logo centré en haut, positionné par-dessus l'arbre */}
