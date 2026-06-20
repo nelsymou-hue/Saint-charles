@@ -242,6 +242,7 @@ export default function App() {
   const [loginPassword, setLoginPassword]   = useState("");
   const [loginScreen, setLoginScreen]       = useState("welcome"); // "welcome" | "profiles"
   const [loginError, setLoginError]         = useState("");
+  const [selectedUser, setSelectedUser]     = useState(null);
 
   const isSA    = user?.role === "superadmin";
   const isAdmin = ["superadmin","admin"].includes(user?.role);
@@ -607,12 +608,14 @@ export default function App() {
           {/* Boîte profils */}
           <div style={{ background:"rgba(255,255,255,.08)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)", boxShadow:"0 8px 32px rgba(0,0,0,.2)" }}>
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
-            {USERS.map(u=>(
+            {USERS.map(u=>{
+              const isSelected = selectedUser?.id === u.id;
+              return (
               <div key={u.id}
-                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"background .15s", overflow:"hidden", position:"relative" }}
-                onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
-                onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
-                onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:`1px solid ${isSelected ? u.color : "rgba(255,255,255,.15)"}`, background: isSelected ? `${u.color}22` : "rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"all .2s", overflow:"hidden", position:"relative", boxShadow: isSelected ? `0 0 16px ${u.color}55, inset 0 0 20px ${u.color}18` : "none" }}
+                onMouseEnter={e=>{ if(!isSelected) e.currentTarget.style.background="rgba(255,255,255,.14)" }}
+                onMouseLeave={e=>{ if(!isSelected) e.currentTarget.style.background="rgba(255,255,255,.08)" }}
+                onClick={()=>{ setSelectedUser(u); setLoginError(""); setLoginPassword(""); }}>
                 <div style={{ position:"absolute", left:0, top:0, bottom:0, width:4, background:u.color, borderRadius:"10px 0 0 10px" }} />
                 <div style={{ flex:1, paddingLeft:6 }}>
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
@@ -623,7 +626,7 @@ export default function App() {
                   <polyline points="11,2 19,8 11,14" fill="none" stroke={u.color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Mot de passe */}
@@ -637,7 +640,7 @@ export default function App() {
                 style={{ flex:1, background:"rgba(255,255,255,.1)", color:"rgba(245,240,232,.7)", border:"1px solid rgba(255,255,255,.15)", borderRadius:10, padding:"8px 0", fontSize:13, cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
                 ← Retour
               </button>
-              <button onClick={()=>{ const u=USERS.find(x=>x.password===loginPassword); if(u){ handleLogin(u); } else { setLoginError("Mot de passe incorrect"); } }}
+              <button onClick={()=>{ if(!selectedUser){ setLoginError("Veuillez sélectionner un profil"); return; } if(selectedUser.password===loginPassword){ handleLogin(selectedUser); } else { setLoginError("Mot de passe incorrect"); } }}
                 style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
                 Connexion
               </button>
@@ -874,7 +877,7 @@ export default function App() {
               <div style={{ fontSize:12, fontWeight:500, color:"rgba(255,255,255,.9)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
               <div style={{ fontSize:11, color:"rgba(255,255,255,.45)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
             </div>
-            <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
+            <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");setSelectedUser(null);}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
               <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
             </button>
           </div>
