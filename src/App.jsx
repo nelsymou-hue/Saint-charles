@@ -30,10 +30,10 @@ const SPACE_COLORS = {
 
 // ─── UTILISATEURS (locaux — pas en base) ─────────────────────────────────────
 const USERS = [
-  { id:1, name:"Mme Directrice",     role:"superadmin", avatar:"MD", color:"#e91e8c",  password:"directrice2024" },
-  { id:2, name:"M. Adjoint",         role:"superadmin", avatar:"MA", color:"#0d9488",  password:"adjoint2024"    },
-  { id:3, name:"Mme Admin 1",        role:"admin",      avatar:"A1", color:"#9c27b0",  password:"admin12024"     },
-  { id:4, name:"M. Admin 2",         role:"admin",      avatar:"A2", color:"#b8860b",  password:"admin22024"     },
+  { id:1, name:"Direction",              role:"superadmin", avatar:"MD", color:"#e91e8c",  password:"directrice2024" },
+  { id:2, name:"Adjoint de direction",  role:"superadmin", avatar:"MA", color:"#0d9488",  password:"adjoint2024"    },
+  { id:3, name:"Administration",         role:"admin",      avatar:"A1", color:"#9c27b0",  password:"admin12024"     },
+  { id:4, name:"Administration 2",       role:"admin",      avatar:"A2", color:"#b8860b",  password:"admin22024"     },
   { id:5, name:"Personnel Enseignant",role:"enseignant", avatar:"PE", color:"#1a237e",  password:"personnel2024"  },
 ];
 
