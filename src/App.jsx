@@ -872,10 +872,9 @@ export default function App() {
             </div>
           </nav>
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
-            <div style={{ width:34, height:34, borderRadius:"50%", background:`${user.color}25`, color:user.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, border:`1px solid ${user.color}35` }}>{user.avatar}</div>
             <div style={{ flex:1, overflow:"hidden" }}>
-              <div style={{ fontSize:12, fontWeight:500, color:"rgba(255,255,255,.9)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
-              <div style={{ fontSize:11, color:"rgba(255,255,255,.45)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
+              <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
+              <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
             </div>
             <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");setSelectedUser(null);}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
               <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
