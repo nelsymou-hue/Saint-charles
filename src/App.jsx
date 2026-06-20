@@ -216,6 +216,7 @@ export default function App() {
   const [docs, setDocs]         = useState([]);
   const [cats, setCats]         = useState(CATS_DEFAUT);
   const [notifs, setNotifs]     = useState([]);
+  const [notifMenu, setNotifMenu] = useState(null);
   const [loading, setLoading]   = useState(false);
   const [view, setView]         = useState("accueil");
   const [espace, setEspace]     = useState(null);
@@ -479,6 +480,10 @@ export default function App() {
   const markNotifLue = async (id) => {
     await supabase.from("notifications").update({ lu:true }).eq("id", id);
     setNotifs(prev => prev.map(n => n.id===id ? {...n, lu:true} : n));
+  };
+  const deleteNotif = async (id) => {
+    await supabase.from("notifications").delete().eq("id", id);
+    setNotifs(prev => prev.filter(n => n.id !== id));
   };
 
   // ══ ÉCRAN LOGIN ════════════════════════════════════════════════════════════
@@ -1090,8 +1095,8 @@ export default function App() {
             <p style={{ color:"rgba(0,96,100,.55)", margin:"0 0 24px", fontSize:14 }}>{unread} non lue(s)</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {notifs.map(n=>(
-                <div key={n.id} onClick={()=>{ if(!n.lu) markNotifLue(n.id); if(n.doc_id){ const d=docs.find(x=>x.id===n.doc_id); if(d) setModalDetail(d); } }}
-                  style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, cursor:"pointer", opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #0F2C5C`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)" }}>
+                <div key={n.id} style={{ ...glassCard, display:"flex", alignItems:"center", gap:14, opacity:n.lu?0.55:1, borderLeft:n.lu?"1px solid rgba(0,96,100,.12)":`3px solid #0F2C5C`, background:n.lu?"rgba(255,255,255,.6)":"rgba(255,255,255,.88)", position:"relative" }}
+                  onClick={()=>{ setNotifMenu(null); if(!n.lu) markNotifLue(n.id); if(n.doc_id){ const d=docs.find(x=>x.id===n.doc_id); if(d) setModalDetail(d); } }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:n.lu?"rgba(0,96,100,.06)":"rgba(0,96,100,.12)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                     <Icon name="bell" size={16} color="#0F2C5C" />
                   </div>
@@ -1099,7 +1104,17 @@ export default function App() {
                     <div style={{ fontSize:14, color:"#0F2C5C", fontWeight:n.lu?400:600 }}>{n.texte}</div>
                     <div style={{ fontSize:12, color:"rgba(0,96,100,.45)", marginTop:3 }}>{fmtDate(n.created_at)}</div>
                   </div>
-                  {!n.lu && <div style={{ width:8, height:8, borderRadius:"50%", background:"#0F2C5C", flexShrink:0 }} />}
+                  <div style={{ position:"relative", flexShrink:0 }} onClick={e=>{ e.stopPropagation(); setNotifMenu(notifMenu===n.id?null:n.id); }}>
+                    <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.3)", padding:"4px 8px", borderRadius:6 }}>⋮</button>
+                    {notifMenu===n.id && (
+                      <div style={{ position:"absolute", right:0, top:"100%", background:"#fff", borderRadius:10, boxShadow:"0 4px 20px rgba(0,0,0,.15)", border:"1px solid rgba(0,0,0,.08)", zIndex:50, minWidth:140, overflow:"hidden" }}>
+                        <div onClick={e=>{ e.stopPropagation(); deleteNotif(n.id); setNotifMenu(null); }}
+                          style={{ padding:"10px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
+                          <Icon name="trash" size={13} color="#dc2626" /> Supprimer
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
               {notifs.length===0 && (
