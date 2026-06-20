@@ -8,7 +8,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── PALETTE & COULEURS ──────────────────────────────────────────────────────
 const BG = "#f5f0e8";
-const SIDEBAR_BG = "#006064";
+const SIDEBAR_BG = "linear-gradient(180deg, #0F2C5C 0%, #1C49A6 100%)";
 
 const PALETTE = [
   { accent:"#e91e8c", grad:"linear-gradient(135deg,#f06,#e91e8c)",   tint:"rgba(233,30,140,.08)", border:"rgba(233,30,140,.22)", icon:"rgba(233,30,140,.12)" },
