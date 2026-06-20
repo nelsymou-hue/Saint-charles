@@ -970,7 +970,7 @@ export default function App() {
               </div>
             ))}
             <div style={{ height:1, background:"rgba(255,255,255,.12)", margin:"6px 14px" }} />
-            <div style={{ background:"rgba(255,255,255,.08)", borderRadius:12, padding:"6px 4px", display:"flex", flexDirection:"column", gap:2 }}>
+            <div style={{ background:"rgba(255,255,255,.18)", borderRadius:12, padding:"6px 4px", display:"flex", flexDirection:"column", gap:2 }}>
               {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
                 <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
                   style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.18)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s", whiteSpace:"nowrap", overflow:"hidden" }}>
