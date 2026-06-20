@@ -266,14 +266,14 @@ export default function App() {
 
   const loadCats = async () => {
     const { data } = await supabase.from("categories").select("*");
-    if (data && data.length > 0) {
-      const grouped = { ...CATS_DEFAUT };
+    const grouped = { ...CATS_DEFAUT };
+    if (data) {
       data.forEach(c => {
         if (!grouped[c.espace_id]) grouped[c.espace_id] = [];
         if (!grouped[c.espace_id].includes(c.nom)) grouped[c.espace_id].push(c.nom);
       });
-      setCats(grouped);
     }
+    setCats(grouped);
   };
 
   const loadNotifs = async (currentUser) => {
@@ -989,7 +989,7 @@ export default function App() {
               {(cats[espace.id]||[]).map(cat=>(
                 <div key={cat} style={{ display:"inline-flex", alignItems:"center", gap:4, flexShrink:0 }}>
                   <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
-                  {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(220,38,38,.15)", border:"1px solid rgba(220,38,38,.25)", color:"#fca5a5", borderRadius:8, width:26, height:26, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0 }}><Icon name="trash" size={12} color="#fca5a5" /></button>}
+                  {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(0,0,0,.06)", border:"none", color:"rgba(0,0,0,.35)", borderRadius:8, width:22, height:22, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0, fontSize:14, letterSpacing:0, lineHeight:1 }} title="Supprimer la catégorie">⋮</button>}
                 </div>
               ))}
               {espDocsPending(espace.id).length > 0 && (
