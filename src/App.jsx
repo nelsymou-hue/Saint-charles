@@ -223,7 +223,7 @@ export default function App() {
   const [espace, setEspace]     = useState(null);
   const [catFilter, setCatFilter] = useState("all");
   const [search, setSearch]     = useState("");
-  const [sidebar, setSidebar]   = useState(true);
+  const [sidebar, setSidebar]   = useState(()=>window.innerWidth>767);
   const [toast, setToast]       = useState(null);
   const [navHistory, setNavHistory] = useState([]);
   const [seenEspaces, setSeenEspaces] = useState({});
@@ -259,6 +259,15 @@ export default function App() {
       loadNotifs(user);
     }
   }, [user]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 767) setSidebar(false);
+      else setSidebar(true);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const loadDocs = async () => {
     setLoading(true);
@@ -752,6 +761,7 @@ export default function App() {
         .nav-item:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
         input::placeholder,textarea::placeholder{color:rgba(0,96,100,.7)!important;opacity:1}
         @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+        @media(max-width:767px){.sc-hamburger{display:flex!important}}
         .legal-content ul{margin:8px 0 8px 18px;padding:0;text-align:left}.legal-content li{margin-bottom:4px;text-align:left}.legal-content p{margin:0 0 10px;text-align:left}
 
         /* ── SIDEBAR ── */
@@ -992,7 +1002,7 @@ export default function App() {
       <div className="sc-main-pad" style={{ flex:1, overflowY:"auto", minWidth:0 }}>
         {/* TOPBAR */}
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
-          <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
+          <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)", zIndex:201 }}>
             <Icon name="menu" size={16} color="#0F2C5C" />
           </button>
           {navHistory.length>0 && (
@@ -1087,10 +1097,10 @@ export default function App() {
               <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#0F2C5C"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
             </div>
             <div style={{ display:"flex", gap:8, marginBottom:20, overflowX:"auto", paddingBottom:4 }}>
-              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter==="all"?"#fff":"#0F2C5C", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
+              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter==="all"?"#fff":"#0F2C5C", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
               {(cats[espace.id]||[]).map(cat=>(
                 <div key={cat} style={{ display:"inline-flex", alignItems:"center", gap:4, flexShrink:0 }}>
-                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.6)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
+                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
                   {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(0,0,0,.06)", border:"none", color:"rgba(0,0,0,.35)", borderRadius:8, width:22, height:22, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0, fontSize:14, letterSpacing:0, lineHeight:1 }} title="Supprimer la catégorie">⋮</button>}
                 </div>
               ))}
