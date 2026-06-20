@@ -117,12 +117,12 @@ const SpaceIcon = ({ id, size=42 }) => {
 const glassCard = { background:"rgba(255,255,255,0.72)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:"1px solid rgba(0,96,100,0.15)", borderRadius:16, padding:20, boxShadow:"0 4px 20px rgba(0,0,0,.06)" };
 const btn = { background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 };
 const btnGhost = { background:"transparent", border:"1.5px solid #0F2C5C", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, color:"#0F2C5C", display:"inline-flex", alignItems:"center", gap:7 };
-const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #0F2C5C", borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:14, outline:"none", color:"#0F2C5C", boxSizing:"border-box" };
+const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,.7)", border:"1.5px solid #0F2C5C", borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:16, outline:"none", color:"#0F2C5C", boxSizing:"border-box" };
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 const Modal = ({ title, onClose, children, maxWidth=480 }) => (
   <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.5)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:20, backdropFilter:"blur(4px)" }}>
-    <div onClick={e=>e.stopPropagation()} style={{ background:BG, borderRadius:20, padding:28, width:"100%", maxWidth, maxHeight:"90vh", overflowY:"auto", border:"1px solid rgba(255,255,255,.3)", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
+    <div className="sc-modal-box" onClick={e=>e.stopPropagation()} style={{ background:BG, borderRadius:20, padding:28, width:"100%", maxWidth, maxHeight:"90vh", overflowY:"auto", border:"1px solid rgba(255,255,255,.3)", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
         <h2 style={{ fontFamily:"'Calibri',sans-serif", fontSize:20, margin:0, color:"#0F2C5C" }}>{title}</h2>
         <button onClick={onClose} style={{ background:"none", border:"none", cursor:"pointer", color:"rgba(0,96,100,.5)", fontSize:20 }}>✕</button>
@@ -558,7 +558,7 @@ export default function App() {
   if (legalView && LEGAL_PAGES[legalView]) {
     const page = LEGAL_PAGES[legalView];
     return (
-      <div style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'Calibri',sans-serif", padding:"32px 20px" }}>
+      <div className="sc-legal-page" style={{ minHeight:"100vh", background:"#f5f0e8", fontFamily:"'Calibri',sans-serif", padding:"32px 20px" }}>
         <div style={{ maxWidth:760, margin:"0 auto" }}>
           <button onClick={()=>setLegalView(null)} style={{ background:"none", border:"1.5px solid #0F2C5C", color:"#0F2C5C", borderRadius:8, padding:"7px 16px", cursor:"pointer", fontSize:13, fontFamily:"'Calibri',sans-serif", marginBottom:32, display:"inline-flex", alignItems:"center", gap:6 }}>← Retour</button>
           <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, color:"#0F2C5C", marginBottom:32 }}>{page.title}</h1>
@@ -732,7 +732,7 @@ export default function App() {
           <div style={{ background:"rgba(255,255,255,.08)", borderRadius:14, padding:"14px 16px", border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)" }}>
             <label style={{ fontSize:12, color:"rgba(245,240,232,.7)", display:"block", marginBottom:8, fontWeight:500, letterSpacing:".3px" }}>Mot de passe</label>
             <input type="password" placeholder="Votre mot de passe..." value={loginPassword} onChange={e=>{ setLoginPassword(e.target.value); setLoginError(""); }}
-              style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:14, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
+              style={{ width:"100%", padding:"9px 13px", background:"rgba(255,255,255,.1)", border:`1px solid ${loginError?"#ef5350":"rgba(255,255,255,.2)"}`, borderRadius:10, fontFamily:"'Calibri',sans-serif", fontSize:16, outline:"none", color:"#f5f0e8", boxSizing:"border-box" }} />
             {loginError && <div style={{ color:"#ef9a9a", fontSize:12, marginTop:6, fontStyle:"italic" }}>{loginError}</div>}
             <div style={{ marginTop:12, display:"flex", gap:8 }}>
               <button onClick={()=>{ setLoginScreen("welcome"); setLoginPassword(""); setLoginError(""); }}
@@ -785,15 +785,47 @@ export default function App() {
 
         /* ── MOBILE (≤ 767px) ── */
         @media(max-width:767px){
-          .sc-sidebar{position:fixed!important;z-index:200;height:100vh;top:0;left:0}
+          .sc-sidebar{position:fixed!important;z-index:200;height:100vh;top:0;left:0;width:280px!important;min-width:280px!important;max-width:280px!important;overflow-y:auto!important}
           .sc-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199;backdrop-filter:blur(2px)}
           .sc-spaces-grid{grid-template-columns:1fr}
           .sc-docs-grid{grid-template-columns:1fr}
           .sc-stat-grid{grid-template-columns:1fr}
           .sc-upload-name{grid-template-columns:1fr}
-          .sc-main-pad{padding:16px 14px}
+          .sc-main-pad{padding:16px 14px;padding-top:72px}
           .sc-topbar{margin-bottom:18px}
           button,a[role=button]{min-height:44px}
+
+          /* Hamburger fixe sur mobile */
+          .sc-hamburger-btn{position:fixed!important;top:12px!important;left:12px!important;z-index:202!important}
+
+          /* Espaces cards mobile */
+          .sc-spaces-grid > div{padding:12px!important}
+          .sc-spaces-grid .sc-space-title{font-size:16px!important}
+
+          /* Docs cards mobile */
+          .sc-docs-grid > div .sc-doc-content{padding:12px!important}
+          .sc-docs-grid > div{font-size:13px!important}
+
+          /* Formulaire dépôt — évite zoom iOS */
+          input,textarea,select{font-size:16px!important}
+
+          /* Modals mobile */
+          .sc-modal-box{width:95vw!important;max-width:95vw!important;max-height:90vh!important;overflow-y:auto!important;padding:18px!important}
+
+          /* Filtres catégories */
+          .sc-cat-filter{min-height:36px!important;padding:8px 14px!important;font-size:13px!important}
+
+          /* Textes minimum */
+          *{font-size:max(var(--fs,inherit),13px)}
+          label{font-size:14px!important}
+          .sc-doc-text{font-size:13px!important}
+
+          /* Page légales mobile */
+          .sc-legal-page{padding:16px!important}
+          .sc-legal-page p,.sc-legal-page li{font-size:14px!important}
+
+          /* Boutons action */
+          .sc-btn-action{min-height:44px!important}
         }
       `}</style>
 
@@ -1002,7 +1034,7 @@ export default function App() {
       <div className="sc-main-pad" style={{ flex:1, overflowY:"auto", minWidth:0 }}>
         {/* TOPBAR */}
         <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
-          <button onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)", zIndex:201 }}>
+          <button className="sc-hamburger-btn" onClick={()=>setSidebar(v=>!v)} style={{ ...glassCard, padding:0, width:44, height:44, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)", zIndex:201 }}>
             <Icon name="menu" size={16} color="#0F2C5C" />
           </button>
           {navHistory.length>0 && (
@@ -1097,10 +1129,10 @@ export default function App() {
               <input style={{...inputStyle, paddingLeft:40, background:"rgba(255,255,255,.7)", border:"1.5px solid rgba(0,96,100,.25)", color:"#0F2C5C"}} placeholder="Rechercher..." value={search} onChange={e=>setSearch(e.target.value)} />
             </div>
             <div style={{ display:"flex", gap:8, marginBottom:20, overflowX:"auto", paddingBottom:4 }}>
-              <div onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter==="all"?"#fff":"#0F2C5C", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none" }}>Tous</div>
+              <div className="sc-cat-filter" onClick={()=>setCatFilter("all")} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", flexShrink:0, transition:"all .2s", background:catFilter==="all"?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter==="all"?"#fff":"#0F2C5C", border:catFilter==="all"?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter==="all"?600:400, boxShadow:catFilter==="all"?`0 4px 14px ${c_esp.tint}`:"none", display:"inline-flex", alignItems:"center" }}>Tous</div>
               {(cats[espace.id]||[]).map(cat=>(
                 <div key={cat} style={{ display:"inline-flex", alignItems:"center", gap:4, flexShrink:0 }}>
-                  <div onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none" }}>{cat}</div>
+                  <div className="sc-cat-filter" onClick={()=>setCatFilter(cat)} style={{ padding:"7px 16px", borderRadius:20, cursor:"pointer", fontSize:13, whiteSpace:"nowrap", transition:"all .2s", background:catFilter===cat?c_esp.grad:"rgba(255,255,255,.95)", color:catFilter===cat?"#fff":"#0F2C5C", border:catFilter===cat?`1.5px solid ${c_esp.accent}`:"1.5px solid rgba(0,96,100,.2)", fontWeight:catFilter===cat?600:400, boxShadow:catFilter===cat?`0 4px 14px ${c_esp.tint}`:"none", display:"inline-flex", alignItems:"center" }}>{cat}</div>
                   {isAdmin && <button onClick={()=>setModalDeleteCat({espId:espace.id,cat})} style={{ background:"rgba(0,0,0,.06)", border:"none", color:"rgba(0,0,0,.35)", borderRadius:8, width:22, height:22, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", padding:0, fontSize:14, letterSpacing:0, lineHeight:1 }} title="Supprimer la catégorie">⋮</button>}
                 </div>
               ))}
