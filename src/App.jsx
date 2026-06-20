@@ -589,7 +589,10 @@ export default function App() {
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
                   <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
                 </div>
-                <span style={{ color:u.color, fontSize:22, fontWeight:700, flexShrink:0, lineHeight:1 }}>→</span>
+                <svg width="22" height="16" viewBox="0 0 22 16" fill="none" style={{ flexShrink:0 }}>
+                  <line x1="1" y1="8" x2="17" y2="8" stroke={u.color} strokeWidth="2.8" strokeLinecap="round"/>
+                  <polyline points="11,2 19,8 11,14" fill="none" stroke={u.color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
             ))}
           </div>
