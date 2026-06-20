@@ -619,7 +619,7 @@ export default function App() {
                 <div style={{ position:"absolute", left:0, top:0, bottom:0, width:4, background:u.color, borderRadius:"10px 0 0 10px" }} />
                 <div style={{ flex:1, paddingLeft:6 }}>
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
-                  <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
+                  <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Enseignant"}</div>
                 </div>
                 <svg width="22" height="16" viewBox="0 0 22 16" fill="none" style={{ flexShrink:0 }}>
                   <line x1="1" y1="8" x2="17" y2="8" stroke={u.color} strokeWidth="2.8" strokeLinecap="round"/>
@@ -877,7 +877,7 @@ export default function App() {
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ flex:1, overflow:"hidden" }}>
               <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
-              <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
+              <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{user.role==="superadmin"?"Super Admin":user.role==="admin"?"Administratif":"Enseignant"}</div>
             </div>
             <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");setSelectedUser(null);}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
               <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
