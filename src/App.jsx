@@ -149,7 +149,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
           <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.18)", border:"1px solid rgba(255,255,255,.3)", display:"flex", alignItems:"center", justifyContent:"center" }}>
             <Icon name="file" size={16} color="#fff" />
           </div>
-          <span style={{ background:tc.bg, color:tc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:700 }}>{doc.type}</span>
+          <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"3px 9px", borderRadius:6, fontSize:13, fontWeight:700, letterSpacing:2, cursor:"pointer" }}>···</span>
         </div>
         <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
         {doc.description && <div style={{ fontSize:12, color:"rgba(0,96,100,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
@@ -758,14 +758,13 @@ export default function App() {
       {modalDetail && (
         <Modal title={modalDetail.titre} onClose={()=>setModalDetail(null)} maxWidth={520}>
           <div style={{ display:"flex", gap:8, marginBottom:14, flexWrap:"wrap" }}>
-            <span style={{ background:(TYPE_COLORS[modalDetail.type]||TYPE_COLORS.AUTRE).bg, color:(TYPE_COLORS[modalDetail.type]||TYPE_COLORS.AUTRE).text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:700 }}>{modalDetail.type}</span>
             <span style={{ background:modalDetail.status==="valide"?"rgba(5,150,105,.15)":modalDetail.status==="attente"?"rgba(217,119,6,.15)":"rgba(220,38,38,.15)", color:modalDetail.status==="valide"?"#6ee7b7":modalDetail.status==="attente"?"#fcd34d":"#fca5a5", padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600 }}>
               {modalDetail.status==="valide"?"Publié":modalDetail.status==="attente"?"En attente":"Refusé"}
             </span>
           </div>
           {modalDetail.description && <div style={{ background:"rgba(0,96,100,.06)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#0F2C5C", lineHeight:1.6 }}>{modalDetail.description}</div>}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
-            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)],["Type",modalDetail.type]].map(([l,v])=>(
+            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)]].map(([l,v])=>(
               <div key={l} style={{ background:"rgba(0,96,100,.06)", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", padding:"10px 14px" }}>
                 <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", marginBottom:3 }}>{l}</div>
                 <div style={{ fontSize:13, color:"#0F2C5C", fontWeight:500 }}>{v}</div>
