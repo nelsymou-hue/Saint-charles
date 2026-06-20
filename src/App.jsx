@@ -556,7 +556,7 @@ export default function App() {
           <div style={{ height:3, width:60, background:"linear-gradient(90deg,#0F2C5C,#1C49A6)", borderRadius:2, marginBottom:32 }} />
           {page.sections.map((s,i)=>(
             <div key={i} style={{ marginBottom:28 }}>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10, borderLeft:"3px solid #1C49A6", paddingLeft:12 }}>{s.h}</h2>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#0F2C5C", marginBottom:10 }}>{s.h}</h2>
               <div style={{ fontSize:14, color:"#374151", lineHeight:1.75, paddingLeft:15 }}>{s.body}</div>
             </div>
           ))}
