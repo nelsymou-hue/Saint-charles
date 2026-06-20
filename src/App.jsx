@@ -580,15 +580,16 @@ export default function App() {
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
             {USERS.map(u=>(
               <div key={u.id}
-                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"background .15s" }}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"background .15s", overflow:"hidden", position:"relative" }}
                 onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
                 onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.08)"}
                 onClick={()=>{ setLoginError(""); setLoginPassword(""); }}>
-                <div style={{ flex:1 }}>
+                <div style={{ position:"absolute", left:0, top:0, bottom:0, width:4, background:u.color, borderRadius:"10px 0 0 10px" }} />
+                <div style={{ flex:1, paddingLeft:6 }}>
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
                   <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Personnel Enseignant"}</div>
                 </div>
-                <span style={{ color:u.color, fontSize:16, fontWeight:700, flexShrink:0 }}>→</span>
+                <span style={{ color:u.color, fontSize:22, fontWeight:700, flexShrink:0, lineHeight:1 }}>→</span>
               </div>
             ))}
           </div>
