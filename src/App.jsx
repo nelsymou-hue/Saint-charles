@@ -133,7 +133,7 @@ const Modal = ({ title, onClose, children, maxWidth=480 }) => (
 );
 
 // ─── DOC CARD ────────────────────────────────────────────────────────────────
-const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) => {
+const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false, showDots=true }) => {
   const [hov, setHov] = useState(false);
   const c = SPACE_COLORS[espaceId] || PALETTE[0];
   const tc = TYPE_COLORS[doc.type] || TYPE_COLORS.AUTRE;
@@ -149,7 +149,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
           <div style={{ width:36, height:36, borderRadius:10, background:"rgba(255,255,255,.18)", border:"1px solid rgba(255,255,255,.3)", display:"flex", alignItems:"center", justifyContent:"center" }}>
             <Icon name="file" size={16} color="#fff" />
           </div>
-          <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"3px 9px", borderRadius:6, fontSize:13, fontWeight:700, letterSpacing:2, cursor:"pointer" }}>···</span>
+          {showDots && <span style={{ background:"rgba(107,114,128,.12)", color:"#6b7280", padding:"3px 9px", borderRadius:6, fontSize:13, fontWeight:700, letterSpacing:2, cursor:"pointer" }}>···</span>}
         </div>
         <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:14, marginBottom:6, color:c.accent, lineHeight:1.4 }}>{doc.titre}</div>
         {doc.description && <div style={{ fontSize:12, color:"rgba(0,96,100,.6)", marginBottom:10, lineHeight:1.55, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{doc.description}</div>}
@@ -1118,7 +1118,7 @@ export default function App() {
                 const lastSeen = getLastSeen(espace.id);
                 const isNew = !isAdmin && user?.role==="enseignant" && doc.status==="valide" && !!lastSeen && doc.created_at > lastSeen && !seenDocs.has(doc.id);
                 const canView = doc.status === "valide" || isAdmin || isSA;
-                return <DocCard key={doc.id} doc={doc} espaceId={espace.id} isNew={isNew} onOpen={canView ? ()=>{ markDocSeen(doc.id); setModalDetail(doc); } : undefined} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />;
+                return <DocCard key={doc.id} doc={doc} espaceId={espace.id} isNew={isNew} onOpen={canView ? ()=>{ markDocSeen(doc.id); setModalDetail(doc); } : undefined} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} showDots={canView} />;
               })}
               {catFilter!=="__attente__" && espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
