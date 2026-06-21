@@ -140,7 +140,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
   const sc = doc.status==="valide" ? {bg:"rgba(5,150,105,.15)",text:"#6ee7b7"} : doc.status==="attente" ? {bg:"rgba(217,119,6,.15)",text:"#fcd34d"} : {bg:"rgba(220,38,38,.15)",text:"#fca5a5"};
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} onClick={onOpen}
-      style={{ position:"relative", borderRadius:20, cursor:"pointer", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-6px) scale(1.012)":"translateY(0)", boxShadow:hov?`0 22px 44px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
+      style={{ position:"relative", borderRadius:20, cursor:onOpen?"pointer":"default", overflow:"hidden", background:"rgba(255,255,255,0.82)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", border:hov?`1px solid ${c.accent}`:`1px solid rgba(0,96,100,.12)`, transition:"all .28s cubic-bezier(.34,1.56,.64,1)", transform:hov?"translateY(-6px) scale(1.012)":"translateY(0)", boxShadow:hov?`0 22px 44px ${c.tint},0 8px 20px rgba(0,0,0,.08)`:`0 4px 16px rgba(0,0,0,.06)` }}>
       {isNew && <div style={{ position:"absolute", top:10, right:10, zIndex:10, width:10, height:10, borderRadius:"50%", background:"#4CAF50", boxShadow:"0 0 0 2px rgba(76,175,80,.3)", animation:"pulse-dot 1.8s ease-in-out infinite" }} />}
       <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:c.grad, borderRadius:"20px 20px 0 0" }} />
       <div style={{ position:"absolute", top:0, left:0, right:0, height:60, background:"linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)", pointerEvents:"none" }} />
@@ -163,7 +163,7 @@ const DocCard = ({ doc, espaceId, onOpen, onDelete, canDelete, isNew=false }) =>
           <span style={{ background:sc.bg, color:sc.text, padding:"3px 9px", borderRadius:6, fontSize:11, fontWeight:600, flex:1, textAlign:"center" }}>
             {doc.status==="valide"?"Publié":doc.status==="attente"?"En attente":"Refusé"}
           </span>
-          {doc.file_url && (
+          {doc.file_url && doc.status === "valide" && (
             <a href={doc.file_url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}
               style={{ background:"rgba(0,96,100,.12)", color:"#0F2C5C", border:"1px solid rgba(0,96,100,.25)", padding:"6px 9px", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", textDecoration:"none" }}>
               <Icon name="download" size={13} color="#0F2C5C" />
@@ -886,7 +886,7 @@ export default function App() {
             </div>
           )}
           <div style={{ display:"flex", gap:10 }}>
-            {modalDetail.file_url && modalDetail.status !== "refuse" && (
+            {modalDetail.file_url && modalDetail.status === "valide" && (
               <a href={modalDetail.file_url} target="_blank" rel="noreferrer"
                 style={{ flex:1, justifyContent:"center", background:"#0F2C5C", color:"#fff", border:"none", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"'Calibri',sans-serif", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7, textDecoration:"none" }}>
                 <Icon name="download" size={14} color="#fff" /> Télécharger
@@ -1117,7 +1117,8 @@ export default function App() {
               {(catFilter==="__attente__" ? espDocsPending(espace.id) : espDocs(espace.id)).map(doc=>{
                 const lastSeen = getLastSeen(espace.id);
                 const isNew = !isAdmin && user?.role==="enseignant" && doc.status==="valide" && !!lastSeen && doc.created_at > lastSeen && !seenDocs.has(doc.id);
-                return <DocCard key={doc.id} doc={doc} espaceId={espace.id} isNew={isNew} onOpen={()=>{ markDocSeen(doc.id); setModalDetail(doc); }} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />;
+                const canView = doc.status === "valide" || isAdmin || isSA;
+                return <DocCard key={doc.id} doc={doc} espaceId={espace.id} isNew={isNew} onOpen={canView ? ()=>{ markDocSeen(doc.id); setModalDetail(doc); } : undefined} onDelete={d=>setModalDelete(d)} canDelete={isSA||(doc.status==="attente")} />;
               })}
               {catFilter!=="__attente__" && espDocs(espace.id).length===0 && !loading && (
                 <div style={{ gridColumn:"1/-1", textAlign:"center", padding:60, color:"rgba(0,96,100,.4)" }}>
