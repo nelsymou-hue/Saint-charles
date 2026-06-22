@@ -1464,13 +1464,11 @@ export default function App() {
                 return (
                   <div key={p.id} style={{...glassCard, display:"flex", alignItems:"center", gap:14, position:"relative", opacity:p.actif?1:.55 }}>
                     <div style={{ width:40, height:40, borderRadius:12, background:p.color, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
-                      <span style={{ color:"#fff", fontSize:14, fontWeight:700 }}>{p.name.substring(0,2).toUpperCase()}</span>
+                      <span style={{ color:"#fff", fontSize:13, fontWeight:700 }}>{p.role==="adjoint"?"ADJ":p.name.substring(0,2).toUpperCase()}</span>
                     </div>
                     <div style={{ flex:1, minWidth:0 }}>
-                      <div style={{ fontSize:14, fontWeight:600, color:"#0F2C5C", display:"flex", alignItems:"center", gap:8 }}>
+                      <div style={{ fontSize:14, fontWeight:600, color:"#0F2C5C" }}>
                         {p.name}
-                        {isMe && <span style={{ fontSize:11, background:"rgba(15,44,92,.1)", color:"#0F2C5C", padding:"2px 7px", borderRadius:10 }}>Moi</span>}
-                        {p.peut_gerer_acces && <span style={{ fontSize:11, background:"rgba(233,30,140,.12)", color:"#e91e8c", padding:"2px 7px", borderRadius:10, display:"inline-flex", alignItems:"center", gap:4 }}><Icon name="shield" size={10} color="#e91e8c" /> Direction</span>}
                       </div>
                       <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:2 }}>{roleLabel} · {p.email}</div>
                     </div>
