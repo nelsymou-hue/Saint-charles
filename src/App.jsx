@@ -1274,14 +1274,9 @@ export default function App() {
             {" · "}
             <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
           </div>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, paddingBottom:"calc(16px + env(safe-area-inset-bottom))", display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
-            <div style={{ flex:1, overflow:"hidden" }}>
-              <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
-              {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{ROLE_LABELS[user.role]}</div>}
-            </div>
-            <button onClick={handleLogout} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
-              <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
-            </button>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:10, paddingBottom:"calc(12px + env(safe-area-inset-bottom))", flexShrink:0 }}>
+            <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textAlign:"center" }}>{user.name}</div>
+            {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)", textAlign:"center" }}>{ROLE_LABELS[user.role]}</div>}
           </div>
         </>}
       </div>
@@ -1299,6 +1294,9 @@ export default function App() {
             </button>
           )}
           <div style={{ flex:1 }} />
+          <button onClick={handleLogout} title="Se déconnecter" style={{ ...glassCard, padding:0, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", flexShrink:0, border:"1px solid rgba(0,96,100,.2)" }}>
+            <Icon name="logout" size={16} color="#0F2C5C" />
+          </button>
         </div>
 
         {/* ACCUEIL */}
