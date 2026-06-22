@@ -1213,7 +1213,7 @@ export default function App() {
       )}
 
       {/* SIDEBAR */}
-      <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px":"0", display:"flex", flexDirection:"column", overflow:"hidden", overflowY:sidebar?"auto":"hidden" }}>
+      <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px 0":"0", display:"flex", flexDirection:"column", overflowX:"hidden", overflowY:sidebar?"auto":"hidden" }}>
         {sidebar && <>
           <div style={{ textAlign:"center", marginBottom:24 }}>
             <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
@@ -1274,7 +1274,7 @@ export default function App() {
             {" · "}
             <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
           </div>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, paddingBottom:"calc(16px + env(safe-area-inset-bottom))", display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ flex:1, overflow:"hidden" }}>
               <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
               {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{ROLE_LABELS[user.role]}</div>}
