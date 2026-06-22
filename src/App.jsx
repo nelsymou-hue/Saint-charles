@@ -1215,13 +1215,13 @@ export default function App() {
       {/* SIDEBAR */}
       <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px 0":"0", display:"flex", flexDirection:"column", overflowX:"hidden", overflowY:"hidden" }}>
         {sidebar && <>
-          <div style={{ textAlign:"center", marginBottom:24, flexShrink:0 }}>
-            <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
+          <div style={{ textAlign:"center", marginBottom:12, flexShrink:0 }}>
+            <div style={{ width:46, height:46, borderRadius:"50%", overflow:"hidden", margin:"0 auto 6px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
                 <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
               </div>
             <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
           </div>
-          <nav style={{ display:"flex", flexDirection:"column", gap:3, flex:1, overflowY:"auto", overflowX:"hidden" }}>
+          <nav style={{ display:"flex", flexDirection:"column", gap:1, flex:1, overflowY:"auto", overflowX:"hidden" }}>
             {[{id:"accueil",label:"Accueil",icon:"home"},{id:"dashboard",label:"Tableau de bord",icon:"dashboard",adminOnly:true}].filter(x=>!x.adminOnly||isAdmin).map(item=>(
               <div key={item.id} className="nav-item" onClick={()=>{setView(item.id);setEspace(null);}}
                 style={{ padding:"9px 14px", borderRadius:10, cursor:"pointer", color:view===item.id?"#fff":"rgba(255,255,255,.6)", fontSize:14, display:"flex", alignItems:"center", gap:9, background:view===item.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view===item.id?500:400, borderLeft:view===item.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
@@ -1250,15 +1250,15 @@ export default function App() {
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
               {unread>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{unread}</span>}
             </div>}
-            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"10px 14px 4px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
+            <div style={{ fontSize:11, color:"rgba(255,255,255,.35)", padding:"6px 14px 2px", fontWeight:600, letterSpacing:1, textTransform:"uppercase" }}>Espaces communs</div>
             {ESPACES.filter(e=>e.id==="ressources").map(e=>(
               <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
                 style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
                 <Icon name={e.icon} size={14} color={view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.45)"} /> {e.nom}
               </div>
             ))}
-            <div style={{ height:1, background:"rgba(255,255,255,.12)", margin:"6px 14px" }} />
-            <div style={{ background:"rgba(255,255,255,.18)", borderRadius:12, padding:"6px 4px", display:"flex", flexDirection:"column", gap:2 }}>
+            <div style={{ height:1, background:"rgba(255,255,255,.12)", margin:"4px 14px" }} />
+            <div style={{ background:"rgba(255,255,255,.18)", borderRadius:12, padding:"4px 4px", display:"flex", flexDirection:"column", gap:1 }}>
               {ESPACES.filter(e=>e.id!=="ressources").map(e=>(
                 <div key={e.id} className="nav-item" onClick={()=>goTo("espace",e)}
                   style={{ padding:"8px 12px", borderRadius:10, cursor:"pointer", color:view==="espace"&&espace?.id===e.id?"#fff":"rgba(255,255,255,.6)", fontSize:12, display:"flex", alignItems:"center", gap:8, background:view==="espace"&&espace?.id===e.id?"rgba(255,255,255,.18)":"transparent", fontWeight:view==="espace"&&espace?.id===e.id?500:400, borderLeft:view==="espace"&&espace?.id===e.id?"3px solid #fff":"3px solid transparent", transition:"all .15s", whiteSpace:"nowrap", overflow:"hidden" }}>
@@ -1267,7 +1267,7 @@ export default function App() {
               ))}
             </div>
           </nav>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.65)", lineHeight:1.8, flexShrink:0 }}>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:8, marginTop:6, marginBottom:8, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.65)", lineHeight:1.6, flexShrink:0 }}>
             <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
             {" · "}
             <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
