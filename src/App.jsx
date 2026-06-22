@@ -34,7 +34,7 @@ const PRESET_COLORS = ["#e91e8c","#0d9488","#9c27b0","#b8860b","#1a237e","#2196f
 
 const ROLE_LABELS = {
   direction: "Direction",
-  adjoint:   "Adjoint de direction",
+  adjoint:   "Adjoint(e) de direction",
   admin:     "Administratif",
   enseignant: null,
 };
@@ -861,7 +861,7 @@ export default function App() {
             )}
             {loginProfiles.map(u=>{
               const isSelected = selectedUser?.id === u.id;
-              const roleLabel = u.role==="direction"?"Direction":u.role==="adjoint"?"Adjoint de direction":u.role==="admin"?"Administratif":"Enseignant";
+              const roleLabel = u.role==="direction"?"Direction":u.role==="adjoint"?"Adjoint(e) de direction":u.role==="admin"?"Administratif":"Enseignant";
               return (
               <div key={u.id}
                 style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:`1px solid ${isSelected ? u.color : "rgba(255,255,255,.15)"}`, background: isSelected ? `${u.color}22` : "rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"all .2s", overflow:"hidden", position:"relative", boxShadow: isSelected ? `0 0 16px ${u.color}55, inset 0 0 20px ${u.color}18` : "none" }}
@@ -1122,7 +1122,7 @@ export default function App() {
             <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Rôle</label>
             <select style={{...fieldStyle(false), appearance:"none", WebkitAppearance:"none", backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230F2C5C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 12px center", paddingRight:36 }}
               value={addUserForm.role} onChange={e=>setAddUserForm(f=>({...f,role:e.target.value}))}>
-              <option value="adjoint">Adjoint de direction</option>
+              <option value="adjoint">Adjoint(e) de direction</option>
               <option value="admin">Administratif</option>
               <option value="enseignant">Enseignant</option>
             </select>
@@ -1168,7 +1168,7 @@ export default function App() {
           <div style={{ marginBottom:14, fontSize:14, color:"#0F2C5C" }}>Compte : <strong>{modalEditRole.name}</strong></div>
           <select style={{...fieldStyle(false), appearance:"none", WebkitAppearance:"none", backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230F2C5C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 12px center", paddingRight:36, marginBottom:16 }}
             value={editRoleValue} onChange={e=>setEditRoleValue(e.target.value)}>
-            <option value="adjoint">Adjoint de direction</option>
+            <option value="adjoint">Adjoint(e) de direction</option>
             <option value="admin">Administratif</option>
             <option value="enseignant">Enseignant</option>
           </select>
