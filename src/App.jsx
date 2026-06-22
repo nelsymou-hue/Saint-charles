@@ -28,14 +28,15 @@ const SPACE_COLORS = {
   ressources:  PALETTE[2],
 };
 
-// ─── UTILISATEURS (locaux — pas en base) ─────────────────────────────────────
-const USERS = [
-  { id:1, name:"Direction",              role:"superadmin", avatar:"MD", color:"#e91e8c",  password:"directrice2024" },
-  { id:2, name:"Adjoint de direction",  role:"superadmin", avatar:"MA", color:"#0d9488",  password:"adjoint2024"    },
-  { id:3, name:"Administration",         role:"admin",      avatar:"A1", color:"#9c27b0",  password:"admin12024"     },
-  { id:4, name:"Administration 2",       role:"admin",      avatar:"A2", color:"#b8860b",  password:"admin22024"     },
-  { id:5, name:"Personnel Enseignant",role:"enseignant", avatar:"PE", color:"#1a237e",  password:"personnel2024"  },
-];
+// ─── COULEURS PAR DÉFAUT POUR NOUVEAUX COMPTES ───────────────────────────────
+const PRESET_COLORS = ["#e91e8c","#0d9488","#9c27b0","#b8860b","#1a237e","#2196f3","#ff5722","#4caf50"];
+
+const ROLE_LABELS = {
+  direction: "Direction",
+  adjoint:   "Adjoint de direction",
+  admin:     "Administratif",
+  enseignant: null,
+};
 
 // ─── ESPACES (fixes) ─────────────────────────────────────────────────────────
 const ESPACES = [
@@ -98,6 +99,11 @@ const Icon = ({ name, size=18, color="currentColor" }) => {
     user:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
     calendar:    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
     warning:     <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+    users:       <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    inbox:       <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>,
+    key:         <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>,
+    shield:      <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    back:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>,
     back:        <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="15 18 9 12 15 6"/></svg>,
     inbox:       <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={s}><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>,
   };
@@ -242,13 +248,30 @@ export default function App() {
   const [refusErrors, setRefusErrors]       = useState({});
   const [refusMode, setRefusMode]           = useState({});
   const [loginPassword, setLoginPassword]   = useState("");
-  const [loginScreen, setLoginScreen]       = useState("welcome"); // "welcome" | "profiles"
+  const [loginScreen, setLoginScreen]       = useState("welcome");
   const [loginError, setLoginError]         = useState("");
   const [selectedUser, setSelectedUser]     = useState(null);
-  const [legalView, setLegalView]           = useState(null); // "mentions"|"cgu"|"confidentialite"
+  const [legalView, setLegalView]           = useState(null);
+  const [loginProfiles, setLoginProfiles]   = useState([]);
+  const [authLoading, setAuthLoading]       = useState(true);
+  const [loginLoading, setLoginLoading]     = useState(false);
 
-  const isSA    = user?.role === "superadmin";
-  const isAdmin = ["superadmin","admin"].includes(user?.role);
+  // Gestion des accès
+  const [gestionProfiles, setGestionProfiles]   = useState([]);
+  const [gestionLoading, setGestionLoading]     = useState(false);
+  const [modalAddUser, setModalAddUser]         = useState(false);
+  const [modalResetPwd, setModalResetPwd]       = useState(null);
+  const [modalEditRole, setModalEditRole]       = useState(null);
+  const [modalConfirmDel, setModalConfirmDel]   = useState(null);
+  const [userActionMenu, setUserActionMenu]     = useState(null);
+  const [addUserForm, setAddUserForm]           = useState({ name:"", email:"", role:"enseignant", password:"", color:"#0d9488" });
+  const [addUserErrors, setAddUserErrors]       = useState({});
+  const [resetPwdValue, setResetPwdValue]       = useState("");
+  const [editRoleValue, setEditRoleValue]       = useState("");
+
+  const isSA         = ["direction","adjoint"].includes(user?.role);
+  const isAdmin      = ["direction","adjoint","admin"].includes(user?.role);
+  const canGererAcces = user?.peut_gerer_acces === true;
   const unread  = notifs.filter(n=>!n.lu).length;
   const pending = docs.filter(d=>d.status==="attente").length;
 
@@ -259,6 +282,24 @@ export default function App() {
       loadNotifs(user);
     }
   }, [user]);
+
+  // ── Auth Supabase ──
+  useEffect(() => {
+    // Charger la liste des profils pour l'écran de connexion
+    loadLoginProfiles();
+
+    // Vérifier la session existante
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) loadProfile(session.user.id);
+      else setAuthLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) loadProfile(session.user.id);
+      else if (event === "SIGNED_OUT") { setUser(null); setAuthLoading(false); }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -362,30 +403,120 @@ export default function App() {
     else setView(isAdmin ? "dashboard" : "accueil");
   };
 
-  const handleLogin = (u) => {
-    if (u.password !== loginPassword) {
-      setLoginError("Mot de passe incorrect");
-      return;
+  const loadLoginProfiles = async () => {
+    const { data } = await supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at");
+    if (data) setLoginProfiles(data);
+  };
+
+  const loadProfile = async (userId) => {
+    const { data } = await supabase.from("profiles").select("*").eq("id", userId).single();
+    if (data && data.actif) {
+      const seen = {};
+      ESPACES.forEach(e => { const v = localStorage.getItem(`seen_${data.id}_${e.id}`); if (v) seen[`${data.id}_${e.id}`] = v; });
+      setSeenEspaces(seen);
+      const raw = localStorage.getItem(`seen_docs_${data.id}`);
+      setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
+      setUser(data);
+      setView(["direction","adjoint","admin"].includes(data.role) ? "dashboard" : "accueil");
+    } else {
+      await supabase.auth.signOut();
+      setLoginError("Votre compte a été désactivé. Contactez la direction.");
     }
-    setLoginError("");
+    setAuthLoading(false);
+  };
+
+  const handleLogin = async () => {
+    if (!selectedUser) { setLoginError("Veuillez sélectionner un profil"); return; }
+    if (!loginPassword.trim()) { setLoginError("Veuillez saisir votre mot de passe"); return; }
+    setLoginLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: selectedUser.email, password: loginPassword });
+    setLoginLoading(false);
+    if (error) setLoginError("Mot de passe incorrect");
+    // Si succès, onAuthStateChange déclenche loadProfile automatiquement
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setView("accueil");
+    setEspace(null);
+    setNavHistory([]);
+    setDocs([]);
+    setLoginScreen("welcome");
+    setSelectedUser(null);
     setLoginPassword("");
-    setUser(u);
-    // restore seen-espaces from localStorage for this user
-    const seen = {};
-    ESPACES.forEach(e => {
-      const val = localStorage.getItem(`seen_${u.id}_${e.id}`);
-      if (val) seen[`${u.id}_${e.id}`] = val;
+  };
+
+  // ── Gestion des accès ──
+  const callManageUsers = async (action, payload) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/manage-users`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ action, ...payload }),
     });
-    setSeenEspaces(seen);
-    // restore seen-docs from localStorage
-    const raw = localStorage.getItem(`seen_docs_${u.id}`);
-    setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
-    setView(isAdmin || u.role === "superadmin" || u.role === "admin" ? "dashboard" : "accueil");
+    return res.json();
+  };
+
+  const loadGestionProfiles = async () => {
+    setGestionLoading(true);
+    const { data } = await supabase.from("profiles").select("*").order("created_at");
+    if (data) setGestionProfiles(data);
+    setGestionLoading(false);
+  };
+
+  const handleAddUser = async () => {
+    const errs = {};
+    if (!addUserForm.name.trim())  errs.name  = "Obligatoire";
+    if (!addUserForm.email.trim()) errs.email = "Obligatoire";
+    if (!addUserForm.password.trim() || addUserForm.password.length < 8) errs.password = "8 caractères minimum";
+    if (Object.keys(errs).length) { setAddUserErrors(errs); return; }
+    const res = await callManageUsers("createUser", addUserForm);
+    if (res.error) { showToast(res.error, true); return; }
+    setModalAddUser(false);
+    setAddUserForm({ name:"", email:"", role:"enseignant", password:"", color:"#0d9488" });
+    setAddUserErrors({});
+    loadGestionProfiles();
+    showToast("Compte créé ✓");
+  };
+
+  const handleResetPwd = async () => {
+    if (!resetPwdValue.trim() || resetPwdValue.length < 8) { showToast("8 caractères minimum", true); return; }
+    const res = await callManageUsers("resetPassword", { userId: modalResetPwd.id, newPassword: resetPwdValue });
+    if (res.error) { showToast(res.error, true); return; }
+    setModalResetPwd(null);
+    setResetPwdValue("");
+    showToast("Mot de passe réinitialisé ✓");
+  };
+
+  const handleEditRole = async () => {
+    const res = await callManageUsers("updateUserRole", { userId: modalEditRole.id, role: editRoleValue });
+    if (res.error) { showToast(res.error, true); return; }
+    setModalEditRole(null);
+    loadGestionProfiles();
+    showToast("Rôle mis à jour ✓");
+  };
+
+  const handleToggleActive = async (profile) => {
+    const res = await callManageUsers("toggleActive", { userId: profile.id, actif: !profile.actif });
+    if (res.error) { showToast(res.error, true); return; }
+    loadGestionProfiles();
+    loadLoginProfiles();
+    showToast(profile.actif ? "Compte désactivé" : "Compte réactivé ✓");
+  };
+
+  const handleDeleteUser = async (profile) => {
+    const res = await callManageUsers("deleteUser", { userId: profile.id });
+    if (res.error) { showToast(res.error, true); return; }
+    setModalConfirmDel(null);
+    loadGestionProfiles();
+    loadLoginProfiles();
+    showToast("Compte supprimé");
   };
 
   const handleValider = async (id) => {
     const doc = docs.find(d=>d.id===id);
-    await supabase.from("documents").update({ status:"valide", commentaire:"" }).eq("id", id);
+    await supabase.from("documents").update({ status:"valide", commentaire:"", validated_by: user.id, validateur: user.name }).eq("id", id);
     await sendNotif(`Votre document "${doc?.titre}" a été validé ✓`, { destinataire:doc?.deposant||doc?.auteur, doc_id:id });
     loadDocs();
     loadNotifs(user);
@@ -452,6 +583,7 @@ export default function App() {
       description: uploadForm.desc,
       auteur: `${uploadForm.prenom} ${uploadForm.nom}`,
       deposant: user.name,
+      uploaded_by: user.id,
       type: getType(uploadForm.file),
       file_url,
       status,
@@ -505,6 +637,21 @@ export default function App() {
     await supabase.from("notifications").delete().eq("id", id);
     setNotifs(prev => prev.filter(n => n.id !== id));
   };
+
+  // ══ ÉCRAN CHARGEMENT AUTH ═════════════════════════════════════════════════
+  if (authLoading) {
+    const loginBg = "linear-gradient(165deg, #0F2C5C 20%, #1C49A6 55%, #e8eaf6 100%)";
+    return (
+      <div style={{ minHeight:"100vh", background:loginBg, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Calibri',sans-serif" }}>
+        <div style={{ textAlign:"center" }}>
+          <div style={{ width:70, height:70, borderRadius:"50%", overflow:"hidden", margin:"0 auto 16px", border:"2px solid rgba(255,255,255,.4)" }}>
+            <img src="/IMG_6909.jpeg" alt="Logo" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+          </div>
+          <div style={{ color:"rgba(255,255,255,.6)", fontSize:13 }}>Chargement…</div>
+        </div>
+      </div>
+    );
+  }
 
   // ══ PAGES LÉGALES ══════════════════════════════════════════════════════════
   const LEGAL_PAGES = {
@@ -708,8 +855,12 @@ export default function App() {
           {/* Boîte profils */}
           <div style={{ background:"rgba(255,255,255,.08)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)", boxShadow:"0 8px 32px rgba(0,0,0,.2)" }}>
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
-            {USERS.map(u=>{
+            {loginProfiles.length === 0 && (
+              <div style={{ color:"rgba(255,255,255,.4)", fontSize:13, textAlign:"center", padding:"12px 0" }}>Chargement des profils…</div>
+            )}
+            {loginProfiles.map(u=>{
               const isSelected = selectedUser?.id === u.id;
+              const roleLabel = u.role==="direction"?"Direction":u.role==="adjoint"?"Adjoint de direction":u.role==="admin"?"Administratif":"Enseignant";
               return (
               <div key={u.id}
                 style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 14px", borderRadius:10, cursor:"pointer", marginBottom:6, border:`1px solid ${isSelected ? u.color : "rgba(255,255,255,.15)"}`, background: isSelected ? `${u.color}22` : "rgba(255,255,255,.08)", backdropFilter:"blur(12px)", transition:"all .2s", overflow:"hidden", position:"relative", boxShadow: isSelected ? `0 0 16px ${u.color}55, inset 0 0 20px ${u.color}18` : "none" }}
@@ -719,7 +870,7 @@ export default function App() {
                 <div style={{ position:"absolute", left:0, top:0, bottom:0, width:4, background:u.color, borderRadius:"10px 0 0 10px" }} />
                 <div style={{ flex:1, paddingLeft:6 }}>
                   <div style={{ color:"#f5f0e8", fontSize:13, fontWeight:500 }}>{u.name}</div>
-                  <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{u.role==="superadmin"?"Super Admin":u.role==="admin"?"Administratif":"Enseignant"}</div>
+                  <div style={{ color:"rgba(245,240,232,.5)", fontSize:11 }}>{roleLabel}</div>
                 </div>
                 <svg width="22" height="16" viewBox="0 0 22 16" fill="none" style={{ flexShrink:0 }}>
                   <line x1="1" y1="8" x2="17" y2="8" stroke={u.color} strokeWidth="2.8" strokeLinecap="round"/>
@@ -740,9 +891,9 @@ export default function App() {
                 style={{ flex:1, background:"rgba(255,255,255,.1)", color:"rgba(245,240,232,.7)", border:"1px solid rgba(255,255,255,.15)", borderRadius:10, padding:"8px 0", fontSize:13, cursor:"pointer", fontFamily:"'Calibri',sans-serif" }}>
                 ← Retour
               </button>
-              <button onClick={()=>{ if(!selectedUser){ setLoginError("Veuillez sélectionner un profil"); return; } if(selectedUser.password===loginPassword){ handleLogin(selectedUser); } else { setLoginError("Mot de passe incorrect"); } }}
-                style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:"'Calibri',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)" }}>
-                Connexion
+              <button onClick={handleLogin} disabled={loginLoading}
+                style={{ flex:2, background:"#1C49A6", color:"#fff", border:"1px solid rgba(255,255,255,.25)", borderRadius:10, padding:"8px 0", fontSize:13, fontWeight:500, cursor:loginLoading?"wait":"pointer", fontFamily:"'Calibri',sans-serif", backdropFilter:"blur(12px)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.15)", opacity:loginLoading?.7:1 }}>
+                {loginLoading ? "Connexion…" : "Connexion"}
               </button>
             </div>
           </div>
@@ -755,7 +906,7 @@ export default function App() {
 
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
-    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'Calibri',sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'Calibri',sans-serif" }} onClick={()=>{ if(userActionMenu) setUserActionMenu(null); }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
         *{box-sizing:border-box}
@@ -874,7 +1025,7 @@ export default function App() {
           </div>
           {modalDetail.description && <div style={{ background:"rgba(0,96,100,.06)", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:14, color:"#0F2C5C", lineHeight:1.6 }}>{modalDetail.description}</div>}
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
-            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)]].map(([l,v])=>(
+            {[["Catégorie",modalDetail.categorie],["Déposé par",modalDetail.auteur],["Date",fmtDate(modalDetail.created_at)],modalDetail.validateur?["Validé par",modalDetail.validateur]:null].filter(Boolean).map(([l,v])=>(
               <div key={l} style={{ background:"rgba(0,96,100,.06)", borderRadius:10, border:"1px solid rgba(0,96,100,.12)", padding:"10px 14px" }}>
                 <div style={{ fontSize:11, color:"rgba(0,96,100,.5)", marginBottom:3 }}>{l}</div>
                 <div style={{ fontSize:13, color:"#0F2C5C", fontWeight:500 }}>{v}</div>
@@ -913,6 +1064,97 @@ export default function App() {
             <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>setModalDelete(null)}>Annuler</button>
             <button style={{ flex:1, justifyContent:"center", background:"rgba(220,38,38,.85)", color:"#fff", border:"1px solid rgba(220,38,38,.3)", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"inherit", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 }}
               onClick={()=>handleDelete(modalDelete)}>
+              <Icon name="trash" size={14} color="#fff" /> Supprimer
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* MODAL AJOUTER COMPTE */}
+      {modalAddUser && canGererAcces && (
+        <Modal title="Ajouter un compte" onClose={()=>{setModalAddUser(false);setAddUserErrors({});}}>
+          <div style={{ marginBottom:14 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Nom affiché *</label>
+            <input style={fieldStyle(addUserErrors.name)} placeholder="Ex : Marie Dupont" value={addUserForm.name} onChange={e=>setAddUserForm(f=>({...f,name:e.target.value}))} />
+            {addUserErrors.name && <div style={{ fontSize:12, color:"#dc2626", marginTop:4 }}>{addUserErrors.name}</div>}
+          </div>
+          <div style={{ marginBottom:14 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Email *</label>
+            <input type="email" style={fieldStyle(addUserErrors.email)} placeholder="prenom.nom@saint-charles.re" value={addUserForm.email} onChange={e=>setAddUserForm(f=>({...f,email:e.target.value}))} />
+            {addUserErrors.email && <div style={{ fontSize:12, color:"#dc2626", marginTop:4 }}>{addUserErrors.email}</div>}
+          </div>
+          <div style={{ marginBottom:14 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Rôle</label>
+            <select style={{...fieldStyle(false), appearance:"none", WebkitAppearance:"none", backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230F2C5C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 12px center", paddingRight:36 }}
+              value={addUserForm.role} onChange={e=>setAddUserForm(f=>({...f,role:e.target.value}))}>
+              <option value="adjoint">Adjoint de direction</option>
+              <option value="admin">Administratif</option>
+              <option value="enseignant">Enseignant</option>
+            </select>
+          </div>
+          <div style={{ marginBottom:14 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:6, fontWeight:500 }}>Mot de passe initial *</label>
+            <input type="password" style={fieldStyle(addUserErrors.password)} placeholder="8 caractères minimum" value={addUserForm.password} onChange={e=>setAddUserForm(f=>({...f,password:e.target.value}))} />
+            {addUserErrors.password && <div style={{ fontSize:12, color:"#dc2626", marginTop:4 }}>{addUserErrors.password}</div>}
+          </div>
+          <div style={{ marginBottom:18 }}>
+            <label style={{ fontSize:13, color:"#0F2C5C", display:"block", marginBottom:8, fontWeight:500 }}>Couleur du profil</label>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+              {PRESET_COLORS.map(c=>(
+                <div key={c} onClick={()=>setAddUserForm(f=>({...f,color:c}))}
+                  style={{ width:28, height:28, borderRadius:"50%", background:c, cursor:"pointer", border:addUserForm.color===c?"3px solid #0F2C5C":"2px solid rgba(0,0,0,.1)", transition:"all .15s" }} />
+              ))}
+            </div>
+          </div>
+          <div style={{ display:"flex", gap:10 }}>
+            <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>{setModalAddUser(false);setAddUserErrors({});}}>Annuler</button>
+            <button style={{...btn,flex:1,justifyContent:"center"}} onClick={handleAddUser}><Icon name="plus" size={14} color="#fff" /> Créer le compte</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* MODAL RESET MDP */}
+      {modalResetPwd && canGererAcces && (
+        <Modal title={`Réinitialiser le mot de passe`} onClose={()=>{setModalResetPwd(null);setResetPwdValue("");}} maxWidth={400}>
+          <div style={{ marginBottom:6, fontSize:14, color:"#0F2C5C" }}>Compte : <strong>{modalResetPwd.name}</strong></div>
+          <div style={{ marginBottom:14 }}>
+            <input type="password" style={{...inputStyle,marginTop:10}} placeholder="Nouveau mot de passe (8 car. min.)" value={resetPwdValue} onChange={e=>setResetPwdValue(e.target.value)} autoFocus />
+          </div>
+          <div style={{ display:"flex", gap:10 }}>
+            <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>{setModalResetPwd(null);setResetPwdValue("");}}>Annuler</button>
+            <button style={{...btn,flex:1,justifyContent:"center"}} onClick={handleResetPwd}><Icon name="key" size={14} color="#fff" /> Réinitialiser</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* MODAL MODIFIER RÔLE */}
+      {modalEditRole && canGererAcces && (
+        <Modal title="Modifier le rôle" onClose={()=>setModalEditRole(null)} maxWidth={380}>
+          <div style={{ marginBottom:14, fontSize:14, color:"#0F2C5C" }}>Compte : <strong>{modalEditRole.name}</strong></div>
+          <select style={{...fieldStyle(false), appearance:"none", WebkitAppearance:"none", backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230F2C5C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`, backgroundRepeat:"no-repeat", backgroundPosition:"right 12px center", paddingRight:36, marginBottom:16 }}
+            value={editRoleValue} onChange={e=>setEditRoleValue(e.target.value)}>
+            <option value="adjoint">Adjoint de direction</option>
+            <option value="admin">Administratif</option>
+            <option value="enseignant">Enseignant</option>
+          </select>
+          <div style={{ display:"flex", gap:10 }}>
+            <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>setModalEditRole(null)}>Annuler</button>
+            <button style={{...btn,flex:1,justifyContent:"center"}} onClick={handleEditRole}>Enregistrer</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* MODAL CONFIRMER SUPPRESSION */}
+      {modalConfirmDel && canGererAcces && (
+        <Modal title="Supprimer ce compte ?" onClose={()=>setModalConfirmDel(null)} maxWidth={400}>
+          <div style={{ background:"rgba(220,38,38,.12)", border:"1px solid rgba(220,38,38,.25)", borderRadius:10, padding:14, marginBottom:20, fontSize:14, color:"#fca5a5", display:"flex", gap:10, alignItems:"flex-start" }}>
+            <Icon name="warning" size={18} color="#fca5a5" />
+            <span>Le compte <strong>{modalConfirmDel.name}</strong> sera supprimé définitivement. Cette action est irréversible.</span>
+          </div>
+          <div style={{ display:"flex", gap:10 }}>
+            <button style={{...btnGhost,flex:1,justifyContent:"center"}} onClick={()=>setModalConfirmDel(null)}>Annuler</button>
+            <button style={{ flex:1, justifyContent:"center", background:"rgba(220,38,38,.85)", color:"#fff", border:"1px solid rgba(220,38,38,.3)", padding:"9px 18px", borderRadius:10, cursor:"pointer", fontFamily:"inherit", fontSize:14, fontWeight:500, display:"inline-flex", alignItems:"center", gap:7 }}
+              onClick={()=>handleDeleteUser(modalConfirmDel)}>
               <Icon name="trash" size={14} color="#fff" /> Supprimer
             </button>
           </div>
@@ -958,6 +1200,12 @@ export default function App() {
                 {pending>0 && <span style={{ background:"#ef4444", color:"#fff", borderRadius:"50%", width:18, height:18, minWidth:18, fontSize:10, fontWeight:700, marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center" }}>{pending}</span>}
               </div>
             )}
+            {canGererAcces && (
+              <div className="nav-item" onClick={()=>{ setView("gestion-acces"); loadGestionProfiles(); }}
+                style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="gestion-acces"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="gestion-acces"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="gestion-acces"?500:400, borderLeft:view==="gestion-acces"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
+                <Icon name="users" size={15} color={view==="gestion-acces"?"#fff":"rgba(255,255,255,.45)"} /> Gestion des accès
+              </div>
+            )}
             {!isAdmin && <div className="nav-item" onClick={()=>{setView("notifs");loadNotifs(user);}}
               style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="notifs"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="notifs"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="notifs"?500:400, borderLeft:view==="notifs"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
               <Icon name="bell" size={15} color={view==="notifs"?"#fff":"rgba(255,255,255,.45)"} /> Notifications
@@ -990,9 +1238,9 @@ export default function App() {
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ flex:1, overflow:"hidden" }}>
               <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
-              {user.role !== "enseignant" && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{user.role==="superadmin"?"Super Admin":"Administratif"}</div>}
+              {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{ROLE_LABELS[user.role]}</div>}
             </div>
-            <button onClick={()=>{setUser(null);setView("accueil");setEspace(null);setNavHistory([]);setDocs([]);setLoginScreen("welcome");setSelectedUser(null);}} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
+            <button onClick={handleLogout} style={{ background:"none", border:"none", cursor:"pointer", padding:4, display:"flex" }}>
               <Icon name="logout" size={16} color="rgba(255,255,255,.45)" />
             </button>
           </div>
@@ -1193,6 +1441,76 @@ export default function App() {
                   <div style={{ marginTop:12, color:"#0F2C5C" }}>Aucun document en attente</div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* GESTION DES ACCÈS */}
+        {view==="gestion-acces" && canGererAcces && (
+          <div>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28, flexWrap:"wrap", gap:12 }}>
+              <div>
+                <h1 style={{ fontFamily:"'Calibri',sans-serif", fontSize:28, margin:"0 0 4px", color:"#0F2C5C" }}>Gestion des accès</h1>
+                <p style={{ color:"rgba(0,96,100,.55)", margin:0, fontSize:14 }}>{gestionProfiles.length} compte(s) enregistré(s)</p>
+              </div>
+              <button style={btn} onClick={()=>setModalAddUser(true)}><Icon name="plus" size={14} color="#fff" /> Ajouter un compte</button>
+            </div>
+            {gestionLoading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement…</div>}
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              {gestionProfiles.map(p=>{
+                const roleLabel = ROLE_LABELS[p.role] || "Enseignant";
+                const isMe = p.id === user.id;
+                return (
+                  <div key={p.id} style={{...glassCard, display:"flex", alignItems:"center", gap:14, position:"relative", opacity:p.actif?1:.55 }}>
+                    <div style={{ width:40, height:40, borderRadius:12, background:p.color, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                      <span style={{ color:"#fff", fontSize:14, fontWeight:700 }}>{p.name.substring(0,2).toUpperCase()}</span>
+                    </div>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontSize:14, fontWeight:600, color:"#0F2C5C", display:"flex", alignItems:"center", gap:8 }}>
+                        {p.name}
+                        {isMe && <span style={{ fontSize:11, background:"rgba(15,44,92,.1)", color:"#0F2C5C", padding:"2px 7px", borderRadius:10 }}>Moi</span>}
+                        {p.peut_gerer_acces && <span style={{ fontSize:11, background:"rgba(233,30,140,.12)", color:"#e91e8c", padding:"2px 7px", borderRadius:10, display:"inline-flex", alignItems:"center", gap:4 }}><Icon name="shield" size={10} color="#e91e8c" /> Direction</span>}
+                      </div>
+                      <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:2 }}>{roleLabel} · {p.email}</div>
+                    </div>
+                    <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:p.actif?"rgba(5,150,105,.12)":"rgba(107,114,128,.12)", color:p.actif?"#059669":"#6b7280", fontWeight:600, flexShrink:0 }}>
+                      {p.actif?"Actif":"Inactif"}
+                    </span>
+                    {!p.peut_gerer_acces && (
+                      <div style={{ position:"relative", flexShrink:0 }}>
+                        <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
+                          onClick={e=>{ e.stopPropagation(); setUserActionMenu(userActionMenu===p.id?null:p.id); }}>⋮</button>
+                        {userActionMenu===p.id && (
+                          <div style={{ position:"absolute", right:0, top:"100%", background:"#fff", borderRadius:10, boxShadow:"0 4px 20px rgba(0,0,0,.15)", border:"1px solid rgba(0,0,0,.08)", zIndex:50, minWidth:180, overflow:"hidden" }}
+                            onClick={e=>e.stopPropagation()}>
+                            <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserActionMenu(null); }}
+                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .1s" }}
+                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                              <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
+                            </div>
+                            <div onClick={()=>{ handleToggleActive(p); setUserActionMenu(null); }}
+                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
+                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                              <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
+                            </div>
+                            <div onClick={()=>{ setModalResetPwd(p); setUserActionMenu(null); }}
+                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
+                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                              <Icon name="key" size={13} color="#0F2C5C" /> Réinitialiser le mot de passe
+                            </div>
+                            <div style={{ height:1, background:"rgba(0,0,0,.06)", margin:"4px 0" }} />
+                            <div onClick={()=>{ setModalConfirmDel(p); setUserActionMenu(null); }}
+                              style={{ padding:"10px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
+                              onMouseEnter={e=>e.currentTarget.style.background="#fff5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                              <Icon name="trash" size={13} color="#dc2626" /> Supprimer le compte
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
