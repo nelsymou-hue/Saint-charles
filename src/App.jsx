@@ -264,7 +264,7 @@ export default function App() {
   const [modalEditRole, setModalEditRole]       = useState(null);
   const [modalConfirmDel, setModalConfirmDel]   = useState(null);
   const [userActionMenu, setUserActionMenu]     = useState(null);
-  const [userMenuPos, setUserMenuPos]           = useState({ top:0, right:0 });
+  const [userMenuPos, setUserMenuPos]           = useState({ top:0, right:0, above:false });
   const [addUserForm, setAddUserForm]           = useState({ name:"", email:"", role:"enseignant", password:"", color:"#0d9488" });
   const [addUserErrors, setAddUserErrors]       = useState({});
   const [resetPwdValue, setResetPwdValue]       = useState("");
@@ -1478,7 +1478,7 @@ export default function App() {
                     {!p.peut_gerer_acces && (
                       <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
-                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); setUserMenuPos({ top: r.bottom+6, right: window.innerWidth-r.right }); setUserActionMenu(p.id); }}>⋮</button>
+                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=200; const spaceBelow=window.innerHeight-r.bottom; const above=spaceBelow<menuH+16; setUserMenuPos({ top: above ? r.top-menuH-6 : r.bottom+6, right: window.innerWidth-r.right, above }); setUserActionMenu(p.id); }}>⋮</button>
                         {userActionMenu===p.id && (
                           <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.18)", border:"1px solid rgba(0,0,0,.08)", zIndex:1000, minWidth:200, overflow:"hidden" }}
                             onClick={e=>e.stopPropagation()}>
