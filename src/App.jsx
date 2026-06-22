@@ -1478,7 +1478,7 @@ export default function App() {
                     {!p.peut_gerer_acces && (
                       <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
-                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); setUserMenuPos({ top: r.top - 8, right: window.innerWidth - r.left + 8 }); setUserActionMenu(p.id); }}>⋮</button>
+                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=185; const top=Math.min(r.top-8, window.innerHeight-menuH-16); setUserMenuPos({ top, right: window.innerWidth-r.left+8 }); setUserActionMenu(p.id); }}>⋮</button>
                         {userActionMenu===p.id && (
                           <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.18)", border:"1px solid rgba(0,0,0,.08)", zIndex:1000, minWidth:200, overflow:"hidden" }}
                             onClick={e=>e.stopPropagation()}>
