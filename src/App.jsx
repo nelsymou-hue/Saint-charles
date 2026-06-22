@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { createClient } from "@supabase/supabase-js";
 
 // ─── SUPABASE ────────────────────────────────────────────────────────────────
@@ -263,8 +264,7 @@ export default function App() {
   const [modalResetPwd, setModalResetPwd]       = useState(null);
   const [modalEditRole, setModalEditRole]       = useState(null);
   const [modalConfirmDel, setModalConfirmDel]   = useState(null);
-  const [userActionMenu, setUserActionMenu]     = useState(null);
-  const [userMenuPos, setUserMenuPos]           = useState({ top:0, right:0, above:false });
+  const [userMenuOpen, setUserMenuOpen]         = useState(null); // { profile, top, left, above }
   const [addUserForm, setAddUserForm]           = useState({ name:"", email:"", role:"enseignant", password:"", color:"#0d9488" });
   const [addUserErrors, setAddUserErrors]       = useState({});
   const [resetPwdValue, setResetPwdValue]       = useState("");
@@ -907,7 +907,7 @@ export default function App() {
 
   // ══ APP PRINCIPALE ═════════════════════════════════════════════════════════
   return (
-    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'Calibri',sans-serif" }} onClick={()=>{ if(userActionMenu) setUserActionMenu(null); }}>
+    <div style={{ minHeight:"100vh", background:BG, display:"flex", fontFamily:"'Calibri',sans-serif" }} onClick={()=>setUserMenuOpen(null)}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
         *{box-sizing:border-box}
@@ -950,34 +950,38 @@ export default function App() {
         }
       `}</style>
 
-      {/* MENU ACTIONS GESTION ACCÈS — rendu au niveau racine pour échapper aux backdrop-filter */}
-      {userActionMenu && userMenuPos.profile && (
-        <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.22)", border:"1px solid rgba(0,0,0,.09)", zIndex:99999, minWidth:210, overflow:"hidden" }}
-          onClick={e=>e.stopPropagation()}>
-          {(() => { const p = userMenuPos.profile; return (<>
-            <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserActionMenu(null); }}
-              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
-              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
-            </div>
-            <div onClick={()=>{ handleToggleActive(p); setUserActionMenu(null); }}
-              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
-              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
-            </div>
-            <div onClick={()=>{ setModalResetPwd(p); setUserActionMenu(null); }}
-              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
-              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <Icon name="key" size={13} color="#0F2C5C" /> Réinitialiser le mot de passe
-            </div>
-            <div style={{ height:1, background:"rgba(0,0,0,.07)", margin:"3px 0" }} />
-            <div onClick={()=>{ setModalConfirmDel(p); setUserActionMenu(null); }}
-              style={{ padding:"11px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
-              onMouseEnter={e=>e.currentTarget.style.background="#fff5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <Icon name="trash" size={13} color="#dc2626" /> Supprimer le compte
-            </div>
-          </>); })()}
-        </div>
+      {/* PORTAIL — menu actions gestion accès injecté dans document.body */}
+      {userMenuOpen && createPortal(
+        <>
+          <div style={{ position:"fixed", inset:0, zIndex:9998 }} onClick={()=>setUserMenuOpen(null)} />
+          <div style={{ position:"fixed", top:userMenuOpen.top, left:userMenuOpen.left, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.22)", border:"1px solid rgba(0,0,0,.09)", zIndex:9999, minWidth:210, overflow:"hidden" }}
+            onClick={e=>e.stopPropagation()}>
+            {(()=>{ const p=userMenuOpen.profile; return (<>
+              <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserMenuOpen(null); }}
+                style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+                onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
+              </div>
+              <div onClick={()=>{ handleToggleActive(p); setUserMenuOpen(null); }}
+                style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+                onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
+              </div>
+              <div onClick={()=>{ setModalResetPwd(p); setUserMenuOpen(null); }}
+                style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+                onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <Icon name="key" size={13} color="#0F2C5C" /> Réinitialiser le mot de passe
+              </div>
+              <div style={{ height:1, background:"rgba(0,0,0,.07)", margin:"3px 0" }} />
+              <div onClick={()=>{ setModalConfirmDel(p); setUserMenuOpen(null); }}
+                style={{ padding:"11px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+                onMouseEnter={e=>e.currentTarget.style.background="#fff5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <Icon name="trash" size={13} color="#dc2626" /> Supprimer le compte
+              </div>
+            </>); })()}
+          </div>
+        </>,
+        document.body
       )}
 
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
@@ -1508,7 +1512,7 @@ export default function App() {
                     {!p.peut_gerer_acces && (
                       <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
-                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=220; const idealTop=r.top+r.height/2-menuH/2; const top=Math.max(16,Math.min(idealTop,window.innerHeight-menuH-16)); setUserMenuPos({ top, right: window.innerWidth-r.left+10, profile:p }); setUserActionMenu(p.id); }}>⋮</button>
+                          onClick={e=>{ e.stopPropagation(); if(userMenuOpen?.profile?.id===p.id){ setUserMenuOpen(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=210; const spaceBelow=window.innerHeight-r.bottom; const top=spaceBelow>=menuH+8 ? r.bottom+4 : r.top-menuH-4; setUserMenuOpen({ profile:p, top:Math.max(8,top), left:r.left-220 }); }}>⋮</button>
                       </div>
                     )}
                   </div>
