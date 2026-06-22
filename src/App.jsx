@@ -1506,9 +1506,17 @@ export default function App() {
                       </div>
                       <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:2 }}>{roleLabel} · {p.email}</div>
                     </div>
-                    <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:p.actif?"rgba(5,150,105,.12)":"rgba(107,114,128,.12)", color:p.actif?"#059669":"#6b7280", fontWeight:600, flexShrink:0 }}>
-                      {p.actif?"Actif":"Inactif"}
-                    </span>
+                    {p.peut_gerer_acces ? (
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ flexShrink:0 }} title="Direction — compte certifié">
+                        <circle cx="12" cy="12" r="11" fill="#e91e8c" opacity=".15"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#e91e8c" opacity=".25"/>
+                        <path d="M12 1C5.93 1 1 5.93 1 12s4.93 11 11 11 11-4.93 11-11S18.07 1 12 1zm-1.5 15.5l-4-4 1.41-1.41L10.5 13.67l6.59-6.59L18.5 8.5l-8 8z" fill="#e91e8c"/>
+                      </svg>
+                    ) : (
+                      <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:p.actif?"rgba(5,150,105,.12)":"rgba(107,114,128,.12)", color:p.actif?"#059669":"#6b7280", fontWeight:600, flexShrink:0 }}>
+                        {p.actif?"Actif":"Inactif"}
+                      </span>
+                    )}
                     {!p.peut_gerer_acces && (
                       <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
