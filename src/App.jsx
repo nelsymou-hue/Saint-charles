@@ -1213,15 +1213,15 @@ export default function App() {
       )}
 
       {/* SIDEBAR */}
-      <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px 0":"0", display:"flex", flexDirection:"column", overflowX:"hidden", overflowY:sidebar?"auto":"hidden" }}>
+      <div className="sc-sidebar" style={{ width:sidebar?240:0, minWidth:sidebar?240:0, background:SIDEBAR_BG, backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRight:"1px solid rgba(255,255,255,.12)", padding:sidebar?"20px 16px 0":"0", display:"flex", flexDirection:"column", overflowX:"hidden", overflowY:"hidden" }}>
         {sidebar && <>
-          <div style={{ textAlign:"center", marginBottom:24 }}>
+          <div style={{ textAlign:"center", marginBottom:24, flexShrink:0 }}>
             <div style={{ width:56, height:56, borderRadius:"50%", overflow:"hidden", margin:"0 auto 8px", border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.1)" }}>
                 <img src="/IMG_6909.jpeg" alt="Logo Saint-Charles" style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} />
               </div>
             <div style={{ fontFamily:"'Calibri',sans-serif", fontSize:13, fontWeight:700, color:"rgba(255,255,255,.9)" }}>Saint-Charles</div>
           </div>
-          <nav style={{ display:"flex", flexDirection:"column", gap:3, flex:1 }}>
+          <nav style={{ display:"flex", flexDirection:"column", gap:3, flex:1, overflowY:"auto", overflowX:"hidden" }}>
             {[{id:"accueil",label:"Accueil",icon:"home"},{id:"dashboard",label:"Tableau de bord",icon:"dashboard",adminOnly:true}].filter(x=>!x.adminOnly||isAdmin).map(item=>(
               <div key={item.id} className="nav-item" onClick={()=>{setView(item.id);setEspace(null);}}
                 style={{ padding:"9px 14px", borderRadius:10, cursor:"pointer", color:view===item.id?"#fff":"rgba(255,255,255,.6)", fontSize:14, display:"flex", alignItems:"center", gap:9, background:view===item.id?"rgba(255,255,255,.15)":"transparent", fontWeight:view===item.id?500:400, borderLeft:view===item.id?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
@@ -1267,14 +1267,14 @@ export default function App() {
               ))}
             </div>
           </nav>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.65)", lineHeight:1.8 }}>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.65)", lineHeight:1.8, flexShrink:0 }}>
             <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
             {" · "}
             <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
             {" · "}
             <span onClick={()=>setLegalView("confidentialite")} style={{ cursor:"pointer", textDecoration:"underline" }}>Confidentialité</span>
           </div>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, paddingBottom:"calc(16px + env(safe-area-inset-bottom))", display:"flex", alignItems:"center", gap:10 }}>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:14, paddingBottom:"calc(16px + env(safe-area-inset-bottom))", display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
             <div style={{ flex:1, overflow:"hidden" }}>
               <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user.name}</div>
               {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)" }}>{ROLE_LABELS[user.role]}</div>}
