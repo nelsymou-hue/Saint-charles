@@ -950,6 +950,36 @@ export default function App() {
         }
       `}</style>
 
+      {/* MENU ACTIONS GESTION ACCÈS — rendu au niveau racine pour échapper aux backdrop-filter */}
+      {userActionMenu && userMenuPos.profile && (
+        <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.22)", border:"1px solid rgba(0,0,0,.09)", zIndex:99999, minWidth:210, overflow:"hidden" }}
+          onClick={e=>e.stopPropagation()}>
+          {(() => { const p = userMenuPos.profile; return (<>
+            <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserActionMenu(null); }}
+              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
+            </div>
+            <div onClick={()=>{ handleToggleActive(p); setUserActionMenu(null); }}
+              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
+            </div>
+            <div onClick={()=>{ setModalResetPwd(p); setUserActionMenu(null); }}
+              style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <Icon name="key" size={13} color="#0F2C5C" /> Réinitialiser le mot de passe
+            </div>
+            <div style={{ height:1, background:"rgba(0,0,0,.07)", margin:"3px 0" }} />
+            <div onClick={()=>{ setModalConfirmDel(p); setUserActionMenu(null); }}
+              style={{ padding:"11px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
+              onMouseEnter={e=>e.currentTarget.style.background="#fff5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <Icon name="trash" size={13} color="#dc2626" /> Supprimer le compte
+            </div>
+          </>); })()}
+        </div>
+      )}
+
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
 
       {/* Overlay mobile pour fermer la sidebar */}
@@ -1478,33 +1508,7 @@ export default function App() {
                     {!p.peut_gerer_acces && (
                       <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
-                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=220; const idealTop=r.top+r.height/2-menuH/2; const top=Math.max(16,Math.min(idealTop,window.innerHeight-menuH-16)); setUserMenuPos({ top, right: window.innerWidth-r.left+10 }); setUserActionMenu(p.id); }}>⋮</button>
-                        {userActionMenu===p.id && (
-                          <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.18)", border:"1px solid rgba(0,0,0,.08)", zIndex:9999, minWidth:210, overflow:"hidden" }}
-                            onClick={e=>e.stopPropagation()}>
-                            <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserActionMenu(null); }}
-                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .1s" }}
-                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                              <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
-                            </div>
-                            <div onClick={()=>{ handleToggleActive(p); setUserActionMenu(null); }}
-                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
-                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                              <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
-                            </div>
-                            <div onClick={()=>{ setModalResetPwd(p); setUserActionMenu(null); }}
-                              style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
-                              onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                              <Icon name="key" size={13} color="#0F2C5C" /> Réinitialiser le mot de passe
-                            </div>
-                            <div style={{ height:1, background:"rgba(0,0,0,.06)", margin:"4px 0" }} />
-                            <div onClick={()=>{ setModalConfirmDel(p); setUserActionMenu(null); }}
-                              style={{ padding:"10px 16px", fontSize:13, color:"#dc2626", cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}
-                              onMouseEnter={e=>e.currentTarget.style.background="#fff5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                              <Icon name="trash" size={13} color="#dc2626" /> Supprimer le compte
-                            </div>
-                          </div>
-                        )}
+                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); const menuH=220; const idealTop=r.top+r.height/2-menuH/2; const top=Math.max(16,Math.min(idealTop,window.innerHeight-menuH-16)); setUserMenuPos({ top, right: window.innerWidth-r.left+10, profile:p }); setUserActionMenu(p.id); }}>⋮</button>
                       </div>
                     )}
                   </div>
