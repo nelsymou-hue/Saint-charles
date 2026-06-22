@@ -939,7 +939,7 @@ export default function App() {
         /* ── MOBILE (≤ 767px) ── */
         @media(max-width:767px){
           .sc-sidebar{position:fixed!important;z-index:200;height:100vh;top:0;left:0}
-          .sc-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199;backdrop-filter:blur(2px)}
+          .sc-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:199;backdrop-filter:blur(2px);left:240px}
           .sc-spaces-grid{grid-template-columns:1fr}
           .sc-docs-grid{grid-template-columns:1fr}
           .sc-stat-grid{grid-template-columns:1fr}
@@ -987,7 +987,7 @@ export default function App() {
       {toast && <div style={{ position:"fixed", bottom:28, right:28, zIndex:999, background:toast.err?"#c62828":"#1a237e", backdropFilter:"blur(12px)", color:"#fff", padding:"12px 22px", borderRadius:12, fontSize:14, fontWeight:500, boxShadow:"0 8px 30px rgba(0,0,0,.2)", border:"1px solid rgba(255,255,255,.2)" }}>{toast.msg}</div>}
 
       {/* Overlay mobile pour fermer la sidebar */}
-      {sidebar && <div className="sc-overlay" onClick={()=>setSidebar(false)} />}
+      {sidebar && <div className="sc-overlay" onClick={()=>setSidebar(false)} onTouchStart={e=>{ if(!e.target.closest('.sc-sidebar')) setSidebar(false); }} />}
 
       {/* MODALS */}
       {modalUpload && (
