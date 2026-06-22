@@ -1239,6 +1239,10 @@ export default function App() {
               <div className="nav-item" onClick={()=>{ setView("gestion-acces"); loadGestionProfiles(); }}
                 style={{ padding:"8px 14px", borderRadius:10, cursor:"pointer", color:view==="gestion-acces"?"#fff":"rgba(255,255,255,.6)", fontSize:13, display:"flex", alignItems:"center", gap:9, background:view==="gestion-acces"?"rgba(255,255,255,.15)":"transparent", fontWeight:view==="gestion-acces"?500:400, borderLeft:view==="gestion-acces"?"3px solid #fff":"3px solid transparent", transition:"all .15s" }}>
                 <Icon name="users" size={15} color={view==="gestion-acces"?"#fff":"rgba(255,255,255,.45)"} /> Gestion des accès
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ marginLeft:"auto", opacity:.7 }}>
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
               </div>
             )}
             {!isAdmin && <div className="nav-item" onClick={()=>{setView("notifs");loadNotifs(user);}}
