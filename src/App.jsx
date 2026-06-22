@@ -1267,7 +1267,7 @@ export default function App() {
               ))}
             </div>
           </nav>
-          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.3)", lineHeight:1.8 }}>
+          <div style={{ borderTop:"1px solid rgba(255,255,255,.1)", paddingTop:10, marginTop:8, marginBottom:12, textAlign:"center", fontSize:10, color:"rgba(255,255,255,.65)", lineHeight:1.8 }}>
             <span onClick={()=>setLegalView("mentions")} style={{ cursor:"pointer", textDecoration:"underline" }}>Mentions légales</span>
             {" · "}
             <span onClick={()=>setLegalView("cgu")} style={{ cursor:"pointer", textDecoration:"underline" }}>CGU</span>
