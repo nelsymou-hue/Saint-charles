@@ -264,6 +264,7 @@ export default function App() {
   const [modalEditRole, setModalEditRole]       = useState(null);
   const [modalConfirmDel, setModalConfirmDel]   = useState(null);
   const [userActionMenu, setUserActionMenu]     = useState(null);
+  const [userMenuPos, setUserMenuPos]           = useState({ top:0, right:0 });
   const [addUserForm, setAddUserForm]           = useState({ name:"", email:"", role:"enseignant", password:"", color:"#0d9488" });
   const [addUserErrors, setAddUserErrors]       = useState({});
   const [resetPwdValue, setResetPwdValue]       = useState("");
@@ -1477,11 +1478,11 @@ export default function App() {
                       {p.actif?"Actif":"Inactif"}
                     </span>
                     {!p.peut_gerer_acces && (
-                      <div style={{ position:"relative", flexShrink:0 }}>
+                      <div style={{ flexShrink:0 }}>
                         <button style={{ background:"none", border:"none", cursor:"pointer", fontSize:18, color:"rgba(0,0,0,.5)", padding:"4px 8px", borderRadius:6 }}
-                          onClick={e=>{ e.stopPropagation(); setUserActionMenu(userActionMenu===p.id?null:p.id); }}>⋮</button>
+                          onClick={e=>{ e.stopPropagation(); if(userActionMenu===p.id){ setUserActionMenu(null); return; } const r=e.currentTarget.getBoundingClientRect(); setUserMenuPos({ top: r.bottom+6, right: window.innerWidth-r.right }); setUserActionMenu(p.id); }}>⋮</button>
                         {userActionMenu===p.id && (
-                          <div style={{ position:"absolute", right:0, top:"100%", background:"#fff", borderRadius:10, boxShadow:"0 4px 20px rgba(0,0,0,.15)", border:"1px solid rgba(0,0,0,.08)", zIndex:50, minWidth:180, overflow:"hidden" }}
+                          <div style={{ position:"fixed", top:userMenuPos.top, right:userMenuPos.right, background:"#fff", borderRadius:10, boxShadow:"0 8px 30px rgba(0,0,0,.18)", border:"1px solid rgba(0,0,0,.08)", zIndex:1000, minWidth:200, overflow:"hidden" }}
                             onClick={e=>e.stopPropagation()}>
                             <div onClick={()=>{ setModalEditRole(p); setEditRoleValue(p.role); setUserActionMenu(null); }}
                               style={{ padding:"10px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .1s" }}
