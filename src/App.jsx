@@ -1507,9 +1507,9 @@ export default function App() {
                       <div style={{ fontSize:12, color:"rgba(0,96,100,.55)", marginTop:2 }}>{roleLabel} · {p.email}</div>
                     </div>
                     {p.peut_gerer_acces ? (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ flexShrink:0 }} title="Direction — compte certifié">
-                        <path d="M12 2l2.4 3.2 4-.8-1.2 3.8 2.8 3-3.8 1 .8 4L12 14.4 7 16.2l.8-4-3.8-1 2.8-3-1.2-3.8 4 .8z" stroke="#b8860b" strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
-                        <polyline points="8.5,12 11,14.5 15.5,9.5" stroke="#b8860b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ flexShrink:0 }} title="Direction — compte validé">
+                        <circle cx="12" cy="12" r="9" stroke="#b8860b" strokeWidth="1.7" fill="none"/>
+                        <polyline points="7.5,12 10.5,15 16.5,9" stroke="#b8860b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ) : (
                       <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:p.actif?"rgba(5,150,105,.12)":"rgba(107,114,128,.12)", color:p.actif?"#059669":"#6b7280", fontWeight:600, flexShrink:0 }}>
