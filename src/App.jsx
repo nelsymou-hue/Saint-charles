@@ -1495,7 +1495,7 @@ export default function App() {
             {gestionLoading && <div style={{ color:"rgba(0,96,100,.45)", fontSize:14, marginBottom:14 }}>Chargement…</div>}
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {gestionProfiles.map(p=>{
-                const roleLabel = ROLE_LABELS[p.role] || "Enseignant";
+                const roleLabel = p.role==="direction"?"Direction":p.role==="adjoint"?"Adjoint(e) de direction":p.role==="admin"?"Administratif":"Enseignant";
                 const isMe = p.id === user.id;
                 return (
                   <div key={p.id} style={{...glassCard, display:"flex", alignItems:"center", gap:14, position:"relative", opacity:p.actif?1:.55 }}>
