@@ -69,7 +69,7 @@ const TYPE_COLORS = {
   AUTRE:{ bg:"rgba(107,114,128,.12)", text:"#6b7280" },
 };
 const getType = n => { if (!n) return "AUTRE"; const e = n.split(".").pop().toUpperCase(); return ["PDF","DOCX","XLSX","PPTX","IMG"].includes(e) ? e : "AUTRE"; };
-const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d.getTime())) return iso; const opts = { timeZone:"Indian/Reunion", day:"numeric", month:"long", year:"numeric" }; const optsT = { timeZone:"Indian/Reunion", hour:"2-digit", minute:"2-digit" }; return d.toLocaleDateString("fr-FR",opts) + " à " + d.toLocaleTimeString("fr-FR",optsT); };
+const fmtDate = iso => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d.getTime())) return iso; const r = new Date(d.getTime() + 4*60*60*1000); const months = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]; return `${r.getUTCDate()} ${months[r.getUTCMonth()]} ${r.getUTCFullYear()} à ${String(r.getUTCHours()).padStart(2,"0")}:${String(r.getUTCMinutes()).padStart(2,"0")}`; };
 
 // ─── ICONES SVG ──────────────────────────────────────────────────────────────
 const Icon = ({ name, size=18, color="currentColor" }) => {
