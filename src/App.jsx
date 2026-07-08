@@ -962,11 +962,6 @@ export default function App() {
                 onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                 <Icon name="user" size={13} color="#0F2C5C" /> Modifier le rôle
               </div>
-              <div onClick={()=>{ handleToggleActive(p); setUserMenuOpen(null); }}
-                style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
-                onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                <Icon name="eye" size={13} color="#0F2C5C" /> {p.actif?"Désactiver":"Réactiver"}
-              </div>
               <div onClick={()=>{ setModalResetPwd(p); setUserMenuOpen(null); }}
                 style={{ padding:"11px 16px", fontSize:13, color:"#0F2C5C", cursor:"pointer", display:"flex", alignItems:"center", gap:9 }}
                 onMouseEnter={e=>e.currentTarget.style.background="#f5f5f5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
