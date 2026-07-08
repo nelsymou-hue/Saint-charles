@@ -1271,7 +1271,6 @@ export default function App() {
           </div>
           <div style={{ borderTop:"1px solid rgba(255,255,255,.12)", paddingTop:10, paddingBottom:"calc(12px + env(safe-area-inset-bottom))", flexShrink:0 }}>
             <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,.95)", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textAlign:"center" }}>{user.name}</div>
-            {ROLE_LABELS[user.role] && <div style={{ fontSize:11, color:"rgba(255,255,255,.5)", textAlign:"center" }}>{ROLE_LABELS[user.role]}</div>}
           </div>
         </>}
       </div>
