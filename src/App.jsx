@@ -462,7 +462,13 @@ export default function App() {
   const loadGestionProfiles = async () => {
     setGestionLoading(true);
     const { data } = await supabase.from("profiles").select("*").order("created_at");
-    if (data) setGestionProfiles(data);
+    if (data) {
+      const ROLE_ORDER = { direction:0, adjoint:1, admin:2, enseignant:3 };
+      setGestionProfiles([...data].sort((a,b) => {
+        if (b.peut_gerer_acces !== a.peut_gerer_acces) return b.peut_gerer_acces ? 1 : -1;
+        return (ROLE_ORDER[a.role]??9) - (ROLE_ORDER[b.role]??9);
+      }));
+    }
     setGestionLoading(false);
   };
 
