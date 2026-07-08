@@ -33,7 +33,7 @@ const SPACE_COLORS = {
 const PRESET_COLORS = ["#e91e8c","#0d9488","#9c27b0","#b8860b","#1a237e","#2196f3","#ff5722","#4caf50"];
 
 const ROLE_LABELS = {
-  direction: "Direction",
+  direction: null,
   adjoint:   "Adjoint(e) de direction",
   admin:     "Administratif",
   enseignant: null,
