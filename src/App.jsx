@@ -253,7 +253,7 @@ export default function App() {
   const [loginError, setLoginError]         = useState("");
   const [selectedUser, setSelectedUser]     = useState(null);
   const [legalView, setLegalView]           = useState(null);
-  const [loginProfiles, setLoginProfiles]   = useState([]);
+  const [loginProfiles, setLoginProfiles]   = useState(() => { try { const c = localStorage.getItem("sc_login_profiles"); return c ? JSON.parse(c) : []; } catch(e) { return []; } });
   const hasSession = Object.keys(localStorage).some(k => k.startsWith("sb-") && k.endsWith("-auth-token"));
   const [authLoading, setAuthLoading]       = useState(hasSession);
   const [loginLoading, setLoginLoading]     = useState(false);
