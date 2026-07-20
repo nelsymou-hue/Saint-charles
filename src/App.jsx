@@ -290,10 +290,22 @@ export default function App() {
     // Charger la liste des profils pour l'écran de connexion
     loadLoginProfiles();
 
-    // Vérifier la session existante
+    // Restaurer le profil depuis le cache IMMÉDIATEMENT (avant getSession)
+    const lastProfile = localStorage.getItem("sc_last_profile");
+    if (lastProfile) {
+      try {
+        const p = JSON.parse(lastProfile);
+        if (p && p.actif) {
+          applyProfile(p);
+          setAuthLoading(false);
+        }
+      } catch(e) {}
+    }
+
+    // Vérifier la session existante en arrière-plan
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) loadProfile(session.user.id);
-      else setAuthLoading(false);
+      else { localStorage.removeItem("sc_last_profile"); setUser(null); setAuthLoading(false); }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -418,6 +430,7 @@ export default function App() {
     setSeenEspaces(seen);
     const raw = localStorage.getItem(`seen_docs_${data.id}`);
     setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
+    localStorage.setItem("sc_last_profile", JSON.stringify(data));
     setUser(data);
     setView(["direction","adjoint","admin"].includes(data.role) ? "dashboard" : "accueil");
   };
@@ -450,6 +463,7 @@ export default function App() {
   };
 
   const handleLogout = async () => {
+    localStorage.removeItem("sc_last_profile");
     await supabase.auth.signOut();
     setUser(null);
     setView("accueil");
