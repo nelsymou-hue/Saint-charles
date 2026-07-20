@@ -254,7 +254,8 @@ export default function App() {
   const [selectedUser, setSelectedUser]     = useState(null);
   const [legalView, setLegalView]           = useState(null);
   const [loginProfiles, setLoginProfiles]   = useState([]);
-  const [authLoading, setAuthLoading]       = useState(true);
+  const hasSession = Object.keys(localStorage).some(k => k.startsWith("sb-") && k.endsWith("-auth-token"));
+  const [authLoading, setAuthLoading]       = useState(hasSession);
   const [loginLoading, setLoginLoading]     = useState(false);
 
   // Gestion des accès
@@ -405,8 +406,10 @@ export default function App() {
   };
 
   const loadLoginProfiles = async () => {
+    const cached = localStorage.getItem("sc_login_profiles");
+    if (cached) { try { setLoginProfiles(JSON.parse(cached)); } catch(e) {} }
     const { data } = await supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at");
-    if (data) setLoginProfiles(data);
+    if (data) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
   };
 
   const loadProfile = async (userId) => {
