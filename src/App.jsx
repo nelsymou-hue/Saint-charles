@@ -412,17 +412,27 @@ export default function App() {
     if (data) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
   };
 
+  const applyProfile = (data) => {
+    const seen = {};
+    ESPACES.forEach(e => { const v = localStorage.getItem(`seen_${data.id}_${e.id}`); if (v) seen[`${data.id}_${e.id}`] = v; });
+    setSeenEspaces(seen);
+    const raw = localStorage.getItem(`seen_docs_${data.id}`);
+    setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
+    setUser(data);
+    setView(["direction","adjoint","admin"].includes(data.role) ? "dashboard" : "accueil");
+  };
+
   const loadProfile = async (userId) => {
+    const cachedProfile = localStorage.getItem(`sc_profile_${userId}`);
+    if (cachedProfile) {
+      try { const p = JSON.parse(cachedProfile); if (p.actif) { applyProfile(p); setAuthLoading(false); } } catch(e) {}
+    }
     const { data } = await supabase.from("profiles").select("*").eq("id", userId).single();
     if (data && data.actif) {
-      const seen = {};
-      ESPACES.forEach(e => { const v = localStorage.getItem(`seen_${data.id}_${e.id}`); if (v) seen[`${data.id}_${e.id}`] = v; });
-      setSeenEspaces(seen);
-      const raw = localStorage.getItem(`seen_docs_${data.id}`);
-      setSeenDocs(raw ? new Set(JSON.parse(raw)) : new Set());
-      setUser(data);
-      setView(["direction","adjoint","admin"].includes(data.role) ? "dashboard" : "accueil");
-    } else {
+      localStorage.setItem(`sc_profile_${userId}`, JSON.stringify(data));
+      applyProfile(data);
+    } else if (data && !data.actif) {
+      localStorage.removeItem(`sc_profile_${userId}`);
       await supabase.auth.signOut();
       setLoginError("Votre compte a été désactivé. Contactez la direction.");
     }
