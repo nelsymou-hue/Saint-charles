@@ -7,6 +7,9 @@ const SUPABASE_URL = "https://auxswitfevqgpgvnaodk.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1eHN3aXRmZXZxZ3Bndm5hb2RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3ODM0MjAsImV4cCI6MjA5NjM1OTQyMH0.YX29gtJ9JNUgnK_5pnTSGP63SXEFelX3O1QkxUQWF48";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Prefetch profiles immédiatement au chargement du module
+const _profilesFetch = supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at");
+
 // ─── PALETTE & COULEURS ──────────────────────────────────────────────────────
 const BG = "#f5f0e8";
 const SIDEBAR_BG = "linear-gradient(180deg, #0F2C5C 0%, #1C49A6 100%)";
@@ -406,10 +409,8 @@ export default function App() {
   };
 
   const loadLoginProfiles = async () => {
-    const cached = localStorage.getItem("sc_login_profiles");
-    if (cached) { try { setLoginProfiles(JSON.parse(cached)); } catch(e) {} }
-    const { data } = await supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at");
-    if (data) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
+    const { data } = await _profilesFetch;
+    if (data && data.length > 0) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
   };
 
   const applyProfile = (data) => {
@@ -875,7 +876,9 @@ export default function App() {
           <div style={{ background:"rgba(255,255,255,.08)", borderRadius:16, padding:16, marginBottom:12, border:"1px solid rgba(255,255,255,.15)", backdropFilter:"blur(12px)", boxShadow:"0 8px 32px rgba(0,0,0,.2)" }}>
             <div style={{ fontSize:10, color:"rgba(255,255,255,.45)", fontWeight:600, letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:10 }}>Sélectionner un profil</div>
             {loginProfiles.length === 0 && (
-              <div style={{ color:"rgba(255,255,255,.4)", fontSize:13, textAlign:"center", padding:"12px 0" }}>Chargement des profils…</div>
+              <div style={{ display:"flex", justifyContent:"center", padding:"12px 0", gap:6 }}>
+                {[0,1,2].map(i=><div key={i} style={{ width:8, height:8, borderRadius:"50%", background:"rgba(255,255,255,.3)", animation:`sc-dot ${0.8+i*0.15}s ease-in-out infinite alternate` }}/>)}
+              </div>
             )}
             {loginProfiles.map(u=>{
               const isSelected = selectedUser?.id === u.id;
@@ -935,6 +938,7 @@ export default function App() {
         @media(max-width:767px){.sc-hamburger{display:flex!important}}
         .legal-content ul{margin:8px 0 8px 18px;padding:0;text-align:left}.legal-content li{margin-bottom:4px;text-align:left}.legal-content p{margin:0 0 10px;text-align:left}
 
+        @keyframes sc-dot{from{opacity:.2;transform:scale(.8)}to{opacity:1;transform:scale(1.2)}}
         /* ── SIDEBAR ── */
         .sc-sidebar{position:sticky;top:0;height:100vh;flex-shrink:0;transition:width .25s,min-width .25s,padding .25s}
         .sc-overlay{display:none}
