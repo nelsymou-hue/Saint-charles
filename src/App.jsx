@@ -410,7 +410,12 @@ export default function App() {
 
   const loadLoginProfiles = async () => {
     const { data } = await _profilesPromise;
-    if (data && data.length > 0) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
+    if (data && data.length > 0) {
+      const ROLE_ORDER = { direction:0, adjoint:1, admin:2, enseignant:3 };
+      const sorted = [...data].sort((a,b) => (ROLE_ORDER[a.role]??9) - (ROLE_ORDER[b.role]??9));
+      setLoginProfiles(sorted);
+      localStorage.setItem("sc_login_profiles", JSON.stringify(sorted));
+    }
   };
 
   const applyProfile = (data) => {
