@@ -7,8 +7,8 @@ const SUPABASE_URL = "https://auxswitfevqgpgvnaodk.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1eHN3aXRmZXZxZ3Bndm5hb2RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3ODM0MjAsImV4cCI6MjA5NjM1OTQyMH0.YX29gtJ9JNUgnK_5pnTSGP63SXEFelX3O1QkxUQWF48";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Prefetch profiles immédiatement au chargement du module
-const _profilesFetch = supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at");
+// Exécute la requête profiles IMMÉDIATEMENT au chargement du module (avant React)
+const _profilesPromise = supabase.from("profiles").select("id,name,role,color,email,actif").eq("actif",true).order("created_at").then(r => r);
 
 // ─── PALETTE & COULEURS ──────────────────────────────────────────────────────
 const BG = "#f5f0e8";
@@ -257,7 +257,7 @@ export default function App() {
   const [loginError, setLoginError]         = useState("");
   const [selectedUser, setSelectedUser]     = useState(null);
   const [legalView, setLegalView]           = useState(null);
-  const [loginProfiles, setLoginProfiles]   = useState(() => { try { const c = localStorage.getItem("sc_login_profiles"); return c ? JSON.parse(c) : []; } catch(e) { return []; } });
+  const [loginProfiles, setLoginProfiles]   = useState(() => { try { const c = localStorage.getItem("sc_login_profiles"); const p = c ? JSON.parse(c) : []; return p.length > 0 ? p : []; } catch(e) { return []; } });
   const [authLoading, setAuthLoading]       = useState(false);
   const [loginLoading, setLoginLoading]     = useState(false);
 
@@ -409,7 +409,7 @@ export default function App() {
   };
 
   const loadLoginProfiles = async () => {
-    const { data } = await _profilesFetch;
+    const { data } = await _profilesPromise;
     if (data && data.length > 0) { setLoginProfiles(data); localStorage.setItem("sc_login_profiles", JSON.stringify(data)); }
   };
 
