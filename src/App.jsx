@@ -219,14 +219,15 @@ const SpaceCard = ({ esp, count, newCount=0, onClick, onAdd }) => {
 
 // ═══════════════════════════════════════════════════════════════════════════
 export default function App() {
-  const [user, setUser]         = useState(null);
+  const _cachedProfile = (() => { try { const p = localStorage.getItem("sc_last_profile"); if (!p) return null; const parsed = JSON.parse(p); return parsed?.actif ? parsed : null; } catch(e) { return null; } })();
+  const [user, setUser]         = useState(_cachedProfile);
   const [docs, setDocs]         = useState([]);
   const [cats, setCats]         = useState(CATS_DEFAUT);
   const [deletedCats, setDeletedCats] = useState(() => { try { return JSON.parse(localStorage.getItem("sc_deleted_cats")||"{}"); } catch(e){ return {}; } });
   const [notifs, setNotifs]     = useState([]);
   const [notifMenu, setNotifMenu] = useState(null);
   const [loading, setLoading]   = useState(false);
-  const [view, setView]         = useState("accueil");
+  const [view, setView]         = useState(() => { try { const p = localStorage.getItem("sc_last_profile"); if (!p) return "accueil"; const r = JSON.parse(p)?.role; return ["direction","adjoint","admin"].includes(r) ? "dashboard" : "accueil"; } catch(e) { return "accueil"; } });
   const [espace, setEspace]     = useState(null);
   const [catFilter, setCatFilter] = useState("all");
   const [search, setSearch]     = useState("");
@@ -255,7 +256,8 @@ export default function App() {
   const [legalView, setLegalView]           = useState(null);
   const [loginProfiles, setLoginProfiles]   = useState(() => { try { const c = localStorage.getItem("sc_login_profiles"); return c ? JSON.parse(c) : []; } catch(e) { return []; } });
   const hasSession = Object.keys(localStorage).some(k => k.startsWith("sb-") && k.endsWith("-auth-token"));
-  const [authLoading, setAuthLoading]       = useState(hasSession);
+  const hasCachedProfile = (() => { try { const p = localStorage.getItem("sc_last_profile"); return p && JSON.parse(p)?.actif; } catch(e) { return false; } })();
+  const [authLoading, setAuthLoading]       = useState(hasSession && !hasCachedProfile);
   const [loginLoading, setLoginLoading]     = useState(false);
 
   // Gestion des accès
