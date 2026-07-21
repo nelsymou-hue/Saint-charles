@@ -255,9 +255,7 @@ export default function App() {
   const [selectedUser, setSelectedUser]     = useState(null);
   const [legalView, setLegalView]           = useState(null);
   const [loginProfiles, setLoginProfiles]   = useState(() => { try { const c = localStorage.getItem("sc_login_profiles"); return c ? JSON.parse(c) : []; } catch(e) { return []; } });
-  const hasSession = Object.keys(localStorage).some(k => k.startsWith("sb-") && k.endsWith("-auth-token"));
-  const hasCachedProfile = (() => { try { const p = localStorage.getItem("sc_last_profile"); return p && JSON.parse(p)?.actif; } catch(e) { return false; } })();
-  const [authLoading, setAuthLoading]       = useState(hasSession && !hasCachedProfile);
+  const [authLoading, setAuthLoading]       = useState(false);
   const [loginLoading, setLoginLoading]     = useState(false);
 
   // Gestion des accès
@@ -292,22 +290,10 @@ export default function App() {
     // Charger la liste des profils pour l'écran de connexion
     loadLoginProfiles();
 
-    // Restaurer le profil depuis le cache IMMÉDIATEMENT (avant getSession)
-    const lastProfile = localStorage.getItem("sc_last_profile");
-    if (lastProfile) {
-      try {
-        const p = JSON.parse(lastProfile);
-        if (p && p.actif) {
-          applyProfile(p);
-          setAuthLoading(false);
-        }
-      } catch(e) {}
-    }
-
-    // Vérifier la session existante en arrière-plan
+    // Vérifier la session Supabase en arrière-plan, sans bloquer l'affichage
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) loadProfile(session.user.id);
-      else { localStorage.removeItem("sc_last_profile"); setUser(null); setAuthLoading(false); }
+      else { localStorage.removeItem("sc_last_profile"); setUser(null); }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -438,20 +424,17 @@ export default function App() {
   };
 
   const loadProfile = async (userId) => {
-    const cachedProfile = localStorage.getItem(`sc_profile_${userId}`);
-    if (cachedProfile) {
-      try { const p = JSON.parse(cachedProfile); if (p.actif) { applyProfile(p); setAuthLoading(false); } } catch(e) {}
-    }
     const { data } = await supabase.from("profiles").select("*").eq("id", userId).single();
     if (data && data.actif) {
       localStorage.setItem(`sc_profile_${userId}`, JSON.stringify(data));
       applyProfile(data);
     } else if (data && !data.actif) {
       localStorage.removeItem(`sc_profile_${userId}`);
+      localStorage.removeItem("sc_last_profile");
       await supabase.auth.signOut();
+      setUser(null);
       setLoginError("Votre compte a été désactivé. Contactez la direction.");
     }
-    setAuthLoading(false);
   };
 
   const handleLogin = async () => {
